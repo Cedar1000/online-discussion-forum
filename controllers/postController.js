@@ -3,7 +3,10 @@ const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
 exports.getAllPost = catchAsync(async (req, res, next) => {
-  const posts = await Post.find();
+  const posts = await Post.find().populate({
+    path: 'user',
+    select: '-__v -joined -role -email -gender -slug',
+  });
 
   res.status(200).json({
     results: posts.length,

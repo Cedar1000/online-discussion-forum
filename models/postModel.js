@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const User = require('./userModel.js');
+// const User = require('./userModel.js');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
@@ -12,8 +12,7 @@ const postSchema = new mongoose.Schema({
     maxlength: [500, 'A post should have less than 500 characters'],
     minlength: [1, 'A post should be at least 1 character long'],
   },
-  user_id: String,
-  user: Object,
+  user: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
   createdAt: {
     type: Date,
     default: Date.now(),
@@ -22,21 +21,15 @@ const postSchema = new mongoose.Schema({
 
 //DOCUMENT MIDDLEWARE: runs before .save() and create()
 
-postSchema.pre(
-  'save',
-  catchAsync(async function (next) {
-    //Find user with given id
-    this.user = await User.findById(this.user_id);
+//QUERY MIDDLEWARE
+postSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'user',
+    select: '-__v -joined -role -email -gender -slug',
+  });
 
-    if (!this.user) {
-      return next(new AppError('Could not find a user with that ID', 404));
-    }
-
-    // Delete user_id field
-    this.user_id = undefined;
-    next();
-  })
-);
+  next();
+});
 
 const Post = mongoose.model('Post', postSchema);
 
