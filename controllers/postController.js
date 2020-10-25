@@ -17,7 +17,7 @@ exports.getAllPost = catchAsync(async (req, res, next) => {
 
 exports.getPost = catchAsync(async (req, res, next) => {
   const { id } = req.params;
-  const post = await Post.findById(id);
+  const post = await Post.findById(id).populate('likes');
 
   //Check if post exists
   if (!post) {

@@ -12,10 +12,16 @@ exports.getAll = (Model) =>
     });
   });
 
-exports.getOne = (Model) =>
+exports.getOne = (Model, popOptions) =>
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
-    const doc = await Model.findById(id);
+    let query = Model.findById(id);
+
+    if (popOptions) {
+      query = query.populate(popOptions);
+    }
+
+    const doc = await query;
 
     if (!doc) {
       return next(new AppError('No document with that ID', 404));
