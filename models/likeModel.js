@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const likeSchema = new mongoose.Schema(
   {
-    user: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
-    post: [{ type: mongoose.Schema.ObjectId, ref: 'Post' }],
+    user: { type: mongoose.Schema.ObjectId, ref: 'User' },
+    post: { type: mongoose.Schema.ObjectId, ref: 'Post' },
   },
   {
     toJSON: { virtuals: true },

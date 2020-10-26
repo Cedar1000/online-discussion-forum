@@ -64,6 +64,8 @@ const userSchema = new mongoose.Schema({
   },
 
   slug: String,
+
+  passwordChangedAt: Date,
 });
 
 //DOCUMENT MIDDLEWARE
@@ -92,6 +94,18 @@ userSchema.methods.correctPassword = async function (
 ) {
   return await bcrypt.compare(inputedPassword, userPassword);
 };
+
+userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimeStamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10
+    );
+
+    return JWTTimestamp < changedTimeStamp;
+  }
+};
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
