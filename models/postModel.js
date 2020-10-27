@@ -11,6 +11,9 @@ const postSchema = new mongoose.Schema(
     },
 
     user: { type: mongoose.Schema.ObjectId, ref: 'User' },
+    category: {
+      type: String,
+    },
     createdAt: {
       type: Date,
       default: Date.now(),

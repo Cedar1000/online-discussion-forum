@@ -5,6 +5,7 @@ exports.getAll = (Model) =>
   catchAsync(async (req, res, next) => {
     let filter = {};
     if (req.params.postId) filter = { post: req.params.postId };
+    if (req.params.category) filter = { category: req.params.category };
 
     const doc = await Model.find(filter);
 

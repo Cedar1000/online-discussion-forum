@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 const postController = require('../controllers/postController');
 const authController = require('../controllers/authController');
@@ -15,8 +15,17 @@ router.use('/:postId/comments', commentRouter);
 
 router
   .route('/')
-  .get(authController.protect, postController.getAllPost)
-  .post(authController.protect, postController.createPost);
+  .get(
+    authController.protect,
+    postController.setSlugAndId,
+    postController.getAllPost
+  )
+  .post(
+    authController.protect,
+    postController.setSlugAndId,
+    postController.checkCategory,
+    postController.createPost
+  );
 
 router
   .route('/:id')
