@@ -52,6 +52,8 @@ exports.login = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     token,
+    user,
+    message: `Welcome back ${user.name}`,
   });
 });
 
@@ -91,6 +93,15 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   // GRANT ACCESS TO ROUTE
   req.user = currentUser;
+
+  next();
+});
+
+//RESTRICT TO ONLY ADMINS
+exports.restrictTo = catchAsync(async (req, res, next) => {
+  if (req.user.role !== 'admin') {
+    return next(new AppError('You are not allowed to do this', 401));
+  }
 
   next();
 });

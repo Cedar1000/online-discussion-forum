@@ -1,8 +1,5 @@
 const mongoose = require('mongoose');
 
-const catchAsync = require('../utils/catchAsync');
-const AppError = require('../utils/appError');
-
 const postSchema = new mongoose.Schema(
   {
     body: {
@@ -13,7 +10,7 @@ const postSchema = new mongoose.Schema(
       minlength: [1, 'A post should be at least 1 character long'],
     },
 
-    user: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
+    user: { type: mongoose.Schema.ObjectId, ref: 'User' },
     createdAt: {
       type: Date,
       default: Date.now(),
@@ -28,6 +25,12 @@ const postSchema = new mongoose.Schema(
 //Virtual populate
 postSchema.virtual('likes', {
   ref: 'Like',
+  foreignField: 'post',
+  localField: '_id',
+});
+
+postSchema.virtual('comments', {
+  ref: 'Comment',
   foreignField: 'post',
   localField: '_id',
 });

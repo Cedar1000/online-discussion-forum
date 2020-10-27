@@ -3,7 +3,10 @@ const AppError = require('../utils/appError');
 
 exports.getAll = (Model) =>
   catchAsync(async (req, res, next) => {
-    const doc = await Model.find();
+    let filter = {};
+    if (req.params.postId) filter = { post: req.params.postId };
+
+    const doc = await Model.find(filter);
 
     res.status(200).json({
       status: 'success',

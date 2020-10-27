@@ -3,7 +3,15 @@ const router = express.Router();
 
 const postController = require('../controllers/postController');
 const authController = require('../controllers/authController');
-const likeController = require('../controllers/likeController');
+const likeRouter = require('./likeRoutes');
+const commentRouter = require('./commentRoutes');
+
+//POST /posts/2334df/likes
+//GET /posts/2334df/likes
+//GET /posts/2334df/likes/23rehduf
+
+router.use('/:postId/likes', likeRouter);
+router.use('/:postId/comments', commentRouter);
 
 router
   .route('/')
@@ -15,19 +23,5 @@ router
   .get(postController.getPost)
   .patch(postController.updatePost)
   .delete(postController.deletePost);
-
-//POST /posts/2334df/likes
-//GET /posts/2334df/likes
-//GET /posts/2334df/likes/23rehduf
-
-router
-  .route('/:postId/likes')
-  .post(
-    authController.protect,
-    likeController.setPostId,
-    likeController.checkUser,
-    likeController.createLike
-  )
-  .get(likeController.getAllLikes);
 
 module.exports = router;

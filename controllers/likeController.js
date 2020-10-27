@@ -7,14 +7,16 @@ exports.setPostId = (req, res, next) => {
   //Allow nested routes
   if (!req.body.post) req.body.post = req.params.postId;
   if (!req.body.user) req.body.user = req.user.id;
-
+  console.log(req.user.id);
   next();
 };
 
 exports.checkUser = catchAsync(async (req, res, next) => {
   const like = await Like.find({ post: req.body.post, user: req.user.id });
+  console.log(like);
+  console.log(like.length);
 
-  if (like) {
+  if (like.length > 0) {
     return next(new AppError('You already liked this post', 401));
   }
   next();
