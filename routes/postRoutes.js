@@ -15,14 +15,10 @@ router.use('/:postId/comments', commentRouter);
 
 router
   .route('/')
-  .get(
-    authController.protect,
-    postController.setSlugAndId,
-    postController.getAllPost
-  )
+  .get(authController.protect, postController.getAllPost)
   .post(
     authController.protect,
-    postController.setSlugAndId,
+    authController.setPostId,
     postController.checkCategory,
     postController.createPost
   );

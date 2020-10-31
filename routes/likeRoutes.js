@@ -8,8 +8,8 @@ router
   .route('/')
   .post(
     authController.protect,
-    likeController.setPostId,
-    likeController.checkUser,
+    authController.setPostId,
+    authController.checkUser,
     likeController.createLike
   )
   .get(likeController.getAllLikes);

@@ -9,8 +9,10 @@ const commentSchema = new mongoose.Schema(
       minlength: [1, 'A comment must have at least 1 character'],
       maxlength: [500, 'A comment should not have more than 300 characters'],
     },
+
     user: { type: mongoose.Schema.ObjectId, ref: 'User' },
     post: { type: mongoose.Schema.ObjectId, ref: 'Post' },
+
     createdAt: {
       type: Date,
       default: Date.now(),
@@ -29,6 +31,13 @@ commentSchema.pre(/^find/, function (next) {
   });
 
   next();
+});
+
+//Virtual Populate
+commentSchema.virtual('commentLikes', {
+  ref: 'LikeComment',
+  foreignField: 'comment',
+  localField: '_id',
 });
 
 const Comment = mongoose.model('Comment', commentSchema);

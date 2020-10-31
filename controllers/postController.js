@@ -20,9 +20,13 @@ exports.checkCategory = catchAsync(async (req, res, next) => {
   next();
 });
 
-exports.getAllPost = factory.getAll(Post, {
-  path: 'user',
-  select: 'name, avatar',
+exports.getAllPost = catchAsync(async (req, res, next) => {
+  const posts = await Post.find().populate('likes').populate('comments');
+
+  res.status(200).json({
+    status: 'success',
+    posts,
+  });
 });
 
 exports.getPost = factory.getOne(Post);

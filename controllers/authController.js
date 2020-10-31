@@ -4,6 +4,7 @@ const User = require('../models/userModel.js');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const signToken = require('../utils/signToken');
+const Like = require('../models/likeModel');
 
 exports.signup = catchAsync(async (req, res, next) => {
   const userData = { ...req.body };
@@ -111,5 +112,18 @@ exports.setPostId = (req, res, next) => {
   //Allow nested routes
   if (!req.body.post) req.body.post = req.params.postId;
   if (!req.body.user) req.body.user = req.user.id;
+  if (!req.body.category) req.body.category = req.params.category;
   next();
 };
+
+//CHECK USER ON POST
+exports.checkUser = catchAsync(async (req, res, next) => {
+  const like = await Like.find({ post: req.body.post, user: req.user.id });
+  console.log(like);
+  console.log(like.length);
+
+  if (like.length > 0) {
+    return next(new AppError('You already liked this post', 401));
+  }
+  next();
+});
