@@ -12,7 +12,7 @@ exports.setSlugAndId = (req, res, next) => {
 };
 
 exports.checkCategory = catchAsync(async (req, res, next) => {
-  console.log(req.body);
+ 
   const category = await Category.findOne({ name: req.body.category });
   if (!category) {
     return next(new AppError('No such category exists', 404));
@@ -21,7 +21,7 @@ exports.checkCategory = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllPost = catchAsync(async (req, res, next) => {
-  const posts = await Post.find().populate('likes').populate('comments');
+  const posts = await Post.find().sort('-createdAt').populate('likes').populate('comments');
 
   res.status(200).json({
     status: 'success',

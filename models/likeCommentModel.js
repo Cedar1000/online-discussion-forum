@@ -4,6 +4,10 @@ const likeCommentSchema = new mongoose.Schema(
   {
     user: { type: mongoose.Schema.ObjectId, ref: 'User' },
     comment: { type: mongoose.Schema.ObjectId, ref: 'Comment' },
+    createdAt: {
+      type: Date,
+      default: Date.now()
+    }
   },
   {
     toJSON: { virtuals: true },

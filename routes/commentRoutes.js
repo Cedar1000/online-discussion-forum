@@ -2,11 +2,13 @@ const express = require('express');
 const commentController = require('../controllers/commentController');
 const authController = require('../controllers/authController');
 const likeCommentRouter = require('./likeCommentRoutes');
+const replyCommentRouter = require('./replyCommentRoutes');
 
 const router = express.Router({ mergeParams: true });
 //POST /comments/2334df/likes
 
 router.use('/:commentId/likes', likeCommentRouter);
+router.use('/:commentId/reply', replyCommentRouter);
 
 router
   .route('/')

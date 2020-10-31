@@ -10,6 +10,7 @@ const postRouter = require('./routes/postRoutes');
 const likeRouter = require('./routes/likeRoutes');
 const commentRouter = require('./routes/commentRoutes');
 const categoryRouter = require('./routes/categoryRoutes');
+const replyRouter = require('./routes/replyCommentRoutes');
 
 //Body parser
 app.use(express.json());
@@ -20,6 +21,7 @@ app.use('/api/v1/posts', postRouter);
 app.use('/api/v1/likes', likeRouter);
 app.use('/api/v1/comments', commentRouter);
 app.use('/api/v1/category', categoryRouter);
+app.use('/api/v1/reply', replyRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

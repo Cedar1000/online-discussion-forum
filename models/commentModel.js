@@ -40,6 +40,12 @@ commentSchema.virtual('commentLikes', {
   localField: '_id',
 });
 
+commentSchema.virtual('commentReplies', {
+  ref: 'replyComment',
+  foreignField: 'comment',
+  localField: '_id',
+});
+
 const Comment = mongoose.model('Comment', commentSchema);
 
 module.exports = Comment;
