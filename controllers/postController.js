@@ -12,7 +12,6 @@ exports.setSlugAndId = (req, res, next) => {
 };
 
 exports.checkCategory = catchAsync(async (req, res, next) => {
- 
   const category = await Category.findOne({ name: req.body.category });
   if (!category) {
     return next(new AppError('No such category exists', 404));
@@ -21,7 +20,7 @@ exports.checkCategory = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllPost = catchAsync(async (req, res, next) => {
-  const posts = await Post.find().sort('-createdAt').populate('likes').populate('comments');
+  const posts = await Post.find().sort('-createdAt').populate('comments');
 
   res.status(200).json({
     status: 'success',
@@ -29,7 +28,20 @@ exports.getAllPost = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getPost = factory.getOne(Post);
+exports.getPost = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const post = await Post.findById(id).populate('likes').populate('comments');
+
+  if (!post) {
+    return next(new AppError('No Post with that ID', 404));
+  }
+
+  res.status(200).json({
+    status: 'Success',
+    post,
+  });
+});
+
 exports.createPost = factory.createOne(Post);
 exports.updatePost = factory.updateOne(Post);
 exports.deletePost = factory.deleteOne(Post);

@@ -5,6 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const signToken = require('../utils/signToken');
 const Like = require('../models/likeModel');
+const Post = require('../models/postModel');
 
 exports.signup = catchAsync(async (req, res, next) => {
   const userData = { ...req.body };
@@ -125,5 +126,19 @@ exports.checkUser = catchAsync(async (req, res, next) => {
   if (like.length > 0) {
     return next(new AppError('You already liked this post', 401));
   }
+  next();
+});
+
+exports.accessControl = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+
+  const post = await Post.findById(id);
+
+  if (post.user._id !== req.user.id) {
+    return next(
+      new AppError('You are not allowed to perform this action', 403)
+    );
+  }
+
   next();
 });
