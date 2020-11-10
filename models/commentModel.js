@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Post = require('../models/postModel');
 
 const commentSchema = new mongoose.Schema(
   {
@@ -44,6 +45,38 @@ commentSchema.virtual('commentReplies', {
   ref: 'replyComment',
   foreignField: 'comment',
   localField: '_id',
+});
+
+commentSchema.statics.calcNumber = async function (postId) {
+  const stats = await this.aggregate([
+    {
+      $match: { post: postId },
+    },
+    {
+      $group: {
+        _id: '$post',
+        nComments: { $sum: 1 },
+      },
+    },
+  ]);
+
+  // console.log(stats);
+
+  if (stats.length > 0) {
+    await Post.findByIdAndUpdate(postId, {
+      commentsQuantity: stats[0].nComments,
+    });
+  } else {
+    await Post.findByIdAndUpdate(postId, {
+      commentsQuantity: 0,
+    });
+  }
+};
+
+commentSchema.post('save', function () {
+  //this always points to the current like
+  this.constructor.calcNumber(this.post);
+  //post middleware doesn't get access to next
 });
 
 const Comment = mongoose.model('Comment', commentSchema);
