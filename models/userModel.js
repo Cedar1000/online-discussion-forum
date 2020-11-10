@@ -126,6 +126,14 @@ userSchema.methods.createPassswordResetToken = function () {
   return resetToken;
 };
 
+//DOCUMENT MIDDLEWARE
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password') || this.isNew) return next();
+
+  this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
