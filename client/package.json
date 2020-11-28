@@ -12,6 +12,7 @@
     "core-js": "^3.6.5",
     "material-icons": "^0.3.1",
     "vue": "^2.6.11",
+    "vue-router": "^3.4.9",
     "vue-textarea-autosize": "^1.1.1",
     "vuesax": "^4.0.1-alpha.25",
     "vuetify": "^2.2.11"

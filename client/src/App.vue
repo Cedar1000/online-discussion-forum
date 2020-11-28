@@ -6,7 +6,7 @@
       <Sidebar />
 
       <div class="posts-div">
-        <Posts />
+        <router-view></router-view>
       </div>
 
       <div class="add-post">
@@ -18,7 +18,7 @@
 
 <script>
 // import Categories from './components/categories';
-import Posts from './components/Posts';
+// import Posts from './components/Posts';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import AddPost from './components/AddPost';
@@ -28,7 +28,7 @@ export default {
 
   components: {
     // Categories,
-    Posts,
+    // Posts,
     Navbar,
     Sidebar,
     AddPost,
