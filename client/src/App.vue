@@ -59,6 +59,7 @@ export default {
 
 .posts-div {
   grid-column: 3/11;
+  padding: 10px 15px;
 }
 
 .add-post {
@@ -94,6 +95,12 @@ export default {
     grid-column: 1/11;
     width: 100%;
     padding: 0 6px;
+  }
+}
+
+@media (max-width: 767px) {
+  .posts-div {
+    padding: 5px 0;
   }
 }
 </style>

@@ -61,6 +61,7 @@ export default {
 .cover-image {
   display: flex;
   justify-content: center;
+  margin-top: 35px;
 }
 
 .details {
@@ -95,7 +96,7 @@ export default {
 
 @media (max-width: 600px) {
   .center {
-    width: 90%;
+    width: 100%;
   }
   .td2 {
     text-align: start;
