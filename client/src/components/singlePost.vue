@@ -35,7 +35,7 @@
         </div>
       </div>
 
-      <v-divider></v-divider>
+      <v-divider class="divider"></v-divider>
       <div class="comment-section">
         <div class="input">
           <textarea-autosize
@@ -51,28 +51,8 @@
           </v-btn>
         </div>
 
-        <div class="comment">
-          <div class="comment-inner">
-            <vs-avatar size="35" circle class="avatar">
-              <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
-            </vs-avatar>
-            <div class="comment-body">
-              <h4>Cedar Daniel</h4>
-              <p>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Blanditiis hic modi repudiandae sapiente facilis quam voluptatum
-                iusto numquam, nihil ut iure recusandae eum accusantium possimus
-                explicabo natus expedita temporibus debitis!
-              </p>
-              <div class="actions">
-                <div class="wrapper-action">
-                  <span><i class="fas fa-heart"></i><b>12</b></span>
-                  <span><i class="fas fa-reply"></i><b>5</b></span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="comment-replies">
+        <div class="comments">
+          <div class="comment">
             <div class="comment-inner">
               <vs-avatar size="35" circle class="avatar">
                 <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
@@ -94,7 +74,55 @@
                 </div>
               </div>
             </div>
+            <div class="comment-replies">
+              <div class="comment-inner">
+                <vs-avatar size="35" circle class="avatar">
+                  <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
+                </vs-avatar>
+                <div class="comment-body">
+                  <h4>Cedar Daniel</h4>
+                  <p>
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                    Blanditiis hic modi repudiandae sapiente facilis quam
+                    voluptatum iusto numquam, nihil ut iure recusandae eum
+                    accusantium possimus explicabo natus expedita temporibus
+                    debitis!
+                  </p>
+                  <div class="actions">
+                    <div class="wrapper-action">
+                      <span><i class="fas fa-heart"></i><b>12</b></span>
+                      <span><i class="fas fa-reply"></i><b>5</b></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
+              <div class="comment-inner">
+                <vs-avatar size="35" circle class="avatar">
+                  <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
+                </vs-avatar>
+                <div class="comment-body">
+                  <h4>Cedar Daniel</h4>
+                  <p>
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                    Blanditiis hic modi repudiandae sapiente facilis quam
+                    voluptatum iusto numquam, nihil ut iure recusandae eum
+                    accusantium possimus explicabo natus expedita temporibus
+                    debitis!
+                  </p>
+                  <div class="actions">
+                    <div class="wrapper-action">
+                      <span><i class="fas fa-heart"></i><b>12</b></span>
+                      <span><i class="fas fa-reply"></i><b>5</b></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <v-divider></v-divider>
+          </div>
+
+          <div class="comment">
             <div class="comment-inner">
               <vs-avatar size="35" circle class="avatar">
                 <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
@@ -116,69 +144,47 @@
                 </div>
               </div>
             </div>
-          </div>
-          <v-divider></v-divider>
-
-          <div class="comment-inner">
-            <vs-avatar size="35" circle class="avatar">
-              <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
-            </vs-avatar>
-            <div class="comment-body">
-              <h4>Cedar Daniel</h4>
-              <p>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Blanditiis hic modi repudiandae sapiente facilis quam voluptatum
-                iusto numquam, nihil ut iure recusandae eum accusantium possimus
-                explicabo natus expedita temporibus debitis!
-              </p>
-              <div class="actions">
-                <div class="wrapper-action">
-                  <span><i class="fas fa-heart"></i><b>12</b></span>
-                  <span><i class="fas fa-reply"></i><b>5</b></span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="comment-replies">
-            <div class="comment-inner">
-              <vs-avatar size="35" circle class="avatar">
-                <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
-              </vs-avatar>
-              <div class="comment-body">
-                <h4>Cedar Daniel</h4>
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Blanditiis hic modi repudiandae sapiente facilis quam
-                  voluptatum iusto numquam, nihil ut iure recusandae eum
-                  accusantium possimus explicabo natus expedita temporibus
-                  debitis!
-                </p>
-                <div class="actions">
-                  <div class="wrapper-action">
-                    <span><i class="fas fa-heart"></i><b>12</b></span>
-                    <span><i class="fas fa-reply"></i><b>5</b></span>
+            <div class="comment-replies">
+              <div class="comment-inner">
+                <vs-avatar size="35" circle class="avatar">
+                  <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
+                </vs-avatar>
+                <div class="comment-body">
+                  <h4>Cedar Daniel</h4>
+                  <p>
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                    Blanditiis hic modi repudiandae sapiente facilis quam
+                    voluptatum iusto numquam, nihil ut iure recusandae eum
+                    accusantium possimus explicabo natus expedita temporibus
+                    debitis!
+                  </p>
+                  <div class="actions">
+                    <div class="wrapper-action">
+                      <span><i class="fas fa-heart"></i><b>12</b></span>
+                      <span><i class="fas fa-reply"></i><b>5</b></span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div class="comment-inner">
-              <vs-avatar size="35" circle class="avatar">
-                <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
-              </vs-avatar>
-              <div class="comment-body">
-                <h4>Cedar Daniel</h4>
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Blanditiis hic modi repudiandae sapiente facilis quam
-                  voluptatum iusto numquam, nihil ut iure recusandae eum
-                  accusantium possimus explicabo natus expedita temporibus
-                  debitis!
-                </p>
-                <div class="actions">
-                  <div class="wrapper-action">
-                    <span><i class="fas fa-heart"></i><b>12</b></span>
-                    <span><i class="fas fa-reply"></i><b>5</b></span>
+              <div class="comment-inner">
+                <vs-avatar size="35" circle class="avatar">
+                  <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
+                </vs-avatar>
+                <div class="comment-body">
+                  <h4>Cedar Daniel</h4>
+                  <p>
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                    Blanditiis hic modi repudiandae sapiente facilis quam
+                    voluptatum iusto numquam, nihil ut iure recusandae eum
+                    accusantium possimus explicabo natus expedita temporibus
+                    debitis!
+                  </p>
+                  <div class="actions">
+                    <div class="wrapper-action">
+                      <span><i class="fas fa-heart"></i><b>12</b></span>
+                      <span><i class="fas fa-reply"></i><b>5</b></span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -231,7 +237,7 @@ export default {
   display: flex;
   width: 10%;
   justify-content: space-between;
-  margin-top: 10px;
+  margin: 10px 0;
   color: #195bff;
 }
 b {
@@ -279,7 +285,7 @@ button {
   margin-top: 15px;
 }
 
-.comment {
+.comments {
   padding: 15px;
 }
 
@@ -288,7 +294,7 @@ button {
   margin-bottom: 15px;
 }
 
-.comment p {
+.comments p {
   max-width: 450px;
   font-size: 15px;
 }
@@ -304,14 +310,15 @@ button {
   margin-left: 5px;
 }
 
-.comment .actions {
+.comments .actions {
   width: 100%;
   justify-content: flex-end;
   margin-top: 0;
-  top: 20px;
+  top: 0;
+  position: relative;
 }
 
-.comment .actions span {
+.comments .actions span {
   margin-right: 10px;
 }
 
@@ -331,13 +338,32 @@ button {
   margin-left: 50px;
 }
 
+.divider {
+  margin-bottom: 15px;
+}
+
+.comment {
+  padding-top: 15px;
+}
+
 @media (max-width: 768px) {
   .actions {
     width: 25%;
   }
 
-  .comment {
+  .comments {
     padding: 0;
+  }
+
+  .comment-inner {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    margin-bottom: 22px;
+  }
+
+  .comment-body {
+    grid-column: 2/9;
+    margin-left: 0;
   }
 }
 </style>
