@@ -3,21 +3,38 @@
     <div class="wrapper">
       <div class="vs-card">
         <i class="fas fa-user-circle"></i>
-        <h3>Login</h3>
+        <h3>Sign Up</h3>
         <div class="center content-inputs">
-          <i class="far fa-user"></i>
-          <input type="text" placeholder="User name" /><br />
+          <input type="text" placeholder="Name" /><br />
 
-          <i class="fas fa-lock"></i>
+          <input type="text" placeholder="Email" /><br />
+
+          <div class="gender">
+            <vs-select
+              class="vs-select"
+              label-placeholder="Gender"
+              v-model="value2"
+            >
+              <vs-option label="Male" value="1">
+                Male
+              </vs-option>
+              <vs-option label="Female" value="2">
+                Female
+              </vs-option>
+            </vs-select>
+          </div>
+
           <input type="password" placeholder="Password" />
 
+          <input type="password" placeholder="Confirm Password" />
+
           <v-btn rounded class="button">
-            Login
+            Sign Up
           </v-btn>
         </div>
         <div class="links">
-          <a href="#">Sign Up</a>
-          <a href="#">Forgot Password</a>
+          <span>Already have an account?</span>
+          <a href="#">Login</a>
         </div>
       </div>
     </div>
@@ -26,9 +43,12 @@
 
 <script>
 export default {
-  name: 'Login',
+  name: 'Register',
   data: () => ({
     active: 0,
+    value1: '',
+    value2: '',
+    value3: '',
   }),
 };
 </script>
@@ -78,7 +98,7 @@ export default {
 
 input {
   padding: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 18px;
   background: #f6f6f6;
   width: 100%;
   border-radius: 20px;
@@ -100,5 +120,21 @@ h3 {
 
 .links a {
   text-decoration: none;
+}
+
+.gender {
+  margin-bottom: 15px;
+}
+
+.vs-select {
+  width: 100%;
+  font-family: 'Lato', sans-serif;
+}
+
+@media (max-width: 360px) {
+  .wrapper {
+    margin-top: 35px;
+    height: 80vh;
+  }
 }
 </style>
