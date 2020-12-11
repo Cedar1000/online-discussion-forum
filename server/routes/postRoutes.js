@@ -15,7 +15,7 @@ router.use('/:postId/comments', commentRouter);
 
 router
   .route('/')
-  .get(authController.protect, postController.getAllPost)
+  .get(postController.getAllPost)
   .post(
     authController.protect,
     authController.setPostId,

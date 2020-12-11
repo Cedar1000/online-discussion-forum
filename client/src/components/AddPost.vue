@@ -3,7 +3,6 @@
     <textarea-autosize
       placeholder="Type Post here..."
       ref="myTextarea"
-      v-model="value"
       :min-height="20"
       :max-height="350"
       @blur.native="onBlurTextarea"

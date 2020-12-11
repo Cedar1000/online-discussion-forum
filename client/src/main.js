@@ -9,6 +9,7 @@ import '@fortawesome/fontawesome-free/js/all.js';
 import TextareaAutosize from 'vue-textarea-autosize';
 import VueRouter from 'vue-router';
 import Routes from './routes';
+import store from './store';
 
 Vue.config.productionTip = false;
 
@@ -22,6 +23,7 @@ const router = new VueRouter({
 
 new Vue({
   vuetify,
+  store,
   render: (h) => h(App),
   router,
 }).$mount('#app');

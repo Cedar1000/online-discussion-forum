@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 
 //Start express app
 const app = express();
@@ -15,6 +16,7 @@ const notificationRouter = require('./routes/notificationRoutes');
 
 //Body parser
 app.use(express.json());
+app.use(cors());
 
 //ROUTES
 app.use('/api/v1/users', userRouter);
