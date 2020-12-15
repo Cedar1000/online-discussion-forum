@@ -1,17 +1,17 @@
 <template>
   <div>
-    <div class="wrapper">
+    <form class="wrapper" @submit.prevent="loginUser">
       <div class="vs-card">
         <i class="fas fa-user-circle"></i>
         <h3>Login</h3>
         <div class="center content-inputs">
           <i class="far fa-user"></i>
-          <input type="text" placeholder="User name" /><br />
+          <input type="text" v-model="email" placeholder="Email" /><br />
 
           <i class="fas fa-lock"></i>
-          <input type="password" placeholder="Password" />
+          <input type="password" v-model="password" placeholder="Password" />
 
-          <v-btn rounded class="button">
+          <v-btn rounded class="button" type="submit">
             Login
           </v-btn>
         </div>
@@ -19,17 +19,41 @@
           <a href="#">Sign Up</a>
           <a href="#">Forgot Password</a>
         </div>
+        <p class="err-msg" v-if="error">Incorrect email or password</p>
       </div>
-    </div>
+    </form>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: 'Login',
+
   data: () => ({
     active: 0,
+    email: '',
+    password: '',
   }),
+
+  methods: {
+    ...mapActions(['login']),
+
+    loginUser() {
+      console.log(this.email, this.password);
+      this.login({ email: this.email, password: this.password });
+      this.email = '';
+      this.password = '';
+    },
+  },
+
+  computed: {
+    error() {
+      console.log(this.$store.errMsg);
+      return this.$store.errMsg;
+    },
+  },
 };
 </script>
 
@@ -100,5 +124,10 @@ h3 {
 
 .links a {
   text-decoration: none;
+}
+.err-msg {
+  font-size: 14px;
+  color: red;
+  margin-top: 15px;
 }
 </style>

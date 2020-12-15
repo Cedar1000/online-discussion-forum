@@ -48,6 +48,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
+  console.log(email, password);
 
   //1) check if email or password was passed in
   if (!email || !password) {
