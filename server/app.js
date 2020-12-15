@@ -30,7 +30,14 @@ if (process.env.NODE_ENV === 'development') {
 //Body parser
 app.use(express.json({ limit: '10kb' }));
 
+//Implementing CORS
 app.use(cors());
+
+//Data sanitization against NoSQL query injection
+app.use(mongoSanitize());
+
+//Data sanitization against XSS
+app.use(xss());
 
 const limiter = rateLimit({
   max: 100,
