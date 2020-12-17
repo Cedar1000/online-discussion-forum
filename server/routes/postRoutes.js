@@ -13,6 +13,8 @@ const commentRouter = require('./commentRoutes');
 router.use('/:postId/likes', likeRouter);
 router.use('/:postId/comments', commentRouter);
 
+// router.use(authController.isLoggedIn);
+
 router
   .route('/')
   .get(postController.getAllPost)

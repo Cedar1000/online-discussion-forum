@@ -8,8 +8,22 @@
       </template>
 
       <template #right>
-        <vs-button flat>Login</vs-button>
-        <vs-button>Get Started</vs-button>
+        <vs-avatar
+          v-show="isLoggedIn"
+          badge
+          circle
+          badge-color="success"
+          badge-position="bottom-right"
+          size="35"
+        >
+          <img
+            src="../assets/images/72571994_111521426928601_2576485395504037888_n.jpg"
+          />
+        </vs-avatar>
+
+        <router-link v-show="!isLoggedIn" to="/login" class="login-btn"
+          >Login</router-link
+        >
       </template>
     </vs-navbar>
     <vs-sidebar
@@ -17,10 +31,14 @@
       absolute
       v-model="active"
       :open.sync="activeSidebar"
+      @click="closeNavbar"
     >
       <template #logo>
         <vs-avatar size="100" circle badge class="avatar">
-          <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
+          <img
+            src="../assets/images/72571994_111521426928601_2576485395504037888_n.jpg"
+            alt=""
+          />
         </vs-avatar>
       </template>
 
@@ -29,7 +47,7 @@
         <template #icon>
           <i class="fas fa-home"></i>
         </template>
-        Home
+        <span @click="handleHome">Home</span>
       </vs-sidebar-item>
 
       <vs-sidebar-item id="Notifications">
@@ -39,7 +57,9 @@
             <span class="not-div">1</span>
           </div>
         </template>
-        Notifications
+        <span @click="handleNotification" to="/Notifications"
+          >Notifications</span
+        >
       </vs-sidebar-item>
       <vs-sidebar-group>
         <template #header>
@@ -75,26 +95,61 @@
         <template #icon>
           <i class="fas fa-user"></i>
         </template>
-        Profile
+        <span @click="handleProfile">Profile</span>
       </vs-sidebar-item>
 
-      <vs-sidebar-item id="signout">
+      <vs-sidebar-item v-show="isLoggedIn" id="signout">
         <template #icon>
           <i class="fas fa-sign-out-alt"></i>
         </template>
-        Sign Out
+        <span @click="signout">Sign Out</span>
       </vs-sidebar-item>
     </vs-sidebar>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
   name: 'navbar',
   data: () => ({
     active: 'home',
     activeSidebar: false,
   }),
+
+  methods: {
+    ...mapActions(['logout']),
+
+    closeNavbar() {
+      console.log('Navbar closed');
+      this.activeSidebar = false;
+    },
+
+    handleNotification() {
+      this.closeNavbar();
+      this.$router.push('/Notifications');
+    },
+
+    handleProfile() {
+      this.closeNavbar();
+      this.$router.push('/Profile');
+    },
+
+    handleHome() {
+      this.closeNavbar();
+      this.$router.push('/Home');
+    },
+
+    signout() {
+      this.logout();
+      console.log('Signed Out');
+    },
+  },
+
+  computed: {
+    ...mapGetters(['isLoggedIn']),
+  },
 };
 </script>
 
@@ -130,6 +185,21 @@ export default {
   right: 4px;
   bottom: 8px;
   border: 2px solid #fff;
+}
+
+.login-btn {
+  color: #fff;
+  background: #195bff;
+  border-radius: 12px;
+  padding: 8px 15px;
+  font-family: 'Lato', sans-serif;
+  font-size: 12.8px;
+  text-decoration: none;
+  margin-left: 5px;
+}
+
+.login-btn:hover {
+  cursor: pointer;
 }
 
 .not-list {

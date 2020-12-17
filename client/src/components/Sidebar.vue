@@ -3,7 +3,10 @@
     <vs-sidebar class="sidebar-content" v-model="active" open>
       <template #logo>
         <vs-avatar size="100" circle badge class="avatar">
-          <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
+          <img
+            src="../assets/images/72571994_111521426928601_2576485395504037888_n.jpg"
+            alt=""
+          />
         </vs-avatar>
       </template>
 
@@ -12,7 +15,7 @@
         <template #icon>
           <i class="fas fa-home"></i>
         </template>
-        Home
+        <router-link to="/Home">Home</router-link>
       </vs-sidebar-item>
 
       <vs-sidebar-item id="Notifications">
@@ -22,7 +25,7 @@
             <span class="not-div">1</span>
           </div>
         </template>
-        Notifications
+        <router-link to="/Notifications">Notifications</router-link>
       </vs-sidebar-item>
       <vs-sidebar-group>
         <template #header>
@@ -58,7 +61,7 @@
         <template #icon>
           <i class="fas fa-user"></i>
         </template>
-        Profile
+        <router-link to="/Profile">Profile</router-link>
       </vs-sidebar-item>
 
       <vs-sidebar-item id="signout">
@@ -97,6 +100,10 @@ export default {
 </script>
 
 <style scoped>
+a {
+  text-decoration: none;
+  color: #2c3e50;
+}
 .hidden {
   grid-column: 1/3;
   grid-row: 1/3;

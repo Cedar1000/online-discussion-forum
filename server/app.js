@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
+const cookieParser = require('cookie-parser');
 
 //Start express app
 const app = express();
@@ -29,9 +30,11 @@ if (process.env.NODE_ENV === 'development') {
 
 //Body parser
 app.use(express.json({ limit: '10kb' }));
+app.use(cookieParser());
 
 //Implementing CORS
 app.use(cors());
+app.options('*', cors());
 
 //Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
@@ -46,6 +49,11 @@ const limiter = rateLimit({
 });
 
 app.use('/api', limiter);
+
+app.use((req, res, next) => {
+  console.log(req.cookies, 'Hi we the cookies');
+  next();
+});
 
 //ROUTES
 app.use('/api/v1/users', userRouter);

@@ -40,17 +40,17 @@ export default {
   methods: {
     ...mapActions(['login']),
 
-    loginUser() {
+    async loginUser() {
       console.log(this.email, this.password);
       this.login({ email: this.email, password: this.password });
       this.email = '';
       this.password = '';
+      await this.$router.push('/posts');
     },
   },
 
   computed: {
     error() {
-      console.log(this.$store.errMsg);
       return this.$store.errMsg;
     },
   },

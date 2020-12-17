@@ -1,14 +1,17 @@
 import axios from 'axios';
+import cookie from 'vue-cookies';
 
 const API_URL = 'http://localhost:3000/api/v1';
 
 const state = {
   user: '',
-  token: '',
+  token: cookie.get('jwt') || null,
   errorMsg: '',
 };
 
-const getters = {};
+const getters = {
+  isLoggedIn: (state) => state.user,
+};
 
 const actions = {
   //Login User In
@@ -20,6 +23,11 @@ const actions = {
         password,
       });
       console.log(response);
+
+      cookie.set('jwt', response.data.token);
+      console.log(cookie.get('jwt'));
+
+      // console.log(document.cookie);
       commit('setUser', response.data.user);
       commit('setToken', response.data.token);
     } catch (error) {
@@ -45,11 +53,27 @@ const actions = {
       console.log(error.response.data);
     }
   },
+
+  async logout({ commit }) {
+    try {
+      await axios.get(`${API_URL}/users/logout`);
+      commit('logOut');
+      cookie.set('jwt', '');
+      console.log(cookie.get('jwt'));
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 const mutations = {
   setUser: (state, user) => (state.user = user),
   setToken: (state, token) => (state.token = token),
+  logOut: (state) => {
+    state.user = null;
+    state.token = null;
+    console.log(state.user, state.token);
+  },
 };
 
 export default {

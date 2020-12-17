@@ -2,7 +2,10 @@
   <div>
     <div class="cover-image">
       <vs-avatar size="170" circle badge badge-color="success">
-        <img src="https://vuesax.com/avatars/avatar-1.png" alt="" />
+        <img
+          src="../assets/images/72571994_111521426928601_2576485395504037888_n.jpg"
+          alt=""
+        />
       </vs-avatar>
     </div>
 
