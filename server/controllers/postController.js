@@ -20,7 +20,13 @@ exports.checkCategory = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllPost = catchAsync(async (req, res, next) => {
-  const posts = await Post.find()
+  let category = {};
+
+  if (req.body.category) {
+    category.category = req.body.category;
+  }
+
+  const posts = await Post.find(category)
     .sort('-createdAt')
     .populate({
       path: 'comments',
@@ -38,6 +44,7 @@ exports.getAllPost = catchAsync(async (req, res, next) => {
     });
 
   res.status(200).json({
+    results: posts.length,
     status: 'success',
     posts,
   });

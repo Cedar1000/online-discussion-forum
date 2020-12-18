@@ -45,7 +45,7 @@
           <template #icon>
             <i class="bx bxl-instagram"></i>
           </template>
-          {{ category.name }}
+          <span @click="getCatPosts(category.name)">{{ category.name }}</span>
         </vs-sidebar-item>
       </vs-sidebar-group>
 
@@ -95,11 +95,15 @@ export default {
   },
 
   methods: {
-    ...mapActions(['logout', 'fetchCategories']),
+    ...mapActions(['logout', 'fetchCategories', 'fetchCategoryPosts']),
 
     signout() {
       this.logout();
       console.log('Signed Out');
+    },
+
+    getCatPosts(name) {
+      this.fetchCategoryPosts(name);
     },
   },
 

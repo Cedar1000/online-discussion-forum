@@ -1,6 +1,6 @@
 <template>
   <div class="posts">
-    <div v-for="post in allPosts" :key="post.id" class="post">
+    <div v-for="post in allCategoryPosts" :key="post.id" class="post">
       <vs-avatar
         badge
         circle
@@ -48,10 +48,7 @@ export default {
   methods: {
     ...mapActions(['fetchPosts']),
   },
-  computed: mapGetters(['allPosts']),
-  created() {
-    this.fetchPosts();
-  },
+  computed: mapGetters(['allCategoryPosts']),
 };
 </script>
 
