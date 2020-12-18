@@ -11,6 +11,7 @@ const state = {
 
 const getters = {
   isLoggedIn: (state) => state.user,
+  currentUser: (state) => state.user,
 };
 
 const actions = {

@@ -23,6 +23,7 @@ Vue.$cookies.config('7d');
 
 const router = new VueRouter({
   routes: Routes,
+  mode: 'history',
 });
 
 new Vue({

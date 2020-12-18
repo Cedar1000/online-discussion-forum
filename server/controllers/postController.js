@@ -20,13 +20,14 @@ exports.checkCategory = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllPost = catchAsync(async (req, res, next) => {
-  let category = {};
+  let categoryObj = {};
 
-  if (req.body.category) {
-    category.category = req.body.category;
+  console.log(req.params.category);
+  if (req.params.category) {
+    categoryObj.category = req.params.category;
   }
 
-  const posts = await Post.find(category)
+  const posts = await Post.find(categoryObj)
     .sort('-createdAt')
     .populate({
       path: 'comments',

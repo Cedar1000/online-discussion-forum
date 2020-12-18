@@ -11,7 +11,7 @@ export default [
   { path: '/profile', component: Profile },
   { path: '/posts', component: Posts },
   { path: '/notifications', component: Notifications },
-  { path: '/post', component: singlePost },
+  { path: '/post/:id', component: singlePost },
   { path: '/login', component: Login },
   { path: '/register', component: Register },
 ];

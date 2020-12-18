@@ -18,7 +18,7 @@
               <b>Name</b>
             </vs-td>
             <vs-td class="td2">
-              Cedar Daniel
+              {{ currentUser.name }}
             </vs-td>
           </vs-tr>
 
@@ -27,7 +27,7 @@
               <b>Email</b>
             </vs-td>
             <vs-td class="td2">
-              Cedard686@gmail.com
+              {{ currentUser.email }}
             </vs-td>
           </vs-tr>
 
@@ -36,7 +36,7 @@
               <b>Gender</b>
             </vs-td>
             <vs-td class="td2">
-              Male
+              {{ currentUser.gender }}
             </vs-td>
           </vs-tr>
 
@@ -45,7 +45,7 @@
               <b>Joined</b>
             </vs-td>
             <vs-td class="td2">
-              August 2020
+              {{ currentUser.joined }}
             </vs-td>
           </vs-tr>
         </template>
@@ -55,8 +55,14 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'Profile',
+
+  computed: {
+    ...mapGetters(['currentUser']),
+  },
 };
 </script>
 

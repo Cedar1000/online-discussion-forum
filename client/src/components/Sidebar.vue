@@ -10,7 +10,7 @@
         </vs-avatar>
       </template>
 
-      <h4 class="username">Cedar Daniel</h4>
+      <h4 class="username">{{ currentUser.name }}</h4>
       <vs-sidebar-item id="home">
         <template #icon>
           <i class="fas fa-home"></i>
@@ -49,7 +49,7 @@
         </vs-sidebar-item>
       </vs-sidebar-group>
 
-      <vs-sidebar-item id="profile">
+      <vs-sidebar-item v-show="isLoggedIn" id="profile">
         <template #icon>
           <i class="fas fa-user"></i>
         </template>
@@ -91,7 +91,7 @@ export default {
     active: 'home',
   }),
   computed: {
-    ...mapGetters(['isLoggedIn', 'allCategories']),
+    ...mapGetters(['isLoggedIn', 'allCategories', 'currentUser']),
   },
 
   methods: {
@@ -104,6 +104,7 @@ export default {
 
     getCatPosts(name) {
       this.fetchCategoryPosts(name);
+      this.$router.push('/posts');
     },
   },
 

@@ -6,15 +6,18 @@ const state = {
   posts: [],
   categories: [],
   categoryPosts: [],
+  singlePost: '',
 };
 
 const getters = {
   allPosts: (state) => state.posts,
   allCategories: (state) => state.categories,
   allCategoryPosts: (state) => state.categoryPosts,
+  presentPost: (state) => state.singlePost,
 };
 
 const actions = {
+  //Geting all Posts from server
   async fetchPosts({ commit }) {
     try {
       const response = await axios.get(`${API_URL}/posts`);
@@ -25,6 +28,7 @@ const actions = {
     }
   },
 
+  // Getting all post categories from server
   async fetchCategories({ commit }) {
     try {
       const response = await axios.get(`${API_URL}/category`);
@@ -35,6 +39,7 @@ const actions = {
     }
   },
 
+  // Getting Posts based on categories
   async fetchCategoryPosts({ commit }, category) {
     try {
       console.log(category);
@@ -45,12 +50,25 @@ const actions = {
       console.log(error);
     }
   },
+
+  //Get Single Post from server
+  async fetchSinglePost({ commit }, id) {
+    try {
+      console.log(id);
+      const response = await axios.get(`${API_URL}/posts/${id}`);
+      console.log(response.data.post);
+      commit('setSinglePost', response.data.post);
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 const mutations = {
   setPosts: (state, posts) => (state.posts = posts),
   setCategories: (state, categories) => (state.categories = categories),
   setPostCategories: (state, posts) => (state.categoryPosts = posts),
+  setSinglePost: (state, post) => (state.singlePost = post),
 };
 
 export default {

@@ -19,7 +19,7 @@
 <script>
 // import Categories from './components/categories';
 // import Posts from './components/Posts';
-import cookie from 'vue-cookies';
+
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import AddPost from './components/AddPost';
@@ -38,12 +38,6 @@ export default {
   data: () => ({
     active: 'home',
   }),
-
-  created() {
-    if (cookie.get('jwt')) {
-      this.$store.dispatch('setJWT');
-    }
-  },
 };
 </script>
 

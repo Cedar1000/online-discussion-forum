@@ -6,32 +6,34 @@
         <!-- user div -->
         <div class="user">
           <vs-avatar size="55" circle class="avatar">
-            <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
+            <img
+              src="../assets/images/72571994_111521426928601_2576485395504037888_n.jpg"
+              alt=""
+            />
           </vs-avatar>
 
           <div class="post-details">
-            <p><b>Cedar Daniel</b></p>
-            <p class="timestamp">November 29 1:45 AM</p>
+            <p>
+              <b>{{ presentPost.user.name }}</b>
+            </p>
+            <p class="timestamp">{{ presentPost.createdAt }}</p>
           </div>
         </div>
 
         <div class="post-content">
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta natus
-            suscipit fugit obcaecati. Pariatur veniam dolorum, facere libero
-            maiores at! Enim ipsam repellat ab dolorum doloremque quaerat libero
-            labore animi. Lorem ipsum dolor sit amet consectetur adipisicing
-            elit. Ullam dolorem enim fugiat, numquam perferendis veniam magni ab
-            fuga recusandae a incidunt reprehenderit quod totam ea vero ut ipsa
-            sit, autem, nemo consequuntur natus earum inventore beatae nam.
-            Minima quia iure aperiam possimus accusantium labore in modi
-            consectetur adipisci quisquam voluptatum obcaecati ratione illo,
-            nesciunt cum magnam sapiente incidunt ut deserunt.
+            {{ presentPost.body }}
           </p>
         </div>
         <div class="actions">
-          <span><i class="fas fa-heart"></i><b>12</b></span>
-          <span><i class="far fa-comment"></i><b>5</b></span>
+          <span
+            ><i class="fas fa-heart"></i
+            ><b>{{ presentPost.likesQuantity }}</b></span
+          >
+          <span
+            ><i class="far fa-comment"></i
+            ><b>{{ presentPost.commentsQuantity }}</b></span
+          >
         </div>
       </div>
 
@@ -41,7 +43,6 @@
           <textarea-autosize
             placeholder="Type Post here..."
             ref="myTextarea"
-            v-model="value"
             :min-height="20"
             :max-height="350"
             @blur.native="onBlurTextarea"
@@ -52,19 +53,22 @@
         </div>
 
         <div class="comments">
-          <div class="comment">
+          <div
+            v-for="comment in presentPost.comments"
+            :key="comment.id"
+            class="comment"
+          >
             <div class="comment-inner">
               <vs-avatar size="35" circle class="avatar">
-                <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
+                <img
+                  src="../assets/images/72571994_111521426928601_2576485395504037888_n.jpg"
+                  alt=""
+                />
               </vs-avatar>
               <div class="comment-body">
                 <h4>Cedar Daniel</h4>
                 <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Blanditiis hic modi repudiandae sapiente facilis quam
-                  voluptatum iusto numquam, nihil ut iure recusandae eum
-                  accusantium possimus explicabo natus expedita temporibus
-                  debitis!
+                  {{ comment.body }}
                 </p>
                 <div class="actions">
                   <div class="wrapper-action">
@@ -77,7 +81,10 @@
             <div class="comment-replies">
               <div class="comment-inner">
                 <vs-avatar size="35" circle class="avatar">
-                  <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
+                  <img
+                    src="../assets/images/72571994_111521426928601_2576485395504037888_n.jpg"
+                    alt=""
+                  />
                 </vs-avatar>
                 <div class="comment-body">
                   <h4>Cedar Daniel</h4>
@@ -99,7 +106,10 @@
 
               <div class="comment-inner">
                 <vs-avatar size="35" circle class="avatar">
-                  <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
+                  <img
+                    src="../assets/images/72571994_111521426928601_2576485395504037888_n.jpg"
+                    alt=""
+                  />
                 </vs-avatar>
                 <div class="comment-body">
                   <h4>Cedar Daniel</h4>
@@ -121,75 +131,6 @@
             </div>
             <v-divider></v-divider>
           </div>
-
-          <div class="comment">
-            <div class="comment-inner">
-              <vs-avatar size="35" circle class="avatar">
-                <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
-              </vs-avatar>
-              <div class="comment-body">
-                <h4>Cedar Daniel</h4>
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Blanditiis hic modi repudiandae sapiente facilis quam
-                  voluptatum iusto numquam, nihil ut iure recusandae eum
-                  accusantium possimus explicabo natus expedita temporibus
-                  debitis!
-                </p>
-                <div class="actions">
-                  <div class="wrapper-action">
-                    <span><i class="fas fa-heart"></i><b>12</b></span>
-                    <span><i class="fas fa-reply"></i><b>5</b></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="comment-replies">
-              <div class="comment-inner">
-                <vs-avatar size="35" circle class="avatar">
-                  <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
-                </vs-avatar>
-                <div class="comment-body">
-                  <h4>Cedar Daniel</h4>
-                  <p>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Blanditiis hic modi repudiandae sapiente facilis quam
-                    voluptatum iusto numquam, nihil ut iure recusandae eum
-                    accusantium possimus explicabo natus expedita temporibus
-                    debitis!
-                  </p>
-                  <div class="actions">
-                    <div class="wrapper-action">
-                      <span><i class="fas fa-heart"></i><b>12</b></span>
-                      <span><i class="fas fa-reply"></i><b>5</b></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="comment-inner">
-                <vs-avatar size="35" circle class="avatar">
-                  <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
-                </vs-avatar>
-                <div class="comment-body">
-                  <h4>Cedar Daniel</h4>
-                  <p>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Blanditiis hic modi repudiandae sapiente facilis quam
-                    voluptatum iusto numquam, nihil ut iure recusandae eum
-                    accusantium possimus explicabo natus expedita temporibus
-                    debitis!
-                  </p>
-                  <div class="actions">
-                    <div class="wrapper-action">
-                      <span><i class="fas fa-heart"></i><b>12</b></span>
-                      <span><i class="fas fa-reply"></i><b>5</b></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -197,8 +138,26 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
   name: 'singlePost',
+  data: () => ({
+    id: '',
+  }),
+
+  methods: {
+    ...mapActions(['fetchSinglePost']),
+  },
+
+  mounted() {
+    this.id = this.$route.params.id;
+    this.fetchSinglePost(this.id);
+  },
+
+  computed: {
+    ...mapGetters(['presentPost']),
+  },
 };
 </script>
 
