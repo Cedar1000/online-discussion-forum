@@ -4,10 +4,12 @@ const API_URL = 'http://localhost:3000/api/v1';
 
 const state = {
   posts: [],
+  categories: [],
 };
 
 const getters = {
   allPosts: (state) => state.posts,
+  allCategories: (state) => state.categories,
 };
 
 const actions = {
@@ -20,10 +22,21 @@ const actions = {
       console.log(error, 'I am an error');
     }
   },
+
+  async fetchCategories({ commit }) {
+    try {
+      const response = await axios.get(`${API_URL}/category`);
+      console.log(response.data.doc);
+      commit('setCategories', response.data.doc);
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 const mutations = {
   setPosts: (state, posts) => (state.posts = posts),
+  setCategories: (state, categories) => (state.categories = categories),
 };
 
 export default {

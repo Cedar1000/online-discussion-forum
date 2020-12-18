@@ -37,23 +37,15 @@
           </vs-sidebar-item>
         </template>
 
-        <vs-sidebar-item id="Instagram">
+        <vs-sidebar-item
+          v-for="category in allCategories"
+          :key="category._id"
+          :id="category.name"
+        >
           <template #icon>
             <i class="bx bxl-instagram"></i>
           </template>
-          Instagram
-        </vs-sidebar-item>
-        <vs-sidebar-item id="twitter">
-          <template #icon>
-            <i class="bx bxl-twitter"></i>
-          </template>
-          Twitter
-        </vs-sidebar-item>
-        <vs-sidebar-item id="Facebook">
-          <template #icon>
-            <i class="bx bxl-facebook"></i>
-          </template>
-          Facebook
+          {{ category.name }}
         </vs-sidebar-item>
       </vs-sidebar-group>
 
@@ -64,11 +56,11 @@
         <router-link to="/Profile">Profile</router-link>
       </vs-sidebar-item>
 
-      <vs-sidebar-item id="signout">
+      <vs-sidebar-item v-show="isLoggedIn" id="signout">
         <template #icon>
           <i class="fas fa-sign-out-alt"></i>
         </template>
-        Sign Out
+        <span @click="signout">Sign Out</span>
       </vs-sidebar-item>
 
       <template #footer>
@@ -91,11 +83,29 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
+
 export default {
   name: 'sidebar',
   data: () => ({
     active: 'home',
   }),
+  computed: {
+    ...mapGetters(['isLoggedIn', 'allCategories']),
+  },
+
+  methods: {
+    ...mapActions(['logout', 'fetchCategories']),
+
+    signout() {
+      this.logout();
+      console.log('Signed Out');
+    },
+  },
+
+  mounted() {
+    this.fetchCategories();
+  },
 };
 </script>
 
