@@ -12,7 +12,11 @@ import VueRouter from 'vue-router';
 import Routes from './routes';
 import store from './store';
 
+require('./store/subscriber');
+
 Vue.config.productionTip = false;
+
+store.dispatch('attempt', localStorage.getItem('token'));
 
 Vue.use(Vuesax);
 Vue.use(TextareaAutosize);

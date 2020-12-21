@@ -1,17 +1,18 @@
 import axios from 'axios';
-import cookie from 'vue-cookies';
 
 const API_URL = 'http://localhost:3000/api/v1';
 
 const state = {
   user: '',
-  token: cookie.get('jwt') || null,
+  token: null,
   errorMsg: '',
+  notifications: '',
 };
 
 const getters = {
   isLoggedIn: (state) => state.user,
   currentUser: (state) => state.user,
+  nNotifications: (state) => state.notifications.length,
 };
 
 const actions = {
@@ -24,9 +25,6 @@ const actions = {
         password,
       });
       console.log(response);
-
-      cookie.set('jwt', response.data.token);
-      console.log(cookie.get('jwt'));
 
       // console.log(document.cookie);
       commit('setUser', response.data.user);
@@ -59,10 +57,32 @@ const actions = {
     try {
       await axios.get(`${API_URL}/users/logout`);
       commit('logOut');
-      cookie.set('jwt', '');
-      console.log(cookie.get('jwt'));
     } catch (error) {
       console.log(error);
+    }
+  },
+
+  async getUserNotifications({ commit }, userId) {
+    try {
+      console.log(userId);
+      const response = await axios.get(`${API_URL}/notifications/${userId}`);
+      console.log(response.data.notifications);
+      commit('setNotification', response.data.notifications);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async attempt({ commit }, token) {
+    commit('setToken', token);
+
+    try {
+      const response = await axios.get(`${API_URL}/users/me`);
+      console.log(response);
+      commit('setUser', response.data.doc);
+    } catch (error) {
+      commit('setToken', null);
+      commit('setUser', null);
     }
   },
 };
@@ -75,6 +95,8 @@ const mutations = {
     state.token = null;
     console.log(state.user, state.token);
   },
+  setNotification: (state, notifications) =>
+    (state.notifications = notifications),
 };
 
 export default {

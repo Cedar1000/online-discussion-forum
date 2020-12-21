@@ -15,10 +15,8 @@ exports.getUsers = factory.getAll(User);
 exports.getUser = factory.getOne(User);
 
 exports.getMe = catchAsync(async (req, res, next) => {
-  res.status(200).json({
-    status: 'success',
-    user: req.user,
-  });
+  req.params.id = req.user.id;
+  next();
 });
 
 exports.updateMe = catchAsync(async (req, res, next) => {

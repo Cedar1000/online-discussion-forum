@@ -22,7 +22,9 @@
         <template #icon>
           <div class="not-list">
             <i class="far fa-bell"></i>
-            <span class="not-div">1</span>
+            <span v-show="nNotifications > 0" class="not-div">{{
+              nNotifications
+            }}</span>
           </div>
         </template>
         <router-link to="/Notifications">Notifications</router-link>
@@ -91,11 +93,22 @@ export default {
     active: 'home',
   }),
   computed: {
-    ...mapGetters(['isLoggedIn', 'allCategories', 'currentUser']),
+    ...mapGetters([
+      'isLoggedIn',
+      'allCategories',
+      'currentUser',
+      'nNotifications',
+    ]),
   },
 
   methods: {
-    ...mapActions(['logout', 'fetchCategories', 'fetchCategoryPosts']),
+    ...mapActions([
+      'logout',
+      'fetchCategories',
+      'fetchCategoryPosts',
+      'getUserNotifications',
+      'attempt',
+    ]),
 
     signout() {
       this.logout();
@@ -110,6 +123,7 @@ export default {
 
   mounted() {
     this.fetchCategories();
+    // this.attempt(localStorage.getItem('token'));
   },
 };
 </script>

@@ -148,7 +148,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['isLoggedIn']),
+    ...mapGetters(['isLoggedIn', 'nNotifications']),
   },
 };
 </script>
