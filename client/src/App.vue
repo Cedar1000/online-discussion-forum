@@ -9,7 +9,7 @@
         <router-view></router-view>
       </div>
 
-      <div class="add-post">
+      <div class="add-post" v-if="checkRouter()">
         <AddPost />
       </div>
     </div>
@@ -39,8 +39,10 @@ export default {
     active: 'home',
   }),
 
-  mounted() {
-    console.log(this);
+  methods: {
+    checkRouter() {
+      return this.$router.currentRoute.fullPath === '/posts';
+    },
   },
 };
 </script>
