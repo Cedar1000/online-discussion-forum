@@ -13,6 +13,7 @@ const getters = {
   isLoggedIn: (state) => state.user,
   currentUser: (state) => state.user,
   nNotifications: (state) => state.notifications.length,
+  Notifications: (state) => state.notifications,
 };
 
 const actions = {
@@ -62,14 +63,16 @@ const actions = {
     }
   },
 
-  async getUserNotifications({ commit }, userId) {
-    try {
-      console.log(userId);
-      const response = await axios.get(`${API_URL}/notifications/${userId}`);
-      console.log(response.data.notifications);
-      commit('setNotification', response.data.notifications);
-    } catch (error) {
-      console.log(error);
+  async getUserNotifications({ commit }) {
+    const { _id } = this.state.auth.user;
+    if (this.state.auth.user) {
+      try {
+        const response = await axios.get(`${API_URL}/notifications/${_id}`);
+        console.log('Notificications', response.data.notifications);
+        commit('setNotification', response.data.notifications);
+      } catch (error) {
+        console.log(error);
+      }
     }
   },
 
@@ -78,7 +81,6 @@ const actions = {
 
     try {
       const response = await axios.get(`${API_URL}/users/me`);
-      console.log(response);
       commit('setUser', response.data.doc);
     } catch (error) {
       commit('setToken', null);

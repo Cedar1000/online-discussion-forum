@@ -17,3 +17,12 @@ store.subscribe((mutation) => {
       break;
   }
 });
+
+store.subscribe((action) => {
+  switch (action.type) {
+    case 'setUser':
+      if (action.payload) {
+        store.dispatch('getUserNotifications');
+      }
+  }
+});

@@ -38,6 +38,10 @@ export default {
   data: () => ({
     active: 'home',
   }),
+
+  mounted() {
+    console.log(this);
+  },
 };
 </script>
 
