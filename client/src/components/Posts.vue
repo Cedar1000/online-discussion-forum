@@ -48,16 +48,33 @@ import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Posts',
-  methods: {
-    ...mapActions(['fetchPosts']),
+  data() {
+    return {
+      param: this.$route.params.category,
+      path: this.$route.fullPath,
+    };
   },
-  computed: mapGetters(['allCategoryPosts']),
+  methods: {
+    ...mapActions(['fetchCategoryPosts']),
+  },
+  computed: {
+    ...mapGetters(['allCategoryPosts']),
+    getPath() {
+      this.fetchCategoryPosts(this.$route.params.category);
+      return this.$route.params.category;
+    },
+  },
+
+  mounted() {
+    this.fetchCategoryPosts(this.param);
+  },
 };
 </script>
 
 <style scoped>
 a {
   text-decoration: none;
+  display: flex;
 }
 .posts {
   padding: 20px;

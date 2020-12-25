@@ -4,18 +4,37 @@
       placeholder="Type Post here..."
       ref="myTextarea"
       :min-height="20"
-      :max-height="350"
-      @blur.native="onBlurTextarea"
+      :max-height="650"
+      v-model="post.body"
     />
-    <v-btn class="mx-2" fab dark color="indigo">
+    <v-btn @click="sendPost" class="mx-2" fab dark color="indigo">
       <i class="fas fa-paper-plane"></i>
     </v-btn>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: 'addpost',
+  data() {
+    return {
+      post: {
+        body: '',
+        category: this.$route.params.category,
+      },
+    };
+  },
+
+  methods: {
+    ...mapActions(['addPost']),
+
+    async sendPost() {
+      this.addPost(this.post);
+      await this.$router.push(`/posts/${this.$route.params.category}`);
+    },
+  },
 };
 </script>
 

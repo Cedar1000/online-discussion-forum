@@ -69,6 +69,13 @@ exports.getPost = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.createPost = factory.createOne(Post);
+exports.createPost = catchAsync(async (req, res, next) => {
+  const post = await Post.create(req.body);
+
+  res.status(201).json({
+    status: 'Success',
+    post,
+  });
+});
 exports.updatePost = factory.updateOne(Post);
 exports.deletePost = factory.deleteOne(Post);

@@ -68,7 +68,6 @@ const actions = {
     if (this.state.auth.user) {
       try {
         const response = await axios.get(`${API_URL}/notifications/${_id}`);
-        console.log('Notificications', response.data.notifications);
         commit('setNotification', response.data.notifications);
       } catch (error) {
         console.log(error);

@@ -41,7 +41,7 @@ export default {
 
   methods: {
     checkRouter() {
-      return this.$router.currentRoute.fullPath === '/posts';
+      return this.$router.currentRoute.fullPath.startsWith('/posts');
     },
   },
 };

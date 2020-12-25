@@ -43,11 +43,14 @@
           v-for="category in allCategories"
           :key="category._id"
           :id="category.name"
+          @click="logName(category.name)"
         >
           <template #icon>
             <i class="bx bxl-instagram"></i>
           </template>
-          <span @click="getCatPosts(category.name)">{{ category.name }}</span>
+          <router-link :to="`/posts/${category.name}`">{{
+            category.name
+          }}</router-link>
         </vs-sidebar-item>
       </vs-sidebar-group>
 
@@ -105,9 +108,9 @@ export default {
     ...mapActions([
       'logout',
       'fetchCategories',
-      'fetchCategoryPosts',
       'getUserNotifications',
       'attempt',
+      'fetchCategoryPosts',
     ]),
 
     signout() {
@@ -118,6 +121,10 @@ export default {
     getCatPosts(name) {
       this.fetchCategoryPosts(name);
       this.$router.push('/posts');
+    },
+
+    logName(name) {
+      console.log(name);
     },
   },
 

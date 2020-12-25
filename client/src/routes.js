@@ -9,7 +9,7 @@ import Register from './components/Register.vue';
 export default [
   { path: '/', component: Home },
   { path: '/profile', component: Profile },
-  { path: '/posts', component: Posts },
+  { path: '/posts/:category', component: Posts },
   { path: '/notifications', component: Notifications },
   { path: '/post/:id', component: singlePost },
   { path: '/login', component: Login },
