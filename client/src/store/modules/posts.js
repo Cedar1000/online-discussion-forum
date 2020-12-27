@@ -65,8 +65,20 @@ const actions = {
   async addPost({ commit }, post) {
     try {
       const response = await axios.post(`${API_URL}/posts`, post);
-      console.log(response.data.doc);
-      commit('addPost', response.data.post);
+      console.log(response.data.postGotBack);
+      commit('addPost', response.data.postGotBack);
+    } catch (error) {
+      console.log(error.response);
+    }
+  },
+
+  //Delete Post
+  async deletePost({ commit }, id) {
+    try {
+      console.log(id);
+      const response = await axios.delete(`${API_URL}/posts/${id}`);
+      console.log(response.data);
+      commit('removePost', response.data);
     } catch (error) {
       console.log(error.response);
     }
@@ -78,8 +90,13 @@ const mutations = {
   setCategories: (state, categories) => (state.categories = categories),
   setPostCategories: (state, posts) => (state.categoryPosts = posts),
   setSinglePost: (state, post) => (state.singlePost = post),
-  addPost: (state, newPost) =>
-    (state.categoryPosts = state.categoryPosts.push(newPost)),
+  addPost: (state, newPost) => {
+    state.categoryPosts.push(newPost);
+  },
+  removePost: (state, post) =>
+    (state.categoryPosts = state.categoryPosts.filter(
+      (el) => el._id !== post._id
+    )),
 };
 
 export default {

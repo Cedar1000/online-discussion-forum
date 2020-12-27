@@ -15,6 +15,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import { bus } from '../main';
 
 export default {
   name: 'addpost',
@@ -32,7 +33,9 @@ export default {
 
     async sendPost() {
       this.addPost(this.post);
-      await this.$router.push(`/posts/${this.$route.params.category}`);
+
+      this.post.body = '';
+      await bus.$emit('scrollDown');
     },
   },
 };

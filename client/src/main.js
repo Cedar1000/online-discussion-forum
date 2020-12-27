@@ -23,12 +23,12 @@ Vue.use(TextareaAutosize);
 Vue.use(VueRouter);
 Vue.use(VueCookies);
 
-Vue.$cookies.config('7d');
-
 const router = new VueRouter({
   routes: Routes,
   mode: 'history',
 });
+
+export const bus = new Vue();
 
 new Vue({
   vuetify,

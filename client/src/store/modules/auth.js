@@ -27,7 +27,6 @@ const actions = {
       });
       console.log(response);
 
-      // console.log(document.cookie);
       commit('setUser', response.data.user);
       commit('setToken', response.data.token);
     } catch (error) {

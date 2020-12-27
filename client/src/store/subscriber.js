@@ -1,5 +1,6 @@
 import store from '@/store';
 import axios from 'axios';
+import { bus } from '../main';
 
 store.subscribe((mutation) => {
   switch (mutation.type) {
@@ -15,6 +16,8 @@ store.subscribe((mutation) => {
         localStorage.removeItem('token');
       }
       break;
+    case 'addPost':
+      bus.$emit('emitSub');
   }
 });
 

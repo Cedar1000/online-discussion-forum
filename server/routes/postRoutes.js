@@ -33,6 +33,10 @@ router
     authController.accessControl,
     postController.updatePost
   )
-  .delete(authController.accessControl, postController.deletePost);
+  .delete(
+    authController.protect,
+    authController.accessControl,
+    postController.deletePost
+  );
 
 module.exports = router;

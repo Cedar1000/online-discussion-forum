@@ -82,8 +82,6 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
-  } else if (req.cookies.jwt) {
-    token = req.cookies.jwt;
   }
 
   //2) Validate token
@@ -152,8 +150,10 @@ exports.accessControl = catchAsync(async (req, res, next) => {
   //Find post with the ID in question
   const post = await Post.findById(id);
 
+  console.log(post.user._id == req.user.id);
+
   // Compare post ID to user ID
-  if (post.user._id !== req.user.id) {
+  if (post.user._id != req.user.id) {
     return next(
       new AppError('You are not allowed to perform this action', 403)
     );

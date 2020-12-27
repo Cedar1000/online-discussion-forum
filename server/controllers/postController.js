@@ -70,11 +70,13 @@ exports.getPost = catchAsync(async (req, res, next) => {
 });
 
 exports.createPost = catchAsync(async (req, res, next) => {
-  const post = await Post.create(req.body);
+  const postCreated = await Post.create(req.body);
+
+  const postGotBack = await Post.findById(postCreated.id);
 
   res.status(201).json({
     status: 'Success',
-    post,
+    postGotBack,
   });
 });
 exports.updatePost = factory.updateOne(Post);
