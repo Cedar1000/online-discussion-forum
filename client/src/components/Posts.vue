@@ -38,7 +38,9 @@
                 ><b>{{ post.commentsQuantity }}</b></span
               >
             </div>
-            <span @click="sendDelReq(post._id)"
+            <span
+              v-if="post.user._id === currentUser._id"
+              @click="sendDelReq(post._id)"
               ><i class="fas fa-trash"></i
             ></span>
           </div>
@@ -67,7 +69,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['allCategoryPosts']),
+    ...mapGetters(['allCategoryPosts', 'currentUser']),
     getPath() {
       this.fetchCategoryPosts(this.$route.params.category);
       return this.$route.params.category;

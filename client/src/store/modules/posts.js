@@ -77,8 +77,7 @@ const actions = {
     try {
       console.log(id);
       const response = await axios.delete(`${API_URL}/posts/${id}`);
-      console.log(response.data);
-      commit('removePost', response.data);
+      commit('removePost', id);
     } catch (error) {
       console.log(error.response);
     }
@@ -93,10 +92,8 @@ const mutations = {
   addPost: (state, newPost) => {
     state.categoryPosts.push(newPost);
   },
-  removePost: (state, post) =>
-    (state.categoryPosts = state.categoryPosts.filter(
-      (el) => el._id !== post._id
-    )),
+  removePost: (state, id) =>
+    (state.categoryPosts = state.categoryPosts.filter((el) => el._id !== id)),
 };
 
 export default {
