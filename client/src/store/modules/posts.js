@@ -76,7 +76,7 @@ const actions = {
   async deletePost({ commit }, id) {
     try {
       console.log(id);
-      const response = await axios.delete(`${API_URL}/posts/${id}`);
+      await axios.delete(`${API_URL}/posts/${id}`);
       commit('removePost', id);
     } catch (error) {
       console.log(error.response);

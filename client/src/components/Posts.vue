@@ -30,7 +30,8 @@
           <div class="action-div">
             <div class="actions">
               <span
-                ><i class="fas fa-heart"></i
+                ><span @click="sendLikeReq(post._id)"
+                  ><i class="far fa-heart"></i></span
                 ><b>{{ post.likesQuantity }}</b></span
               >
               <span
@@ -63,9 +64,14 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['fetchCategoryPosts', 'deletePost']),
+    ...mapActions(['fetchCategoryPosts', 'deletePost', 'likePost']),
+
     sendDelReq(id) {
       this.deletePost(id);
+    },
+
+    sendLikeReq(id) {
+      this.likePost(id);
     },
   },
   computed: {
@@ -144,7 +150,7 @@ b {
   width: 65px;
 }
 
-.fa-heart {
+.liked {
   color: #ef4545;
 }
 
