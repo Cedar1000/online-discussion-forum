@@ -2,12 +2,16 @@
   <div>
     <div class="not-div">
       <v-list v-show="Notifications && Notifications.length > 1">
-        <v-list-item class="list-item">
+        <v-list-item
+          v-for="Not in Notifications"
+          :key="Not.id"
+          class="list-item"
+        >
           <vs-avatar class="v-avatar" circle size="60">
             <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
           </vs-avatar>
           <div>
-            <b>Cedar Daniel</b> liked your post
+            {{ Not.body }}
             <div class="timestamp">5 sec ago.</div>
           </div>
         </v-list-item>

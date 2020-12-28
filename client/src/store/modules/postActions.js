@@ -9,7 +9,7 @@ const getters = {};
 const actions = {
   async likePost({ commit, rootState }, id) {
     try {
-      const response = axios.post(`posts/${id}/likes`);
+      const response = await axios.post(`posts/${id}/likes`);
       console.log(response);
       commit('addLike', { id, rootState });
     } catch (error) {
@@ -21,7 +21,7 @@ const actions = {
 const mutations = {
   addLike: function(state, payload) {
     const { categoryPosts } = payload.rootState.posts;
-    console.log(categoryPosts, payload.id);
+    return categoryPosts.find((el) => el.id === payload.id).likeQuantity++;
   },
 };
 
