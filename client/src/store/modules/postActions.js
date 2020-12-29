@@ -21,7 +21,8 @@ const actions = {
 const mutations = {
   addLike: function(state, payload) {
     const { categoryPosts } = payload.rootState.posts;
-    return categoryPosts.find((el) => el.id === payload.id).likeQuantity++;
+    const post = categoryPosts.find((el) => el.id === payload.id);
+    post.likesQuantity += 1;
   },
 };
 
