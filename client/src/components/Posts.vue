@@ -29,9 +29,13 @@
           </router-link>
           <div class="action-div">
             <div class="actions">
-              <span
-                ><span @click="sendLikeReq(post._id)"
-                  ><i class="far fa-heart"></i></span
+              <span>
+                <i
+                  v-if="hasLiked(currentUser._id, post.likes)"
+                  class="fas fa-heart liked"
+                ></i>
+                <span v-else @click="sendLikeReq(post._id)">
+                  <i class="far fa-heart"></i> </span
                 ><b>{{ post.likesQuantity }}</b></span
               >
               <span
@@ -73,7 +77,14 @@ export default {
     sendLikeReq(id) {
       this.likePost(id);
     },
+
+    hasLiked(userId, likesArr) {
+      const IDs = [];
+      likesArr.forEach((el) => IDs.push(el.user._id));
+      return IDs.includes(userId);
+    },
   },
+
   computed: {
     ...mapGetters(['allCategoryPosts', 'currentUser']),
     getPath() {

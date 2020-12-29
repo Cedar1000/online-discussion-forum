@@ -42,6 +42,9 @@ exports.getAllPost = catchAsync(async (req, res, next) => {
           select: 'name avatar',
         },
       ],
+    })
+    .populate({
+      path: 'likes',
     });
 
   res.status(200).json({
