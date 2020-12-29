@@ -31,7 +31,7 @@
             <div class="actions">
               <span>
                 <i
-                  v-if="hasLiked(currentUser._id, post.likes)"
+                  v-if="post.likes && hasLiked(currentUser._id, post.likes)"
                   class="fas fa-heart liked"
                 ></i>
                 <span v-else @click="sendLikeReq(post._id)">

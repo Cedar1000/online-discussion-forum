@@ -75,7 +75,7 @@ exports.getPost = catchAsync(async (req, res, next) => {
 exports.createPost = catchAsync(async (req, res, next) => {
   const postCreated = await Post.create(req.body);
 
-  const postGotBack = await Post.findById(postCreated.id);
+  const postGotBack = await Post.findById(postCreated.id).populate('likes');
 
   res.status(201).json({
     status: 'Success',

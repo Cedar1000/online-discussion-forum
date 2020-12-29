@@ -35,16 +35,17 @@ exports.createLike = catchAsync(async (req, res, next) => {
   const message = `${req.user.name} liked your post`;
 
   // Create Notification
-  const notification = await Notification.create({
+  await Notification.create({
     actionUser: req.user,
     userToNotify: likedPost.user,
     body: message,
   });
 
+  const likePoped = await Like.findById(like._id);
+
   res.status(200).json({
     status: 'success',
-    like,
-    notification,
+    likePoped,
   });
 });
 
