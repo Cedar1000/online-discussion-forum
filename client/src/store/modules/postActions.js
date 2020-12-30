@@ -23,7 +23,7 @@ const mutations = {
     const { categoryPosts } = payload.rootState.posts;
     const post = categoryPosts.find((el) => el.id === payload.id);
     post.likesQuantity += 1;
-    console.log(payload.newLike);
+
     post.likes.push(payload.newLike);
   },
 };

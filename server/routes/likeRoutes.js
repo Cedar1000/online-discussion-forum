@@ -14,6 +14,13 @@ router
   )
   .get(likeController.getAllLikes);
 
-router.route('/:id').get(likeController.getLike).delete(likeController.dislike);
+router
+  .route('/:id')
+  .get(likeController.getLike)
+  .delete(
+    authController.protect,
+    likeController.likeAuth,
+    likeController.dislike
+  );
 
 module.exports = router;

@@ -13,6 +13,21 @@ exports.setPostId = (req, res, next) => {
   next();
 };
 
+exports.likeAuth = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const like = await Like.findById(id);
+
+  console.log(req.user._id);
+  console.log(like.user.id);
+
+  if (req.user._id != like.user.id) {
+    return next(
+      new AppError('You are not authorized to delete this like', 403)
+    );
+  }
+  next();
+});
+
 exports.checkUser = catchAsync(async (req, res, next) => {
   const like = await Like.find({ post: req.body.post, user: req.user.id });
   console.log(like);
