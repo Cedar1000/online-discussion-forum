@@ -30,11 +30,16 @@
           <div class="action-div">
             <div class="actions">
               <span>
-                <i
-                  v-if="post.likes && hasLiked(currentUser._id, post.likes)"
-                  class="fas fa-heart liked"
-                ></i>
-                <span v-else @click="sendLikeReq(post._id)">
+                <span
+                  v-show="post.likes && hasLiked(currentUser._id, post.likes)"
+                  @click="handleDislike(post)"
+                >
+                  <i class="fas fa-heart liked"></i>
+                </span>
+                <span
+                  v-show="!hasLiked(currentUser._id, post.likes)"
+                  @click="sendLikeReq(post._id)"
+                >
                   <i class="far fa-heart"></i> </span
                 ><b>{{ post.likesQuantity }}</b></span
               >
@@ -68,7 +73,12 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['fetchCategoryPosts', 'deletePost', 'likePost']),
+    ...mapActions([
+      'fetchCategoryPosts',
+      'deletePost',
+      'likePost',
+      'dislikePost',
+    ]),
 
     sendDelReq(id) {
       this.deletePost(id);
@@ -76,6 +86,14 @@ export default {
 
     sendLikeReq(id) {
       this.likePost(id);
+    },
+
+    handleDislike(post) {
+      const like = post.likes.find(
+        (el) => el.user._id === this.currentUser._id
+      );
+
+      this.dislikePost({ postId: post._id, likeId: like._id });
     },
 
     hasLiked(userId, likesArr) {
