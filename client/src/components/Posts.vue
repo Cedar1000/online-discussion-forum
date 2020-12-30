@@ -72,6 +72,7 @@ export default {
       path: this.$route.fullPath,
     };
   },
+
   methods: {
     ...mapActions([
       'fetchCategoryPosts',
@@ -105,6 +106,7 @@ export default {
 
   computed: {
     ...mapGetters(['allCategoryPosts', 'currentUser']),
+
     getPath() {
       this.fetchCategoryPosts(this.$route.params.category);
       return this.$route.params.category;
@@ -119,6 +121,8 @@ export default {
 
       postDiv.scrollTop = postDiv.scrollHeight;
     });
+
+    bus.$emit('closeSidebar');
   },
 };
 </script>

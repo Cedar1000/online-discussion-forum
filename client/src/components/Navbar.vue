@@ -71,23 +71,16 @@
           </vs-sidebar-item>
         </template>
 
-        <vs-sidebar-item id="Instagram">
+        <vs-sidebar-item
+          v-for="category in allCategories"
+          :key="category._id"
+          :id="category.name"
+          @click="logName(category.name)"
+        >
           <template #icon>
             <i class="bx bxl-instagram"></i>
           </template>
-          Instagram
-        </vs-sidebar-item>
-        <vs-sidebar-item id="twitter">
-          <template #icon>
-            <i class="bx bxl-twitter"></i>
-          </template>
-          Twitter
-        </vs-sidebar-item>
-        <vs-sidebar-item id="Facebook">
-          <template #icon>
-            <i class="bx bxl-facebook"></i>
-          </template>
-          Facebook
+          <span @click="redirect(category.name)">{{ category.name }}</span>
         </vs-sidebar-item>
       </vs-sidebar-group>
 
@@ -145,15 +138,30 @@ export default {
       this.logout();
       console.log('Signed Out');
     },
+
+    redirect(category) {
+      console.log(category);
+      this.closeNavbar();
+      this.$router.push(`/posts/${category}`);
+    },
   },
 
   computed: {
-    ...mapGetters(['isLoggedIn', 'nNotifications']),
+    ...mapGetters(['isLoggedIn', 'nNotifications', 'allCategories']),
+  },
+
+  mounted() {
+    this.activeSidebar = false;
   },
 };
 </script>
 
 <style scoped>
+a {
+  text-decoration: none;
+  color: #2c3e50;
+}
+
 .sidebar-content {
   font-family: 'Lato', sans-serif;
   position: absolute;
