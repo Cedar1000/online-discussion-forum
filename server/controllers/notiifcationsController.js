@@ -9,7 +9,9 @@ exports.getUserNotifications = catchAsync(async (req, res, next) => {
   const { userId } = req.params;
 
   //Find Notifications for particular User
-  const notifications = await Notification.find({ userToNotify: userId });
+  const notifications = await Notification.find({ userToNotify: userId }).sort(
+    '-createdAt'
+  );
 
   res.status(200).json({
     status: 'Success',
