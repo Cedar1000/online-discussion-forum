@@ -54,7 +54,9 @@
         <template #icon>
           <div class="not-list">
             <i class="far fa-bell"></i>
-            <span class="not-div">{{ nNotifications }}</span>
+            <span v-show="nNotifications > 0" class="not-div">{{
+              nNotifications
+            }}</span>
           </div>
         </template>
         <span @click="handleNotification" to="/Notifications"
