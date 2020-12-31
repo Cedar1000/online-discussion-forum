@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="wrapper">
-      <i class="fas fa-arrow-left"></i>
+      <router-link :to="`/notifications`"
+        ><i class="fas fa-arrow-left"></i
+      ></router-link>
       <div class="post">
         <!-- user div -->
         <div class="user">
