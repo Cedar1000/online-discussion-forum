@@ -12,8 +12,11 @@ const state = {
 const getters = {
   isLoggedIn: (state) => state.user,
   currentUser: (state) => state.user,
-  nNotifications: (state) =>
-    state.notifications.filter((el) => el.read === false).length,
+
+  nNotifications: (state) => {
+    if (state.notifications.length)
+      return state.notifications.filter((el) => el.read === false).length;
+  },
   Notifications: (state) => state.notifications,
 };
 
@@ -89,7 +92,9 @@ const actions = {
 
   async patchNotification({ commit }, id) {
     try {
-      const response = await axios.patch(`${API_URL}/notifications/${id}`);
+      const response = await axios.patch(`${API_URL}/notifications/${id}`, {
+        read: true,
+      });
       commit('updateNotification', response.data.notification);
     } catch (error) {
       console.log(error.response);

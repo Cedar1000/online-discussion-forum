@@ -6,6 +6,7 @@
           v-for="Not in Notifications"
           :key="Not.id"
           class="list-item"
+          :class="{ unread: !Not.read }"
         >
           <vs-avatar class="v-avatar" circle size="60">
             <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
@@ -41,8 +42,10 @@ export default {
     ...mapActions(['patchNotification']),
 
     markRead(not) {
-      this.patchNotification(not._id);
-      this.$router.push(`/post/${not.post}`);
+      if (not.read === false) {
+        this.patchNotification(not._id);
+        this.$router.push(`/post/${not.post}`);
+      }
     },
   },
 };
@@ -52,6 +55,10 @@ export default {
 a {
   text-decoration: none;
   color: #2c3e50;
+}
+
+.unread {
+  background-color: #f8f8f8;
 }
 
 .not-div {
