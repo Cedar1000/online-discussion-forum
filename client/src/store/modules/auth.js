@@ -12,7 +12,8 @@ const state = {
 const getters = {
   isLoggedIn: (state) => state.user,
   currentUser: (state) => state.user,
-  nNotifications: (state) => state.notifications.length,
+  nNotifications: (state) =>
+    state.notifications.filter((el) => el.read === false).length,
   Notifications: (state) => state.notifications,
 };
 
