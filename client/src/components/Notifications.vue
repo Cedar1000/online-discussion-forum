@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Notifications',
@@ -38,8 +38,10 @@ export default {
   },
 
   methods: {
+    ...mapActions(['patchNotification']),
+
     markRead(not) {
-      console.log(not);
+      this.patchNotification(not._id);
       this.$router.push(`/post/${not.post}`);
     },
   },

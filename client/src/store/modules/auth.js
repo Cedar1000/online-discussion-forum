@@ -85,6 +85,15 @@ const actions = {
       commit('setUser', null);
     }
   },
+
+  async patchNotification({ commit }, id) {
+    try {
+      const response = await axios.patch(`${API_URL}/notifications/${id}`);
+      commit('updateNotification', response.data.notification);
+    } catch (error) {
+      console.log(error.response);
+    }
+  },
 };
 
 const mutations = {
@@ -97,6 +106,10 @@ const mutations = {
   },
   setNotification: (state, notifications) =>
     (state.notifications = notifications),
+
+  updateNotification: (state, notification) => {
+    state.notifications.find((el) => el.id === notification.id).read = true;
+  },
 };
 
 export default {
