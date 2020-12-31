@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="not-div">
-      <v-list v-show="Notifications && Notifications.length > 1">
+      <v-list v-show="Notifications && Notifications.length > 0">
         <v-list-item
           v-for="Not in Notifications"
           :key="Not.id"
@@ -10,7 +10,8 @@
           <vs-avatar class="v-avatar" circle size="60">
             <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
           </vs-avatar>
-          <div>
+
+          <div @click="markRead(Not)">
             {{ Not.body }}
             <div class="timestamp">5 sec ago.</div>
           </div>
@@ -35,10 +36,22 @@ export default {
   computed: {
     ...mapGetters(['Notifications']),
   },
+
+  methods: {
+    markRead(not) {
+      console.log(not);
+      this.$router.push(`/post/${not.post}`);
+    },
+  },
 };
 </script>
 
 <style scoped>
+a {
+  text-decoration: none;
+  color: #2c3e50;
+}
+
 .not-div {
   font-family: 'Lato', sans-serif;
   overflow: hidden;

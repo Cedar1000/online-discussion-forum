@@ -6,6 +6,8 @@ const notificationSchema = new mongoose.Schema(
 
     userToNotify: { type: mongoose.Schema.ObjectId, ref: 'User' },
 
+    post: { type: mongoose.Schema.ObjectId, ref: 'Post' },
+
     read: {
       type: Boolean,
       default: false,

@@ -22,7 +22,7 @@
         </template>
 
         <template #text>
-          <router-link :to="`posts/${post.id}`">
+          <router-link :to="`/post/${post.id}`">
             <p>
               {{ post.body }}
             </p>

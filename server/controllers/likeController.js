@@ -54,6 +54,7 @@ exports.createLike = catchAsync(async (req, res, next) => {
     actionUser: req.user,
     userToNotify: likedPost.user,
     body: message,
+    post: likedPost._id,
   });
 
   const likePoped = await Like.findById(like._id);
