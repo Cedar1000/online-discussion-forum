@@ -1,6 +1,11 @@
 <template>
   <div class="posts" id="posts">
-    <div v-for="post in allCategoryPosts" :key="post.id" class="post">
+    <div
+      v-for="post in allCategoryPosts"
+      :key="post.id"
+      class="post"
+      :class="{ me: post.user._id === currentUser._id }"
+    >
       <vs-avatar
         badge
         circle
