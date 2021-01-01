@@ -102,6 +102,16 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+userSchema.pre('save', function (next) {
+  if (this.gender === 'male') {
+    this.avatar = 'male.jpg';
+  } else {
+    this.avatar = 'female.jpg';
+  }
+
+  next();
+});
+
 //INSTANCE METHODS
 userSchema.methods.correctPassword = async function (
   inputedPassword,
