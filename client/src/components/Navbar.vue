@@ -16,9 +16,7 @@
           badge-position="bottom-right"
           size="35"
         >
-          <img
-            src="../assets/images/72571994_111521426928601_2576485395504037888_n.jpg"
-          />
+          <img :src="`http://localhost:3000/img/users/${currentUser.avatar}`" />
         </vs-avatar>
 
         <router-link v-show="!isLoggedIn" to="/login" class="login-btn"
@@ -35,10 +33,7 @@
     >
       <template #logo>
         <vs-avatar size="100" circle badge class="avatar">
-          <img
-            src="../assets/images/72571994_111521426928601_2576485395504037888_n.jpg"
-            alt=""
-          />
+          <img :src="`http://localhost:3000/img/users/${currentUser.avatar}`" />
         </vs-avatar>
       </template>
 
@@ -149,7 +144,12 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['isLoggedIn', 'nNotifications', 'allCategories']),
+    ...mapGetters([
+      'isLoggedIn',
+      'nNotifications',
+      'allCategories',
+      'currentUser',
+    ]),
   },
 
   mounted() {

@@ -80,3 +80,7 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
     data: null,
   });
 });
+
+exports.getImages = catchAsync(async (req, res, next) => {
+  res.send('../public/img/users/cake1.png');
+});

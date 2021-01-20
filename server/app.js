@@ -24,6 +24,8 @@ const notificationRouter = require('./routes/notificationRoutes');
 //Set security HTTP headers
 app.use(helmet());
 
+app.use(express.static(`${__dirname}/public`));
+
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }

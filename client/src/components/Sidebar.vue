@@ -4,7 +4,7 @@
       <template #logo>
         <vs-avatar size="100" circle badge class="avatar">
           <img
-            src="../assets/images/72571994_111521426928601_2576485395504037888_n.jpg"
+            :src="`http://localhost:3000/img/users/${currentUser.avatar}`"
             alt=""
           />
         </vs-avatar>

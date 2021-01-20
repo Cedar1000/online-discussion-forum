@@ -2,10 +2,7 @@
   <div>
     <div class="cover-image">
       <vs-avatar size="170" circle badge badge-color="success">
-        <img
-          src="../assets/images/72571994_111521426928601_2576485395504037888_n.jpg"
-          alt=""
-        />
+        <img :src="`http://localhost:3000/img/users/${currentUser.avatar}`" />
       </vs-avatar>
     </div>
 
