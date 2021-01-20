@@ -9,7 +9,9 @@
         <div class="user">
           <vs-avatar size="55" circle class="avatar">
             <img
-              src="../assets/images/72571994_111521426928601_2576485395504037888_n.jpg"
+              :src="
+                `http://localhost:3000/img/users/${presentPost.user.avatar}`
+              "
               alt=""
             />
           </vs-avatar>
@@ -43,13 +45,13 @@
       <div class="comment-section">
         <div class="input">
           <textarea-autosize
-            placeholder="Type Post here..."
+            placeholder="Write a comment..."
             ref="myTextarea"
-            :min-height="20"
+            :min-height="10"
             :max-height="350"
-            @blur.native="onBlurTextarea"
+            v-model="comment"
           />
-          <v-btn class="mx-2" fab dark color="indigo">
+          <v-btn @click="sendComment" class="mx-2" fab dark color="indigo">
             <i class="fas fa-paper-plane"></i>
           </v-btn>
         </div>
@@ -146,10 +148,16 @@ export default {
   name: 'singlePost',
   data: () => ({
     id: '',
+    comment: '',
   }),
 
   methods: {
-    ...mapActions(['fetchSinglePost']),
+    ...mapActions(['fetchSinglePost', 'commentOnPost']),
+
+    sendComment() {
+      this.commentOnPost({ postId: this.id, comment: this.comment });
+      this.comment = '';
+    },
   },
 
   mounted() {
@@ -212,8 +220,7 @@ b {
 .input {
   display: flex;
   align-items: center;
-  width: 50%;
-  display: none;
+  /* display: none; */
 }
 
 textarea {
@@ -221,10 +228,11 @@ textarea {
   border-radius: 25px;
   width: 100%;
   padding: 10px;
-  height: 30px !important;
+  height: 40px !important;
   font-family: 'Lato', sans-serif;
   margin-right: 5px;
-  line-height: 30px;
+  overflow: hidden;
+  overflow-y: scroll;
 }
 
 textarea:focus {

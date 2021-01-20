@@ -12,6 +12,7 @@ exports.setPostId = (req, res, next) => {
 };
 
 exports.createComment = catchAsync(async (req, res, next) => {
+  console.log(req.body);
   //Create Comment
   const comment = await Comment.create(req.body);
 
@@ -19,7 +20,7 @@ exports.createComment = catchAsync(async (req, res, next) => {
   const { post } = req.body;
 
   const commentedPost = await Post.findById(post);
-  console.log(commentedPost);
+
   //Construct message
   const message = `${req.user.name} commented your post`;
 

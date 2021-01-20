@@ -9,7 +9,10 @@
           :class="{ unread: !Not.read }"
         >
           <vs-avatar class="v-avatar" circle size="60">
-            <img src="https://vuesax.com/avatars/avatar-2.png" alt="" />
+            <img
+              :src="`http://localhost:3000/img/users/${Not.actionUser.avatar}`"
+              alt=""
+            />
           </vs-avatar>
 
           <div @click="markRead(Not)">
@@ -42,9 +45,9 @@ export default {
     ...mapActions(['patchNotification']),
 
     markRead(not) {
+      this.$router.push(`/post/${not.post}`);
       if (not.read === false) {
         this.patchNotification(not._id);
-        this.$router.push(`/post/${not.post}`);
       }
     },
   },

@@ -30,6 +30,13 @@ const notificationSchema = new mongoose.Schema(
   }
 );
 
+notificationSchema.pre(/^find/, function () {
+  this.populate({
+    path: 'actionUser',
+    select: 'name, avatar',
+  });
+});
+
 const Notification = mongoose.model('Notification', notificationSchema);
 
 module.exports = Notification;
