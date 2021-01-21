@@ -4,7 +4,7 @@
       <router-link :to="`/notifications`"
         ><i class="fas fa-arrow-left"></i
       ></router-link>
-      <div class="post">
+      <div v-if="this.presentPost" class="post">
         <!-- user div -->
         <div class="user">
           <vs-avatar size="55" circle class="avatar">
@@ -160,7 +160,7 @@ export default {
     },
   },
 
-  mounted() {
+  created() {
     this.id = this.$route.params.id;
     this.fetchSinglePost(this.id);
   },

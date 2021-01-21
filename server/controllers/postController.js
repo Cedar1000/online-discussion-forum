@@ -58,7 +58,10 @@ exports.getPost = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   const post = await Post.findById(id)
     .populate('likes')
-    .populate('comments')
+    .populate({
+      path: 'comments',
+      populate: [{ path: 'replies' }],
+    })
     .populate('replyComment')
     .populate('likeComment');
 
