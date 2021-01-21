@@ -82,7 +82,7 @@
                 </div>
               </div>
             </div>
-            <div class="comment-replies">
+            <div v-if="presentPost.comments.replies" class="comment-replies">
               <div class="comment-inner">
                 <vs-avatar size="35" circle class="avatar">
                   <img
