@@ -3,6 +3,7 @@ const factory = require('../controllers/handlerFactory');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const Category = require('../models/categoryModel');
+const { populate } = require('../models/postModel');
 
 exports.setSlugAndId = (req, res, next) => {
   //Allow nested routes
@@ -60,10 +61,8 @@ exports.getPost = catchAsync(async (req, res, next) => {
     .populate('likes')
     .populate({
       path: 'comments',
-      populate: [{ path: 'replies' }],
-    })
-    .populate('replyComment')
-    .populate('likeComment');
+      populate: [{ path: 'likes' }, { path: 'replies' }],
+    });
 
   if (!post) {
     return next(new AppError('No Post with that ID', 404));
