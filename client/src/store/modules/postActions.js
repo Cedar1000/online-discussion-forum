@@ -44,6 +44,20 @@ const actions = {
       console.log(error.response);
     }
   },
+
+  //LIke A Comment
+  async likeComment({ commit, rootState }, id) {
+    try {
+      const response = await axios.post(`comments/${id}/likes`);
+      console.log(response);
+      commit('likeComment', rootState, {
+        commentId: id,
+        commentLike: response.data.doc,
+      });
+    } catch (error) {
+      console.log(error.response);
+    }
+  },
 };
 
 //Mutations
@@ -68,6 +82,14 @@ const mutations = {
   addComment: (state, payload) => {
     const { singlePost } = payload.rootState.posts;
     singlePost.comments.push(payload.newComment);
+  },
+
+  //Add Like to Comment
+  likeComment: (state, payload) => {
+    const { singlePost } = payload.rootState.posts;
+    singlePost.comments
+      .find((el) => el.id === payload.id)
+      .likes.push(payload.commentLike);
   },
 };
 

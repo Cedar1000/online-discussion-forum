@@ -76,8 +76,26 @@
                 </p>
                 <div class="actions">
                   <div class="wrapper-action">
-                    <span><i class="fas fa-heart"></i><b>12</b></span>
-                    <span><i class="fas fa-reply"></i><b>5</b></span>
+                    <span @click="sendLikeReq(comment._id)"
+                      ><i
+                        v-show="!hasLiked(currentUser._id, comment.likes)"
+                        class="far fa-heart like"
+                      ></i
+                    ></span>
+                    <span
+                      ><i
+                        v-show="
+                          comment.likes &&
+                            hasLiked(currentUser._id, comment.likes)
+                        "
+                        class="fas fa-heart"
+                      ></i
+                      ><b>{{ comment.likes.length }}</b></span
+                    >
+                    <span
+                      ><i class="fas fa-reply"></i
+                      ><b>{{ comment.replies.length }}</b></span
+                    >
                   </div>
                 </div>
               </div>
@@ -152,11 +170,21 @@ export default {
   }),
 
   methods: {
-    ...mapActions(['fetchSinglePost', 'commentOnPost']),
+    ...mapActions(['fetchSinglePost', 'commentOnPost', 'likeComment']),
 
     sendComment() {
       this.commentOnPost({ postId: this.id, comment: this.comment });
       this.comment = '';
+    },
+
+    hasLiked(userId, likesArr) {
+      const IDs = [];
+      likesArr.forEach((el) => IDs.push(el.user._id));
+      return IDs.includes(userId);
+    },
+
+    sendLikeReq(id) {
+      this.likeComment(id);
     },
   },
 
@@ -166,12 +194,15 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['presentPost']),
+    ...mapGetters(['presentPost', 'currentUser']),
   },
 };
 </script>
 
 <style scoped>
+.like {
+  color: #195bff !important;
+}
 .wrapper {
   padding: 15px;
   font-family: 'Lato', sans-serif;
