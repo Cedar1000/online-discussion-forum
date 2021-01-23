@@ -13,7 +13,7 @@ exports.setCommentId = (req, res, next) => {
 exports.checkUser = catchAsync(async (req, res, next) => {
   const like = await LikeComment.find({
     comment: req.body.comment,
-    user: req.user.id,
+    user: req.body.user,
   });
 
   if (like.length > 0) {

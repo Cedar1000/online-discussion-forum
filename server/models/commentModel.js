@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Post = require('../models/postModel');
-const replyComment = require('./replyCommentModel');
 
 const commentSchema = new mongoose.Schema(
   {
@@ -13,7 +12,18 @@ const commentSchema = new mongoose.Schema(
     },
 
     user: { type: mongoose.Schema.ObjectId, ref: 'User' },
+
     post: { type: mongoose.Schema.ObjectId, ref: 'Post' },
+
+    likesQuantity: {
+      type: Number,
+      default: 0,
+    },
+
+    replyQuantity: {
+      type: Number,
+      default: 0,
+    },
 
     createdAt: {
       type: Date,

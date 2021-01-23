@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Comment = require('../models/commentModel');
 
 const replyCommentSchema = new mongoose.Schema(
   {
@@ -7,7 +8,9 @@ const replyCommentSchema = new mongoose.Schema(
       trim: true,
       required: [true, 'A reply must have a body'],
     },
+
     comment: { type: mongoose.Schema.ObjectId, ref: 'Comment' },
+
     user: { type: mongoose.Schema.ObjectId, ref: 'User' },
 
     createdAt: {
@@ -20,6 +23,39 @@ const replyCommentSchema = new mongoose.Schema(
     toJson: { virtuals: true },
   }
 );
+
+replyCommentSchema.statics.calcNumber = async function (commentId) {
+  console.log(commentId);
+  const stats = await this.aggregate([
+    {
+      $match: { comment: commentId },
+    },
+    {
+      $group: {
+        _id: '$comment',
+        nReplies: { $sum: 1 },
+      },
+    },
+  ]);
+
+  console.log(stats);
+
+  if (stats.length > 0) {
+    await Comment.findByIdAndUpdate(commentId, {
+      replyQuantity: stats[0].nReplies,
+    });
+  } else {
+    await Comment.findByIdAndUpdate(postId, {
+      replyQuantity: 0,
+    });
+  }
+};
+
+replyCommentSchema.post('save', function () {
+  //this always points to the current like
+  this.constructor.calcNumber(this.comment);
+  //post middleware doesn't get access to next
+});
 
 const ReplyComment = mongoose.model('ReplyComment', replyCommentSchema);
 
