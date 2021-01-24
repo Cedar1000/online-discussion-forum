@@ -75,26 +75,30 @@
                   {{ comment.body }}
                 </p>
                 <div class="actions">
-                  <div class="wrapper-action">
-                    <span @click="sendLikeReq(comment._id)"
-                      ><i
-                        v-show="!hasLiked(currentUser._id, comment.likes)"
-                        class="far fa-heart like"
-                      ></i
-                    ></span>
-                    <span
-                      ><i
+                  <div class="wrapper-actions">
+                    <span>
+                      <span
                         v-show="
                           comment.likes &&
                             hasLiked(currentUser._id, comment.likes)
                         "
-                        class="fas fa-heart"
-                      ></i
-                      ><b>{{ comment.likes.length }}</b></span
+                        @click="handleDislike(comment)"
+                      >
+                        <i class="fas fa-heart liked"></i>
+                      </span>
+                      <span
+                        v-show="
+                          comment.likes &&
+                            !hasLiked(currentUser._id, comment.likes)
+                        "
+                        @click="sendLikeReq(comment._id)"
+                      >
+                        <i class="far fa-heart like"></i> </span
+                      ><b>{{ comment.likesQuantity }}</b></span
                     >
-                    <span
-                      ><i class="fas fa-reply"></i
-                      ><b>{{ comment.replies.length }}</b></span
+                    <span class="replies"
+                      ><i class="far fa-comment"></i
+                      ><b>{{ comment.replyQuantity }}</b></span
                     >
                   </div>
                 </div>
@@ -200,6 +204,15 @@ export default {
 </script>
 
 <style scoped>
+.replies {
+  margin-left: 10px;
+}
+.actions {
+  display: flex;
+  justify-content: space-between;
+  width: 65px;
+}
+
 .like {
   color: #195bff !important;
 }
@@ -310,16 +323,17 @@ button {
   margin-left: 5px;
 }
 
+.comment-body p {
+  padding-top: 5px;
+}
+
 .comments .actions {
   width: 100%;
   justify-content: flex-end;
   margin-top: 0;
   top: 0;
   position: relative;
-}
-
-.comments .actions span {
-  margin-right: 10px;
+  margin-bottom: 0;
 }
 
 .wrapper-action {

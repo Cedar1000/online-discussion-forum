@@ -38,7 +38,7 @@ replyCommentSchema.statics.calcNumber = async function (commentId) {
     },
   ]);
 
-  console.log(stats);
+  // console.log(stats);
 
   if (stats.length > 0) {
     await Comment.findByIdAndUpdate(commentId, {
