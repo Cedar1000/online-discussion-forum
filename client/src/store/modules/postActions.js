@@ -50,10 +50,23 @@ const actions = {
     try {
       const response = await axios.post(`comments/${id}/likes`);
       console.log(response);
-      commit('likeComment', rootState, {
+      commit('likeComment', {
+        rootState,
         commentId: id,
         commentLike: response.data.doc,
       });
+    } catch (error) {
+      console.log(error.response);
+    }
+  },
+
+  //Dislike A Comment
+  async dislikeComment({ commit, rootState }, { commentId, likeId }) {
+    console.log(commentId, likeId);
+    try {
+      await axios.delete(`comments/${commentId}/likes/${likeId}`);
+
+      commit('dislikeComment', { rootState, commentId, likeId });
     } catch (error) {
       console.log(error.response);
     }
@@ -81,15 +94,34 @@ const mutations = {
   //Add comment to state
   addComment: (state, payload) => {
     const { singlePost } = payload.rootState.posts;
+
+    singlePost.commentsQuantity += 1;
     singlePost.comments.push(payload.newComment);
   },
 
   //Add Like to Comment
   likeComment: (state, payload) => {
     const { singlePost } = payload.rootState.posts;
-    singlePost.comments
-      .find((el) => el.id === payload.id)
-      .likes.push(payload.commentLike);
+
+    const comment = singlePost.comments.find(
+      (comment) => comment.id === payload.commentId
+    );
+
+    comment.likesQuantity += 1;
+
+    comment.likes.push(payload.commentLike);
+  },
+
+  //Dislike A Comment
+  dislikeComment: (state, payload) => {
+    const { singlePost } = payload.rootState.posts;
+
+    const comment = singlePost.comments.find(
+      (el) => el.id === payload.commentId
+    );
+
+    comment.likesQuantity -= 1;
+    comment.likes = comment.likes.filter((like) => like._id !== payload.likeId);
   },
 };
 

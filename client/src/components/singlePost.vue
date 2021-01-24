@@ -82,7 +82,7 @@
                           comment.likes &&
                             hasLiked(currentUser._id, comment.likes)
                         "
-                        @click="handleDislike(comment)"
+                        @click="handleDislike(comment.likes, comment._id)"
                       >
                         <i class="fas fa-heart liked"></i>
                       </span>
@@ -97,7 +97,7 @@
                       ><b>{{ comment.likesQuantity }}</b></span
                     >
                     <span class="replies"
-                      ><i class="far fa-comment"></i
+                      ><i class="fas fa-reply"></i
                       ><b>{{ comment.replyQuantity }}</b></span
                     >
                   </div>
@@ -174,7 +174,12 @@ export default {
   }),
 
   methods: {
-    ...mapActions(['fetchSinglePost', 'commentOnPost', 'likeComment']),
+    ...mapActions([
+      'fetchSinglePost',
+      'commentOnPost',
+      'likeComment',
+      'dislikeComment',
+    ]),
 
     sendComment() {
       this.commentOnPost({ postId: this.id, comment: this.comment });
@@ -183,12 +188,18 @@ export default {
 
     hasLiked(userId, likesArr) {
       const IDs = [];
-      likesArr.forEach((el) => IDs.push(el.user._id));
+      likesArr.forEach((el) => IDs.push(el.user));
       return IDs.includes(userId);
     },
 
     sendLikeReq(id) {
       this.likeComment(id);
+    },
+
+    handleDislike(likes, id) {
+      const like = likes.find((el) => el.user === this.currentUser._id);
+
+      this.dislikeComment({ commentId: id, likeId: like._id });
     },
   },
 
