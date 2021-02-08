@@ -96,7 +96,7 @@
                         <i class="far fa-heart like"></i> </span
                       ><b>{{ comment.likesQuantity }}</b></span
                     >
-                    <span class="replies"
+                    <span @click="toggleReply(comment._id)" class="replies"
                       ><i class="fas fa-reply"></i
                       ><b>{{ comment.replyQuantity }}</b></span
                     >
@@ -155,7 +155,23 @@
                 </div>
               </div>
             </div>
-            <v-divider></v-divider>
+
+            <div
+              v-show="replyMode === true && commentToReply === comment.id"
+              class="input"
+            >
+              <textarea-autosize
+                placeholder="Reply to this comment..."
+                ref="myTextarea"
+                :min-height="10"
+                :max-height="350"
+                v-model="reply"
+              />
+              <v-btn @click="sendComment" class="mx-2" fab dark color="indigo">
+                <i class="fas fa-paper-plane"></i>
+              </v-btn>
+            </div>
+            <v-divider class="divider"></v-divider>
           </div>
         </div>
       </div>
@@ -171,6 +187,9 @@ export default {
   data: () => ({
     id: '',
     comment: '',
+    reply: '',
+    replyMode: false,
+    commentToReply: '',
   }),
 
   methods: {
@@ -201,6 +220,12 @@ export default {
 
       this.dislikeComment({ commentId: id, likeId: like._id });
     },
+
+    toggleReply(id) {
+      const toReply = this.presentPost.comments.find((el) => el.id === id);
+      this.replyMode = true;
+      this.commentToReply = toReply.id;
+    },
   },
 
   created() {
@@ -215,6 +240,10 @@ export default {
 </script>
 
 <style scoped>
+.divider {
+  margin-top: 10px;
+}
+
 .replies {
   margin-left: 10px;
 }

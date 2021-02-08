@@ -12,9 +12,10 @@ exports.setPostId = (req, res, next) => {
 };
 
 exports.createComment = catchAsync(async (req, res, next) => {
-  console.log(req.body);
   //Create Comment
-  const comment = await Comment.create(req.body);
+  const commentCreated = await Comment.create(req.body);
+
+  const comment = await Comment.findById(commentCreated.id).populate('likes');
 
   //Get Liked Post
   const { post } = req.body;
