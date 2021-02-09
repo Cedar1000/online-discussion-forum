@@ -4,7 +4,7 @@ const catchAsync = require('../utils/catchAsync');
 
 exports.setReply = (req, res, next) => {
   //Allow nested routes
-  console.log(req.user);
+
   if (!req.body.user) req.body.user = req.user;
   if (!req.body.comment) req.body.comment = req.params.commentId;
   next();

@@ -41,7 +41,6 @@ export default {
     ...mapActions(['login']),
 
     async loginUser() {
-      console.log(this.email, this.password);
       this.login({ email: this.email, password: this.password });
       this.email = '';
       this.password = '';

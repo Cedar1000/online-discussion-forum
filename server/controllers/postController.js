@@ -22,7 +22,6 @@ exports.checkCategory = catchAsync(async (req, res, next) => {
 exports.getAllPost = catchAsync(async (req, res, next) => {
   let categoryObj = {};
 
-  console.log(req.params.category);
   if (req.params.category) {
     categoryObj.category = req.params.category;
   }
@@ -83,5 +82,19 @@ exports.createPost = catchAsync(async (req, res, next) => {
     postGotBack,
   });
 });
-exports.updatePost = factory.updateOne(Post);
+
+exports.updatePost = catchAsync(async (req, res, next) => {
+  const postUpdated = await Post.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  const postGotBack = await Post.findById(postUpdated.id).populate('likes');
+
+  res.status(201).json({
+    status: 'Success',
+    postGotBack,
+  });
+});
+
 exports.deletePost = factory.deleteOne(Post);

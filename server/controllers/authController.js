@@ -22,8 +22,6 @@ const createSendToken = (user, statusCode, res) => {
 
   res.cookie('jwt', token, cookieOptions);
 
-  // console.log(res);
-
   //Remove password from output
   user.password = undefined;
   res.status(statusCode).json({
@@ -49,7 +47,6 @@ exports.signup = catchAsync(async (req, res, next) => {
 
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
-  console.log(email, password);
 
   //1) check if email or password was passed in
   if (!email || !password) {
@@ -135,8 +132,6 @@ exports.setPostId = (req, res, next) => {
 //CHECK USER ON POST
 exports.checkUser = catchAsync(async (req, res, next) => {
   const like = await Like.find({ post: req.body.post, user: req.user.id });
-  console.log(like);
-  console.log(like.length);
 
   if (like.length > 0) {
     return next(new AppError('You already liked this post', 401));
@@ -149,8 +144,6 @@ exports.accessControl = catchAsync(async (req, res, next) => {
 
   //Find post with the ID in question
   const post = await Post.findById(id);
-
-  console.log(post.user._id == req.user.id);
 
   // Compare post ID to user ID
   if (post.user._id != req.user.id) {
@@ -214,8 +207,6 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     .createHash('sha256')
     .update(req.params.token)
     .digest('hex');
-
-  console.log(hashedToken);
 
   const user = await User.findOne({
     passwordResetToken: hashedToken,

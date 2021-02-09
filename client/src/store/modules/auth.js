@@ -24,12 +24,10 @@ const actions = {
   //Login User In
   async login({ commit }, { email, password }) {
     try {
-      console.log(email, password);
       const response = await axios.post(`${API_URL}/users/login`, {
         email,
         password,
       });
-      console.log(response);
 
       commit('setUser', response.data.user);
       commit('setToken', response.data.token);
@@ -40,7 +38,6 @@ const actions = {
 
   async signIn({ commit }, { name, email, gender, password, passwordConfirm }) {
     try {
-      console.log(name, email, gender, password, passwordConfirm);
       const response = await axios.post(`${API_URL}/users/signup`, {
         name,
         email,
@@ -49,7 +46,6 @@ const actions = {
         passwordConfirm,
       });
 
-      console.log(response);
       commit('setUser', response.data.user);
       commit('setToken', response.data.token);
     } catch (error) {
@@ -62,7 +58,7 @@ const actions = {
       await axios.get(`${API_URL}/users/logout`);
       commit('logOut');
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
     }
   },
 
@@ -73,7 +69,7 @@ const actions = {
         const response = await axios.get(`${API_URL}/notifications/${_id}`);
         commit('setNotification', response.data.notifications);
       } catch (error) {
-        console.log(error);
+        console.log(error.response);
       }
     }
   },

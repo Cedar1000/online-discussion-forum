@@ -52,6 +52,12 @@
                 ><i class="far fa-comment"></i
                 ><b>{{ post.commentsQuantity }}</b></span
               >
+
+              <span
+                v-if="post.user._id === currentUser._id"
+                @click="editPost(post)"
+                ><i class="far fa-user"></i
+              ></span>
             </div>
             <span
               v-if="post.user._id === currentUser._id"
@@ -106,6 +112,10 @@ export default {
       const IDs = [];
       likesArr.forEach((el) => IDs.push(el.user._id));
       return IDs.includes(userId);
+    },
+
+    editPost(post) {
+      bus.$emit('transferPost', post);
     },
   },
 
@@ -185,7 +195,7 @@ b {
 .actions {
   display: flex;
   justify-content: space-between;
-  width: 65px;
+  width: 100px;
 }
 
 .liked {

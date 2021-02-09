@@ -112,7 +112,6 @@ export default {
     ...mapActions(['logout']),
 
     closeNavbar() {
-      console.log('Navbar closed');
       this.activeSidebar = false;
     },
 
@@ -133,11 +132,9 @@ export default {
 
     signout() {
       this.logout();
-      console.log('Signed Out');
     },
 
     redirect(category) {
-      console.log(category);
       this.closeNavbar();
       this.$router.push(`/posts/${category}`);
     },

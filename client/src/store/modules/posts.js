@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/api/v1';
+axios.defaults.baseURL = 'http://localhost:3000/api/v1';
 
 const state = {
   posts: [],
@@ -20,7 +20,7 @@ const actions = {
   //Geting all Posts from server
   async fetchPosts({ commit }) {
     try {
-      const response = await axios.get(`${API_URL}/posts`);
+      const response = await axios.get(`posts`);
       console.log(response.data.posts);
       commit('setPosts', response.data.posts);
     } catch (error) {
@@ -31,7 +31,7 @@ const actions = {
   // Getting all post categories from server
   async fetchCategories({ commit }) {
     try {
-      const response = await axios.get(`${API_URL}/category`);
+      const response = await axios.get(`category`);
 
       commit('setCategories', response.data.doc);
     } catch (error) {
@@ -42,7 +42,7 @@ const actions = {
   // Getting Posts based on categories
   async fetchCategoryPosts({ commit }, category) {
     try {
-      const response = await axios.get(`${API_URL}/category/${category}/posts`);
+      const response = await axios.get(`category/${category}/posts`);
 
       commit('setPostCategories', response.data.posts);
     } catch (error) {
@@ -53,7 +53,7 @@ const actions = {
   //Get Single Post from server
   async fetchSinglePost({ commit }, id) {
     try {
-      const response = await axios.get(`${API_URL}/posts/${id}`);
+      const response = await axios.get(`posts/${id}`);
       console.log(response.data.post);
       commit('setSinglePost', response.data.post);
     } catch (error) {
@@ -63,8 +63,9 @@ const actions = {
 
   //Add Post
   async addPost({ commit }, post) {
+    console.log(post);
     try {
-      const response = await axios.post(`${API_URL}/posts`, post);
+      const response = await axios.post(`posts`, post);
       console.log(response.data.postGotBack);
       commit('addPost', response.data.postGotBack);
     } catch (error) {
@@ -76,10 +77,21 @@ const actions = {
   async deletePost({ commit }, id) {
     try {
       console.log(id);
-      await axios.delete(`${API_URL}/posts/${id}`);
+      await axios.delete(`posts/${id}`);
       commit('removePost', id);
     } catch (error) {
       console.log(error.response);
+    }
+  },
+
+  //Edit Post
+  async editPost({ commit }, { id, body }) {
+    try {
+      const response = await axios.patch(`posts/${id}`, { body });
+
+      commit('editPost', response.data.postGotBack);
+    } catch (error) {
+      console.log(error);
     }
   },
 };
@@ -89,11 +101,18 @@ const mutations = {
   setCategories: (state, categories) => (state.categories = categories),
   setPostCategories: (state, posts) => (state.categoryPosts = posts),
   setSinglePost: (state, post) => (state.singlePost = post),
+
   addPost: (state, newPost) => {
     state.categoryPosts.push(newPost);
   },
+
   removePost: (state, id) =>
     (state.categoryPosts = state.categoryPosts.filter((el) => el._id !== id)),
+
+  editPost: (state, post) => {
+    const index = state.categoryPosts.findIndex((el) => el._id === post._id);
+    state.categoryPosts.splice(index, 1, post);
+  },
 };
 
 export default {

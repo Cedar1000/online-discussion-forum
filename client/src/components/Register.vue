@@ -80,7 +80,6 @@ export default {
       this.gender = '';
       this.password = '';
       this.passwordConfirm = '';
-      console.log('fields cleared');
     },
   },
 };

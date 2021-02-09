@@ -122,10 +122,6 @@ export default {
       this.fetchCategoryPosts(name);
       this.$router.push('/posts');
     },
-
-    logName(name) {
-      console.log(name);
-    },
   },
 
   mounted() {

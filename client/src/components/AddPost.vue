@@ -25,18 +25,30 @@ export default {
         body: '',
         category: this.$route.params.category,
       },
+
+      edit: false,
     };
   },
 
   methods: {
-    ...mapActions(['addPost']),
+    ...mapActions(['addPost', 'editPost']),
 
     async sendPost() {
-      this.addPost(this.post);
-
+      if (this.edit) {
+        this.editPost({ id: this.post._id, body: this.post.body });
+        this.edit = false;
+      } else {
+        this.addPost(this.post);
+      }
       this.post.body = '';
-      await bus.$emit('scrollDown');
     },
+  },
+
+  created() {
+    bus.$on('transferPost', (post) => {
+      this.post = post;
+      this.edit = true;
+    });
   },
 };
 </script>
