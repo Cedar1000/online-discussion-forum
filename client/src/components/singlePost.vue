@@ -104,52 +104,29 @@
                 </div>
               </div>
             </div>
-            <div v-if="presentPost.comments.replies" class="comment-replies">
-              <div class="comment-inner">
-                <vs-avatar size="35" circle class="avatar">
-                  <img
-                    src="../assets/images/72571994_111521426928601_2576485395504037888_n.jpg"
-                    alt=""
-                  />
-                </vs-avatar>
-                <div class="comment-body">
-                  <h4>Cedar Daniel</h4>
-                  <p>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Blanditiis hic modi repudiandae sapiente facilis quam
-                    voluptatum iusto numquam, nihil ut iure recusandae eum
-                    accusantium possimus explicabo natus expedita temporibus
-                    debitis!
-                  </p>
-                  <div class="actions">
-                    <div class="wrapper-action">
-                      <span><i class="fas fa-heart"></i><b>12</b></span>
-                      <span><i class="fas fa-reply"></i><b>5</b></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="comment-inner">
-                <vs-avatar size="35" circle class="avatar">
-                  <img
-                    src="../assets/images/72571994_111521426928601_2576485395504037888_n.jpg"
-                    alt=""
-                  />
-                </vs-avatar>
-                <div class="comment-body">
-                  <h4>Cedar Daniel</h4>
-                  <p>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    Blanditiis hic modi repudiandae sapiente facilis quam
-                    voluptatum iusto numquam, nihil ut iure recusandae eum
-                    accusantium possimus explicabo natus expedita temporibus
-                    debitis!
-                  </p>
-                  <div class="actions">
-                    <div class="wrapper-action">
-                      <span><i class="fas fa-heart"></i><b>12</b></span>
-                      <span><i class="fas fa-reply"></i><b>5</b></span>
+            <div v-if="comment.replies && comment.replies.length > 1">
+              <div
+                class="comment-replies"
+                v-for="reply in comment.replies"
+                :key="reply._id"
+              >
+                <div class="comment-inner">
+                  <vs-avatar size="35" circle class="avatar">
+                    <img
+                      src="../assets/images/72571994_111521426928601_2576485395504037888_n.jpg"
+                      alt=""
+                    />
+                  </vs-avatar>
+                  <div class="comment-body">
+                    <h4>{{ reply.user.name }}</h4>
+                    <p>
+                      {{ reply.body }}
+                    </p>
+                    <div class="actions">
+                      <div class="wrapper-action">
+                        <span><i class="fas fa-heart"></i><b>12</b></span>
+                        <span><i class="fas fa-reply"></i><b>5</b></span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -167,7 +144,13 @@
                 :max-height="350"
                 v-model="reply"
               />
-              <v-btn @click="sendComment" class="mx-2" fab dark color="indigo">
+              <v-btn
+                @click="sendReply(comment.id)"
+                class="mx-2"
+                fab
+                dark
+                color="indigo"
+              >
                 <i class="fas fa-paper-plane"></i>
               </v-btn>
             </div>
@@ -198,6 +181,7 @@ export default {
       'commentOnPost',
       'likeComment',
       'dislikeComment',
+      'replyComment',
     ]),
 
     sendComment() {
@@ -225,6 +209,11 @@ export default {
       const toReply = this.presentPost.comments.find((el) => el.id === id);
       this.replyMode = true;
       this.commentToReply = toReply.id;
+    },
+
+    sendReply(id) {
+      this.replyComment({ id, body: this.reply });
+      this.reply = '';
     },
   },
 

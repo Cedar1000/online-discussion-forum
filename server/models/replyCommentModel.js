@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Comment = require('../models/commentModel');
+const User = require('../models/userModel');
 
 const replyCommentSchema = new mongoose.Schema(
   {
@@ -11,7 +12,7 @@ const replyCommentSchema = new mongoose.Schema(
 
     comment: { type: mongoose.Schema.ObjectId, ref: 'Comment' },
 
-    user: { type: mongoose.Schema.ObjectId, ref: 'User' },
+    user: { type: Object, required: [true, 'A reply must have a user'] },
 
     createdAt: {
       type: Date,

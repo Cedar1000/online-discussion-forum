@@ -60,7 +60,7 @@ exports.getPost = catchAsync(async (req, res, next) => {
     .populate('likes')
     .populate({
       path: 'comments',
-      populate: [{ path: 'likes' }, { path: 'replies' }],
+      populate: [{ path: 'likes' }, { path: 'replies' }, { path: 'user' }],
     });
 
   if (!post) {

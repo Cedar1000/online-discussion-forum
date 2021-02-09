@@ -71,6 +71,18 @@ const actions = {
       console.log(error.response);
     }
   },
+
+  //Reply Comment
+  async replyComment({ commit, rootState }, { id, body }) {
+    try {
+      const response = await axios.post(`comments/${id}/reply`, { body });
+      console.log(response.data.doc);
+
+      commit('addReply', { rootState, id, reply: response.data.doc });
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 //Mutations
@@ -122,6 +134,17 @@ const mutations = {
 
     comment.likesQuantity -= 1;
     comment.likes = comment.likes.filter((like) => like._id !== payload.likeId);
+  },
+
+  //Add Reply to Comment
+  addReply: (state, payload) => {
+    const { singlePost } = payload.rootState.posts;
+
+    const comment = singlePost.comments.find(
+      (comment) => comment.id === payload.id
+    );
+
+    comment.replies.push(payload.reply);
   },
 };
 
