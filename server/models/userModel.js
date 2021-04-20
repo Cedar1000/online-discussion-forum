@@ -27,6 +27,14 @@ const userSchema = new mongoose.Schema({
 
   avatar: String,
 
+  cloudinaryId: String,
+
+  username: {
+    type: String,
+    required: [true, 'A user must have a username'],
+    trim: true,
+  },
+
   joined: {
     type: Date,
     default: Date.now(),

@@ -1,32 +1,9 @@
-const multer = require('multer');
 const factory = require('../controllers/handlerFactory');
 const User = require('../models/userModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
-
-const multerStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public/img/users');
-  },
-  filename: (req, file, cb) => {
-    //user-78967665bd-654667.jpeg
-    const ext = file.mimetype.split('/')[1];
-    cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
-  },
-});
-
-const multerFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image')) {
-    cb(null, true);
-  } else {
-    cb(new AppError('Not an Image! Please upload only images.', 400), false);
-  }
-};
-
-const upload = multer({
-  storage: multerStorage,
-  fileFilter: multerFilter,
-});
+const upload = require('../utils/multer');
+const cloudinary = require('../utils/cloudinary');
 
 exports.uploadUserAvatar = upload.single('avatar');
 
@@ -48,6 +25,7 @@ exports.getMe = catchAsync(async (req, res, next) => {
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   //1) Create error if user Posts password data
+  console.log(req.file);
   if (req.body.password || req.body.passwordConfirm) {
     return next(
       new AppError(
@@ -58,8 +36,36 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   }
 
   //2) Update user document
-  const filteredBody = filterObj(req.body, 'name', 'email');
-  if (req.file) filteredBody.avatar = req.file.filename;
+
+  let result;
+  if (req.file) {
+    try {
+      if (!['male.jpg', 'female.jpg'].includes(req.user.avatar)) {
+        console.log(req.user);
+        await cloudinary.uploader.destroy(req.user.cloudinaryId);
+      }
+
+      result = await cloudinary.uploader.upload(req.file.path);
+    } catch (error) {
+      res.status(500).json({
+        status: 'error',
+        error,
+      });
+    }
+  }
+
+  req.body.avatar = result.secure_url;
+  req.body.cloudinaryId = result.public_id || req.user.cloudinaryId;
+
+  const filteredBody = filterObj(
+    req.body,
+    'name',
+    'email',
+    'username',
+    'gender',
+    'avatar',
+    'cloudinaryId'
+  );
 
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
@@ -69,6 +75,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     user: updatedUser,
+    result,
   });
 });
 
