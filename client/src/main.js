@@ -7,10 +7,10 @@ import 'material-icons/iconfont/material-icons.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import '@fortawesome/fontawesome-free/js/all.js';
 import TextareaAutosize from 'vue-textarea-autosize';
-import VueCookies from 'vue-cookies';
 import VueRouter from 'vue-router';
 import Routes from './routes';
 import store from './store';
+import Vuelidate from 'vuelidate';
 
 require('./store/subscriber');
 
@@ -21,9 +21,9 @@ store.dispatch('attempt', localStorage.getItem('token'));
 Vue.use(Vuesax);
 Vue.use(TextareaAutosize);
 Vue.use(VueRouter);
-Vue.use(VueCookies);
+Vue.use(Vuelidate);
 
-const router = new VueRouter({
+export const router = new VueRouter({
   routes: Routes,
   mode: 'history',
 });

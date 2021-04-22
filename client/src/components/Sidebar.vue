@@ -2,15 +2,12 @@
   <div class="hidden">
     <vs-sidebar class="sidebar-content" v-model="active" open>
       <template #logo>
-        <vs-avatar size="100" circle badge class="avatar">
-          <img
-            :src="`http://localhost:3000/img/users/${currentUser.avatar}`"
-            alt=""
-          />
+        <vs-avatar v-if="isLoggedIn" size="100" circle badge class="avatar">
+          <img :src="currentUser.avatar" alt="" />
         </vs-avatar>
       </template>
 
-      <h4 class="username">{{ currentUser.name }}</h4>
+      <h4 v-if="isLoggedIn" class="username">{{ currentUser.username }}</h4>
       <vs-sidebar-item id="home">
         <template #icon>
           <i class="fas fa-home"></i>

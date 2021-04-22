@@ -45,7 +45,12 @@ exports.updateMe = catchAsync(async (req, res, next) => {
         await cloudinary.uploader.destroy(req.user.cloudinaryId);
       }
 
-      result = await cloudinary.uploader.upload(req.file.path);
+      result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'Forum',
+      });
+
+      req.body.avatar = result.secure_url;
+      req.body.cloudinaryId = result.public_id || req.user.cloudinaryId;
     } catch (error) {
       res.status(500).json({
         status: 'error',
@@ -53,9 +58,6 @@ exports.updateMe = catchAsync(async (req, res, next) => {
       });
     }
   }
-
-  req.body.avatar = result.secure_url;
-  req.body.cloudinaryId = result.public_id || req.user.cloudinaryId;
 
   const filteredBody = filterObj(
     req.body,

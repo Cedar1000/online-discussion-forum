@@ -9,14 +9,14 @@
 
       <template #right>
         <vs-avatar
-          v-show="isLoggedIn"
+          v-if="isLoggedIn"
           badge
           circle
           badge-color="success"
           badge-position="bottom-right"
           size="35"
         >
-          <img :src="`http://localhost:3000/img/users/${currentUser.avatar}`" />
+          <img :src="currentUser.avatar" />
         </vs-avatar>
 
         <router-link v-show="!isLoggedIn" to="/login" class="login-btn"
@@ -32,12 +32,12 @@
       @click="closeNavbar"
     >
       <template #logo>
-        <vs-avatar size="100" circle badge class="avatar">
-          <img :src="`http://localhost:3000/img/users/${currentUser.avatar}`" />
+        <vs-avatar v-if="isLoggedIn" size="100" circle badge class="avatar">
+          <img :src="currentUser.avatar" />
         </vs-avatar>
       </template>
 
-      <h4 class="username">Cedar Daniel</h4>
+      <h4 class="username">{{ currentUser.username }}</h4>
       <vs-sidebar-item id="home">
         <template #icon>
           <i class="fas fa-home"></i>

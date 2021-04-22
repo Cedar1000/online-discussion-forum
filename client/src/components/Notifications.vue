@@ -9,10 +9,7 @@
           :class="{ unread: !Not.read }"
         >
           <vs-avatar class="v-avatar" circle size="60">
-            <img
-              :src="`http://localhost:3000/img/users/${Not.actionUser.avatar}`"
-              alt=""
-            />
+            <img :src="Not.actionUser.avatar" alt="" />
           </vs-avatar>
 
           <div @click="markRead(Not)">

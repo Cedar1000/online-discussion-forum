@@ -8,12 +8,7 @@
         <!-- user div -->
         <div class="user">
           <vs-avatar size="55" circle class="avatar">
-            <img
-              :src="
-                `http://localhost:3000/img/users/${presentPost.user.avatar}`
-              "
-              alt=""
-            />
+            <img :src="presentPost.user.avatar" alt="" />
           </vs-avatar>
 
           <div class="post-details">
@@ -64,10 +59,7 @@
           >
             <div class="comment-inner">
               <vs-avatar size="35" circle class="avatar">
-                <img
-                  src="../assets/images/72571994_111521426928601_2576485395504037888_n.jpg"
-                  alt=""
-                />
+                <img :src="comment.user.avatar" alt="" />
               </vs-avatar>
               <div class="comment-body">
                 <h4>Cedar Daniel</h4>

@@ -20,7 +20,7 @@ const sendErrorProd = (err, res) => {
       message: err.message,
     });
 
-    //Programming or other unkknown error: don't want leak details to the client
+    //Programming or other unknown error: don't want leak details to the client
   } else {
     //1) Log error
     console.error('ERROR', err);
@@ -39,7 +39,8 @@ const handleCastErrorDB = (err) => {
 
 //DUPPLICATE FIELD ERROR
 const handleDuplicateFieldsDB = (err) => {
-  const value = err.keyValue.name;
+  console.log(err);
+  const value = Object.keys(err.keyValue)[0];
   const message = `Duplicate Field value: ${value}. Please use another value!`;
   return new AppError(message, 400);
 };

@@ -144,7 +144,7 @@ const mutations = {
       (comment) => comment.id === payload.id
     );
 
-    comment.replies.push(payload.reply);
+    comment.replies.unshift(payload.reply);
   },
 };
 

@@ -1,19 +1,69 @@
 <template>
   <div>
+    <vs-alert v-if="errorMsg" class="vs-alert" color="danger">
+      {{ errorMsg }}
+    </vs-alert>
+
     <form class="wrapper" @submit.prevent="signInUser">
       <div class="vs-card">
         <i class="fas fa-user-circle"></i>
         <h3>Sign Up</h3>
         <div class="center content-inputs">
-          <input type="text" v-model="name" placeholder="Name" /><br />
+          <vs-input
+            type="text"
+            v-model="$v.payload.name.$model"
+            placeholder="Name"
+            :danger="$v.payload.name.$dirty && !$v.payload.name.required"
+          /><br />
 
-          <input type="text" v-model="email" placeholder="Email" /><br />
+          <span
+            class="error"
+            v-if="$v.payload.name.$dirty && !$v.payload.name.required"
+          >
+            Name is required
+          </span>
+
+          <vs-input
+            required
+            type="text"
+            v-model="$v.payload.email.$model"
+            placeholder="Email"
+            :danger="$v.payload.email.$dirty && !$v.payload.email.required"
+          /><br />
+
+          <span
+            class="error"
+            v-if="$v.payload.email.$dirty && !$v.payload.email.required"
+          >
+            Email is required
+          </span>
+
+          <span class="error" v-if="$v.payload.email.$invalid">
+            Email is Invalid
+          </span>
+
+          <vs-input
+            type="text"
+            v-model="$v.payload.username.$model"
+            placeholder="Username"
+            :danger="
+              $v.payload.username.$dirty && !$v.payload.username.required
+            "
+          /><br />
+
+          <span
+            class="error"
+            v-if="$v.payload.username.$dirty && !$v.payload.username.required"
+          >
+            Username is required
+          </span>
 
           <div class="gender">
             <vs-select
               class="vs-select"
               label-placeholder="Gender"
-              v-model="gender"
+              required
+              v-model="$v.payload.gender.$model"
             >
               <vs-option label="Male" value="male">
                 Male
@@ -24,21 +74,55 @@
             </vs-select>
           </div>
 
-          <input type="password" v-model="password" placeholder="Password" />
+          <div class="password">
+            <vs-input
+              type="password"
+              required
+              v-model="$v.payload.password.$model"
+              placeholder="Password"
+              :danger="
+                $v.payload.password.$dirty && !$v.payload.password.required
+              "
+            />
 
-          <input
-            type="password"
-            v-model="passwordConfirm"
-            placeholder="Confirm Password"
-          />
+            <span
+              class="error"
+              v-if="$v.payload.password.$dirty && !$v.payload.password.required"
+            >
+              Password is required
+            </span>
+          </div>
 
-          <v-btn rounded class="button" type="submit">
+          <div class="password">
+            <vs-input
+              type="password"
+              required
+              v-model="$v.payload.passwordConfirm.$model"
+              placeholder="Confirm Password"
+              :danger="
+                $v.payload.passwordConfirm.$dirty &&
+                  !$v.payload.passwordConfirm.required
+              "
+            />
+
+            <span
+              class="error"
+              v-if="
+                $v.payload.passwordConfirm.$dirty &&
+                  !$v.payload.passwordConfirm.required
+              "
+            >
+              passwordConfirm is required
+            </span>
+          </div>
+
+          <v-btn rounded :disabled="invalid" class="button" type="submit">
             Sign Up
           </v-btn>
         </div>
         <div class="links">
           <span>Already have an account?</span>
-          <a href="#">Login</a>
+          <router-link to="/Login">Login</router-link>
         </div>
       </div>
     </form>
@@ -46,32 +130,55 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
+import { required, minLength, email } from 'vuelidate/lib/validators';
 
 export default {
   name: 'Register',
   data: () => ({
-    active: 0,
-    name: '',
-    email: '',
-    gender: '',
-    password: '',
-    passwordConfirm: '',
+    payload: {
+      name: '',
+      username: '',
+      email: '',
+      gender: '',
+      password: '',
+      passwordConfirm: '',
+    },
   }),
+  validations: {
+    payload: {
+      name: {
+        required,
+      },
+      username: {
+        required,
+      },
+
+      email: {
+        required,
+        email,
+      },
+      gender: {
+        required,
+      },
+
+      password: {
+        required,
+        minLength: minLength(8),
+      },
+      passwordConfirm: {
+        required,
+        minLength: minLength(8),
+      },
+    },
+  },
 
   methods: {
     ...mapActions(['signIn']),
 
     signInUser() {
-      this.signIn({
-        name: this.name,
-        email: this.email,
-        gender: this.gender,
-        password: this.password,
-        passwordConfirm: this.passwordConfirm,
-      });
-
-      this.clearFields();
+      console.log(this.payload);
+      this.signIn(this.payload);
     },
 
     clearFields() {
@@ -82,10 +189,40 @@ export default {
       this.passwordConfirm = '';
     },
   },
+  mounted() {
+    console.log(this.$v.payload);
+    console.log(this.$v.payload.$anyError);
+  },
+
+  computed: {
+    ...mapGetters(['errorMsg']),
+
+    invalid() {
+      // console.log(this.$v.payload);
+      return this.$v.payload.$invalid;
+    },
+  },
 };
 </script>
 
 <style scoped>
+.vs-alert {
+  font-family: 'Lato', sans-serif;
+  height: auto;
+}
+
+.error {
+  display: block;
+  position: relative;
+  bottom: 10px;
+  color: #f57f6c;
+}
+
+.inputError {
+  width: 100%;
+  border-bottom: 2px solid #f57f6c;
+}
+
 .wrapper {
   justify-content: center;
   display: flex;
@@ -128,15 +265,6 @@ export default {
   margin-bottom: 5px;
 }
 
-input {
-  padding: 10px;
-  margin-bottom: 18px;
-  background: #f6f6f6;
-  width: 100%;
-  border-radius: 20px;
-  font-size: 14px;
-}
-
 h3 {
   margin-bottom: 10px;
   margin-top: 10px;
@@ -154,7 +282,8 @@ h3 {
   text-decoration: none;
 }
 
-.gender {
+.gender,
+.password {
   margin-bottom: 15px;
 }
 

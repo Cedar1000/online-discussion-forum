@@ -33,6 +33,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'A user must have a username'],
     trim: true,
+    unique: true,
   },
 
   joined: {
@@ -112,9 +113,11 @@ userSchema.pre('save', async function (next) {
 
 userSchema.pre('save', function (next) {
   if (this.gender === 'male') {
-    this.avatar = 'male.jpg';
+    this.avatar =
+      'https://res.cloudinary.com/dkp7wyq3t/image/upload/v1618886245/Forum/male.jpg.png';
   } else {
-    this.avatar = 'female.jpg';
+    this.avatar =
+      'https://res.cloudinary.com/dkp7wyq3t/image/upload/v1618886245/Forum/female.jpg.jpg';
   }
 
   next();

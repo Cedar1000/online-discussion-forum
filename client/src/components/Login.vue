@@ -1,5 +1,8 @@
 <template>
   <div>
+    <vs-alert v-if="errorMsg" class="vs-alert" color="danger">
+      {{ errorMsg }}
+    </vs-alert>
     <form class="wrapper" @submit.prevent="loginUser">
       <div class="vs-card">
         <i class="fas fa-user-circle"></i>
@@ -16,17 +19,16 @@
           </v-btn>
         </div>
         <div class="links">
-          <a href="#">Sign Up</a>
+          <router-link to="/Register">Sign Up</router-link>
           <a href="#">Forgot Password</a>
         </div>
-        <p class="err-msg" v-if="error">Incorrect email or password</p>
       </div>
     </form>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'Login',
@@ -40,23 +42,27 @@ export default {
   methods: {
     ...mapActions(['login']),
 
-    async loginUser() {
+    loginUser() {
       this.login({ email: this.email, password: this.password });
       this.email = '';
       this.password = '';
-      await this.$router.push('/posts');
     },
   },
 
   computed: {
-    error() {
-      return this.$store.errMsg;
-    },
+    ...mapGetters(['errorMsg']),
   },
 };
 </script>
 
 <style scoped>
+.vs-alert {
+  text-align: center;
+  widows: 90%;
+  display: block;
+  margin: 0 auto;
+}
+
 .wrapper {
   justify-content: center;
   display: flex;
