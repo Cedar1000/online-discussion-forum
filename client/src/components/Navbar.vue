@@ -37,15 +37,15 @@
         </vs-avatar>
       </template>
 
-      <h4 class="username">{{ currentUser.username }}</h4>
+      <h4 v-if="isLoggedIn" class="username">{{ currentUser.username }}</h4>
       <vs-sidebar-item id="home">
         <template #icon>
           <i class="fas fa-home"></i>
         </template>
-        <span @click="handleHome">Home</span>
+        <span @click="redirectTo('/Home')">Home</span>
       </vs-sidebar-item>
 
-      <vs-sidebar-item id="Notifications">
+      <vs-sidebar-item v-if="isLoggedIn" id="Notifications">
         <template #icon>
           <div class="not-list">
             <i class="far fa-bell"></i>
@@ -54,11 +54,11 @@
             }}</span>
           </div>
         </template>
-        <span @click="handleNotification" to="/Notifications"
+        <span @click="redirectTo('/Notifications')" to="/Notifications"
           >Notifications</span
         >
       </vs-sidebar-item>
-      <vs-sidebar-group>
+      <vs-sidebar-group v-if="isLoggedIn">
         <template #header>
           <vs-sidebar-item arrow>
             <template #icon>
@@ -81,11 +81,11 @@
         </vs-sidebar-item>
       </vs-sidebar-group>
 
-      <vs-sidebar-item id="profile">
+      <vs-sidebar-item v-if="isLoggedIn" id="profile">
         <template #icon>
           <i class="fas fa-user"></i>
         </template>
-        <span @click="handleProfile">Profile</span>
+        <span @click="redirectTo('/Profile')">Profile</span>
       </vs-sidebar-item>
 
       <vs-sidebar-item v-show="isLoggedIn" id="signout">
@@ -93,6 +93,27 @@
           <i class="fas fa-sign-out-alt"></i>
         </template>
         <span @click="signout">Sign Out</span>
+      </vs-sidebar-item>
+
+      <vs-sidebar-item v-show="isLoggedIn" id="signout">
+        <template #icon>
+          <i class="fas fa-sign-out-alt"></i>
+        </template>
+        <span @click="signout">Sign Out</span>
+      </vs-sidebar-item>
+
+      <vs-sidebar-item v-show="!isLoggedIn" id="login">
+        <template #icon>
+          <i class="fas fa-sign-in-alt"></i>
+        </template>
+        <span @click="redirectTo('/Login')">Login</span>
+      </vs-sidebar-item>
+
+      <vs-sidebar-item v-show="!isLoggedIn" id="signup">
+        <template #icon>
+          <i class="fas fa-user-plus"></i>
+        </template>
+        <span @click="redirectTo('/Register')">Sign Up</span>
       </vs-sidebar-item>
     </vs-sidebar>
   </div>
@@ -115,19 +136,9 @@ export default {
       this.activeSidebar = false;
     },
 
-    handleNotification() {
-      this.closeNavbar();
-      this.$router.push('/Notifications');
-    },
-
-    handleProfile() {
-      this.closeNavbar();
-      this.$router.push('/Profile');
-    },
-
-    handleHome() {
-      this.closeNavbar();
-      this.$router.push('/Home');
+    redirectTo(url) {
+      this.activeSidebar = false;
+      this.$router.push(url);
     },
 
     signout() {

@@ -209,6 +209,9 @@ export default {
 .vs-alert {
   font-family: 'Lato', sans-serif;
   height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .error {

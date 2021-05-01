@@ -14,21 +14,25 @@ const sendErrorDev = (err, res) => {
 //Error For Production Mode
 const sendErrorProd = (err, res) => {
   // Operational, trusted error: send message to client
-  if (err.isOperational) {
-    res.status(err.statusCode).json({
-      status: err.status,
-      message: err.message,
-    });
+  res.status(err.statusCode).json({
+    err,
+    message: err.message,
+  });
+  // if (err.isOperational) {
+  //   res.status(err.statusCode).json({
+  //     status: err.status,
+  //     message: err.message,
+  //   });
 
-    //Programming or other unknown error: don't want leak details to the client
-  } else {
-    //1) Log error
-    console.error('ERROR', err);
-    res.status(500).json({
-      status: 'error',
-      message: 'Something went very wrong',
-    });
-  }
+  //   //Programming or other unknown error: don't want leak details to the client
+  // } else {
+  //   //1) Log error
+  //   console.error('ERROR', err);
+  //   res.status(500).json({
+  //     status: 'error',
+  //     message: 'Something went very wrong',
+  //   });
+  // }
 };
 
 //CAST ERROR
@@ -64,19 +68,22 @@ const handleJWTExpiredError = () =>
 
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
+  // console.log({ ...err, isSpread: true });
   err.status = err.status || 'error';
 
   if (process.env.NODE_ENV.trim() === 'development') {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV.trim() === 'production') {
-    let error = { ...err };
+    console.log(err.prototype);
+    let error = { ...err, message: err.message };
     if (error.kind === 'ObjectId') error = handleCastErrorDB(error);
     if (error.code === 11000) error = handleDuplicateFieldsDB(error);
     if (error.name === 'ValidationError')
       error = handleValidationErrorDB(error);
     if (error.name === 'JsonWebTokenError') error = handleJWTError();
     if (error.name === 'TokenExpiresError') error = handleJWTExpiredError();
-
+    // console.log('prod', error);
+    console.log(error);
     sendErrorProd(error, res);
   }
 };

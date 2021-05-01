@@ -18,6 +18,11 @@ store.subscribe((mutation) => {
       break;
     case 'addPost':
       bus.$emit('emitSub');
+      break;
+
+    case 'setError':
+      bus.$emit('stopLoading');
+      break;
   }
 });
 
