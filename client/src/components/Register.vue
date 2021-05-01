@@ -38,7 +38,10 @@
             Email is required
           </span>
 
-          <span class="error" v-if="$v.payload.email.$invalid">
+          <span
+            class="error"
+            v-if="$v.payload.email.$dirty && $v.payload.email.$invalid"
+          >
             Email is Invalid
           </span>
 
@@ -91,6 +94,15 @@
             >
               Password is required
             </span>
+
+            <span
+              class="error"
+              v-if="
+                $v.payload.password.$dirty && !$v.payload.password.minLength
+              "
+            >
+              Must be a minimum of 8 characters
+            </span>
           </div>
 
           <div class="password">
@@ -114,11 +126,35 @@
             >
               passwordConfirm is required
             </span>
+
+            <span
+              class="error"
+              v-if="
+                $v.payload.passwordConfirm.$dirty &&
+                  !$v.payload.passwordConfirm.minLength
+              "
+            >
+              Must be a minimum of 8 characters
+            </span>
           </div>
 
-          <v-btn rounded :disabled="invalid" class="button" type="submit">
+          <v-btn
+            v-if="!loading"
+            rounded
+            :disabled="invalid"
+            class="button"
+            type="submit"
+          >
             Sign Up
           </v-btn>
+
+          <div v-if="loading" class="spinner">
+            <half-circle-spinner
+              :animation-duration="1000"
+              :size="35"
+              :color="'#195bff'"
+            />
+          </div>
         </div>
         <div class="links">
           <span>Already have an account?</span>
@@ -132,10 +168,19 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import { required, minLength, email } from 'vuelidate/lib/validators';
+import { HalfCircleSpinner } from 'epic-spinners';
+import { bus } from '../main';
 
 export default {
   name: 'Register',
+
+  components: {
+    HalfCircleSpinner,
+  },
+
   data: () => ({
+    loading: false,
+
     payload: {
       name: '',
       username: '',
@@ -177,6 +222,7 @@ export default {
     ...mapActions(['signIn']),
 
     signInUser() {
+      this.loading = true;
       console.log(this.payload);
       this.signIn(this.payload);
     },
@@ -202,10 +248,21 @@ export default {
       return this.$v.payload.$invalid;
     },
   },
+
+  created() {
+    bus.$on('stopLoading', () => {
+      this.loading = false;
+    });
+  },
 };
 </script>
 
 <style scoped>
+.spinner {
+  display: flex;
+  justify-content: center;
+}
+
 .vs-alert {
   font-family: 'Lato', sans-serif;
   height: auto;
