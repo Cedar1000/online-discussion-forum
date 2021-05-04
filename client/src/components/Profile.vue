@@ -13,7 +13,27 @@
       </vs-avatar>
       <span>
         <h4>{{ currentUser.username }}</h4>
-        <button><b>Update Profile Photo</b></button>
+        <input
+          style="display:none"
+          type="file"
+          @change="uploadFile"
+          ref="fileInput"
+        />
+        <button
+          v-if="!uploading"
+          @click="$refs.fileInput.click()"
+          class="upload-btn"
+        >
+          Upload Image
+        </button>
+
+        <div v-if="uploading" class="spinner">
+          <half-circle-spinner
+            :animation-duration="1000"
+            :size="15"
+            :color="'#195bff'"
+          />
+        </div>
       </span>
     </div>
 
@@ -50,12 +70,18 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import { bus } from '../main';
+import { HalfCircleSpinner } from 'epic-spinners';
 
 export default {
   name: 'Profile',
+  components: {
+    HalfCircleSpinner,
+  },
 
   data: () => ({
     Edit: true,
+    uploading: false,
     payload: {
       name: '',
       username: '',
@@ -70,6 +96,21 @@ export default {
     handleSubmit() {
       this.updateMe(this.payload);
     },
+
+    uploadFile(event) {
+      this.uploading = true;
+
+      //Get File From Event
+      const selectedFile = event.target.files[0];
+
+      //Create new FormData Object
+      const fd = new FormData();
+
+      //Append File and file name to the new FormData
+      fd.append('avatar', selectedFile, selectedFile.name);
+
+      this.updateMe(fd);
+    },
   },
 
   computed: {
@@ -81,6 +122,12 @@ export default {
     this.payload.username = this.currentUser.username;
     this.payload.email = this.currentUser.email;
     this.payload.gender = this.currentUser.gender;
+
+    bus.$on('stopLoading', () => {
+      console.log('uploadiing');
+      this.loading = false;
+      this.uploading = false;
+    });
   },
 };
 </script>

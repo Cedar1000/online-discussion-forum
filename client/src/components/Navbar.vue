@@ -95,13 +95,6 @@
         <span @click="signout">Sign Out</span>
       </vs-sidebar-item>
 
-      <vs-sidebar-item v-show="isLoggedIn" id="signout">
-        <template #icon>
-          <i class="fas fa-sign-out-alt"></i>
-        </template>
-        <span @click="signout">Sign Out</span>
-      </vs-sidebar-item>
-
       <vs-sidebar-item v-show="!isLoggedIn" id="login">
         <template #icon>
           <i class="fas fa-sign-in-alt"></i>

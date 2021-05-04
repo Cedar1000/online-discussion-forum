@@ -23,6 +23,10 @@ store.subscribe((mutation) => {
     case 'setError':
       bus.$emit('stopLoading');
       break;
+
+    case 'updateUser':
+      bus.$emit('stopLoading');
+      break;
   }
 });
 

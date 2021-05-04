@@ -101,12 +101,14 @@ const actions = {
   },
 
   async updateMe({ commit }, payload) {
+    console.log(payload);
     try {
       const response = await axios.patch('users/updateMe', payload);
       console.log(response.data);
       commit('updateUser', response.data.user);
     } catch (error) {
       console.log(error.response);
+      commit('setError', error.response.data.message);
     }
   },
 };

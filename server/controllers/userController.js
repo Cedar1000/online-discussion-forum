@@ -25,7 +25,7 @@ exports.getMe = catchAsync(async (req, res, next) => {
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   //1) Create error if user Posts password data
-  console.log(req.file);
+
   if (req.body.password || req.body.passwordConfirm) {
     return next(
       new AppError(
@@ -39,24 +39,15 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 
   let result;
   if (req.file) {
-    try {
-      if (!['male.jpg', 'female.jpg'].includes(req.user.avatar)) {
-        console.log(req.user);
-        await cloudinary.uploader.destroy(req.user.cloudinaryId);
-      }
+    result = await cloudinary.uploader.upload(req.file.path, {
+      folder: 'Forum',
+      public_id: req.user._id,
+      overwrite: true,
+    });
 
-      result = await cloudinary.uploader.upload(req.file.path, {
-        folder: 'Forum',
-      });
+    console.log(result);
 
-      req.body.avatar = result.secure_url;
-      req.body.cloudinaryId = result.public_id || req.user.cloudinaryId;
-    } catch (error) {
-      res.status(500).json({
-        status: 'error',
-        error,
-      });
-    }
+    req.body.avatar = result.secure_url;
   }
 
   const filteredBody = filterObj(

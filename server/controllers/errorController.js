@@ -67,6 +67,7 @@ const handleJWTExpiredError = () =>
   );
 
 module.exports = (err, req, res, next) => {
+  console.log(err);
   err.statusCode = err.statusCode || 500;
   // console.log({ ...err, isSpread: true });
   err.status = err.status || 'error';
@@ -74,7 +75,6 @@ module.exports = (err, req, res, next) => {
   if (process.env.NODE_ENV.trim() === 'development') {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV.trim() === 'production') {
-    console.log(err.prototype);
     let error = { ...err, message: err.message };
     if (error.kind === 'ObjectId') error = handleCastErrorDB(error);
     if (error.code === 11000) error = handleDuplicateFieldsDB(error);
