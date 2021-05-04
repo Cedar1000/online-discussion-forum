@@ -1,72 +1,180 @@
 <template>
   <div>
-    <v-card class="mx-auto" width="256" tile>
-      <v-navigation-drawer permanent>
-        <v-system-bar></v-system-bar>
-        <v-list>
-          <v-list-item>
-            <v-list-item-avatar>
-              <v-img src="https://cdn.vuetifyjs.com/images/john.png"></v-img>
-            </v-list-item-avatar>
-          </v-list-item>
+    <div class="table-div">
+      <form @submit.prevent="setAdd">
+        <div class="center content-inputs">
+          <vs-input class="input" v-model="name" placeholder="Name" />
+        </div>
 
-          <v-list-item link>
-            <v-list-item-content>
-              <v-list-item-title class="title">
-                John Leider
-              </v-list-item-title>
-              <v-list-item-subtitle>john@vuetifyjs.com</v-list-item-subtitle>
-            </v-list-item-content>
+        <vs-button class="vs-button">
+          <i class="fas fa-plus"></i>
+        </vs-button>
+      </form>
 
-            <v-list-item-action>
-              <v-icon>mdi-menu-down</v-icon>
-            </v-list-item-action>
-          </v-list-item>
-        </v-list>
-        <v-divider></v-divider>
-        <v-list nav dense>
-          <v-list-item-group v-model="selectedItem" color="primary">
-            <v-list-item v-for="(item, i) in items" :key="i">
-              <v-list-item-icon>
-                <v-icon v-text="item.icon"></v-icon>
-              </v-list-item-icon>
+      <vs-table striped class="vs-table">
+        <template #thead>
+          <vs-tr>
+            <vs-th>
+              Name
+            </vs-th>
+            <vs-th>
+              Edit
+            </vs-th>
 
-              <v-list-item-content>
-                <v-list-item-title v-text="item.text"></v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list-item-group>
-        </v-list>
-      </v-navigation-drawer>
-    </v-card>
+            <vs-th>
+              Delete
+            </vs-th>
+          </vs-tr>
+        </template>
+        <template #tbody>
+          <vs-tr v-for="cat in allCategories" :key="cat._id" :data="cat">
+            <vs-td class="vs-td">
+              {{ cat.name }}
+            </vs-td>
+
+            <vs-td @click="handleEdit(cat.name, cat._id)">
+              <i class="edit-icon fas fa-edit"></i>
+            </vs-td>
+
+            <vs-td class="delete" @click="handleDelete(cat.name, cat._id)">
+              <i class="edit-icon fas fa-trash"></i>
+            </vs-td>
+          </vs-tr>
+        </template>
+      </vs-table>
+
+      <vs-dialog class="vs-dialogue" width="300px" not-center v-model="active">
+        <template #header>
+          <h4 class="not-margin">Edit Category <b>Name</b></h4>
+        </template>
+
+        <div class="con-content">
+          <vs-input v-model="newName" placeholder="Name"></vs-input>
+        </div>
+
+        <template #footer>
+          <div class="con-footer">
+            <div class="btn-section">
+              <vs-button @click="setUpdate" transparent>
+                Ok
+              </vs-button>
+              <vs-button @click="active = false" dark transparent>
+                Cancel
+              </vs-button>
+            </div>
+          </div>
+        </template>
+      </vs-dialog>
+
+      <vs-dialog class="vs-dialogue" width="300px" not-center v-model="active2">
+        <template #header>
+          <h4 class="not-margin">
+            Are you sure you want delete <b>{{ newName }}?</b>
+          </h4>
+        </template>
+
+        <template #footer>
+          <div class="con-footer">
+            <div class="btn-section">
+              <vs-button @click="setDelete" transparent>
+                Yes
+              </vs-button>
+              <vs-button @click="active = false" dark transparent>
+                Cancel
+              </vs-button>
+            </div>
+          </div>
+        </template>
+      </vs-dialog>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
+
 export default {
   name: 'categories',
 
   data: () => ({
-    selectedItem: 0,
-    items: [
-      { text: 'My Files', icon: 'mdi-folder' },
-      { text: 'Shared with me', icon: 'mdi-account-multiple' },
-      { text: 'Starred', icon: 'mdi-star' },
-      { text: 'Recent', icon: 'mdi-history' },
-      { text: 'Offline', icon: 'mdi-check-circle' },
-      { text: 'Uploads', icon: 'mdi-upload' },
-      { text: 'Backups', icon: 'mdi-cloud-upload' },
-      { text: 'Uploads', icon: 'mdi-upload' },
-      { text: 'Backups', icon: 'mdi-cloud-upload' },
-    ],
+    active: false,
+    active2: false,
+    name: '',
+    newName: '',
+    id: '',
   }),
+
+  methods: {
+    ...mapActions(['updateCategory', 'addCategory', 'deleteCategory']),
+
+    handleEdit(name, id) {
+      this.active = true;
+      this.newName = name;
+      this.id = id;
+    },
+
+    handleDelete(name, id) {
+      this.active2 = true;
+      this.newName = name;
+      this.id = id;
+    },
+
+    setUpdate() {
+      this.active = false;
+      this.updateCategory({ id: this.id, name: this.newName });
+    },
+
+    setAdd() {
+      this.name = '';
+      this.addCategory({ name: this.name });
+    },
+
+    setDelete() {
+      this.active2 = false;
+      this.deleteCategory(this.id);
+    },
+  },
+
+  computed: {
+    ...mapGetters(['allCategories']),
+  },
 };
 </script>
 
 <style scoped>
-aside {
-  position: fixed;
-  background-attachment: scroll;
-  padding-top: 40px;
+.edit-icon {
+  color: var(--brand-color);
+}
+
+.vs-table {
+  font-family: var(--brand-font);
+  padding: 10px;
+}
+
+form {
+  display: flex;
+  padding: 10px;
+  font-family: var(--brand-font);
+}
+
+.vs-button {
+  border-radius: 50%;
+}
+
+.center {
+  width: 90%;
+}
+
+.vs-dialogue {
+  font-family: var(--brand-font);
+}
+
+.btn-section {
+  display: flex;
+}
+
+.delete {
+  display: flex;
+  justify-content: center;
 }
 </style>

@@ -7,6 +7,7 @@ import Notifications from './components/Notifications.vue';
 import singlePost from './components/singlePost.vue';
 import Login from './components/Login.vue';
 import Register from './components/Register.vue';
+import Categories from './components/Categories.vue';
 
 export default [
   { path: '/', component: Home },
@@ -56,4 +57,5 @@ export default [
   },
   { path: '/login', component: Login },
   { path: '/register', component: Register },
+  { path: '/categories', component: Categories },
 ];

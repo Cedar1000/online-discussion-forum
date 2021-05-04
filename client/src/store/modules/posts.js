@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:3000/api/v1';
+import { CREATE, DELETE } from '../factory';
+
+axios.defaults.baseURL = 'http://localhost:3000/api/v1/';
 
 const state = {
   posts: [],
@@ -24,7 +26,7 @@ const actions = {
       console.log(response.data.posts);
       commit('setPosts', response.data.posts);
     } catch (error) {
-      console.log(error, 'I am an error');
+      console.log(error.response, 'I am an error');
     }
   },
 
@@ -94,6 +96,36 @@ const actions = {
       console.log(error);
     }
   },
+
+  async addCategory({ commit }, name) {
+    try {
+      const response = await axios.post('category', name);
+
+      commit('addCategory', response.data.doc);
+    } catch (error) {
+      console.log(error.response);
+    }
+  },
+
+  //Edit category
+  async updateCategory({ commit }, { id, name }) {
+    try {
+      const response = await axios.patch(`category/${id}`, { name });
+      commit('setCategory', response.data.data);
+    } catch (error) {
+      console.log(error.response);
+    }
+  },
+
+  //Delete Category
+  async deleteCategory({ commit }, id) {
+    try {
+      await axios.delete(`category/${id}`);
+      commit('deleteCategory', id);
+    } catch (error) {
+      console.log(error.response);
+    }
+  },
 };
 
 const mutations = {
@@ -112,6 +144,21 @@ const mutations = {
   editPost: (state, post) => {
     const index = state.categoryPosts.findIndex((el) => el._id === post._id);
     state.categoryPosts.splice(index, 1, post);
+  },
+
+  addCategory: (state, category) => {
+    CREATE(state.categories, category);
+  },
+
+  setCategory: (state, category) => {
+    const index = state.categories.findIndex(
+      (el) => el._id === category.data._id
+    );
+    state.categories[index].name = category.data.name;
+  },
+
+  deleteCategory: (state, id) => {
+    state.categories = DELETE(state.categories, id);
   },
 };
 
