@@ -5,7 +5,6 @@ const userController = require('../controllers/userController');
 
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
-router.get('/images', userController.getImages);
 
 router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
@@ -34,5 +33,6 @@ router.get(
 );
 
 router.route('/:id').get(userController.getUser);
+router.patch('/:id/makeAdmin', userController.makeAdmin);
 
 module.exports = router;

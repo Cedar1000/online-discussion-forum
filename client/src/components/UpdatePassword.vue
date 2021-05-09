@@ -4,77 +4,46 @@
       {{ errorMsg }}
     </vs-alert>
 
-    <form class="wrapper" @submit.prevent="signInUser">
+    <vs-alert v-if="successMessage" class="vs-alert" color="success">
+      {{ successMessage }}
+    </vs-alert>
+
+    <form class="wrapper" @submit.prevent="sendDetails">
       <div class="vs-card">
         <i class="fas fa-user-circle"></i>
-        <h3>Sign Up</h3>
+        <h3>Update Password</h3>
         <div class="center content-inputs">
-          <vs-input
-            type="text"
-            v-model="$v.payload.name.$model"
-            placeholder="Name"
-            :danger="$v.payload.name.$dirty && !$v.payload.name.required"
-          /><br />
-
-          <span
-            class="error"
-            v-if="$v.payload.name.$dirty && !$v.payload.name.required"
-          >
-            Name is required
-          </span>
-
-          <vs-input
-            required
-            type="text"
-            v-model="$v.payload.email.$model"
-            placeholder="Email"
-            :danger="$v.payload.email.$dirty && !$v.payload.email.required"
-          /><br />
-
-          <span
-            class="error"
-            v-if="$v.payload.email.$dirty && !$v.payload.email.required"
-          >
-            Email is required
-          </span>
-
-          <span
-            class="error"
-            v-if="$v.payload.email.$dirty && $v.payload.email.$invalid"
-          >
-            Email is Invalid
-          </span>
-
-          <vs-input
-            type="text"
-            v-model="$v.payload.username.$model"
-            placeholder="Username"
-            :danger="
-              $v.payload.username.$dirty && !$v.payload.username.required
-            "
-          /><br />
-
-          <span
-            class="error"
-            v-if="$v.payload.username.$dirty && !$v.payload.username.required"
-          >
-            Username is required
-          </span>
-
-          <div class="gender">
-            <vs-select
-              class="vs-select"
-              label-placeholder="Gender"
+          <div class="password">
+            <vs-input
+              type="password"
               required
-              v-model="$v.payload.gender.$model"
+              v-model="$v.payload.passwordCurrent.$model"
+              placeholder="Current Password"
+              :danger="
+                $v.payload.passwordCurrent.$dirty &&
+                  !$v.payload.passwordCurrent.required
+              "
+            />
+
+            <span
+              class="error"
+              v-if="
+                $v.payload.passwordCurrent.$dirty &&
+                  !$v.payload.passwordCurrent.required
+              "
             >
-              <vs-option label="Male" value="male">
-                Male
-              </vs-option>
-              <vs-option label="Female" value="female">
-                Female
-              </vs-option>
-            </vs-select>
+              Current Password is required
+            </span>
+
+            <span
+              class="error"
+              v-if="
+                $v.payload.passwordCurrent.$dirty &&
+                  !$v.payload.passwordCurrent.minLength
+              "
+            >
+              Must be a minimum of 8 characters
+            </span>
           </div>
 
           <div class="password">
@@ -156,10 +125,6 @@
             />
           </div>
         </div>
-        <div class="links">
-          <span>Already have an account?</span>
-          <router-link to="/Login">Login</router-link>
-        </div>
       </div>
     </form>
   </div>
@@ -167,12 +132,12 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import { required, minLength, email } from 'vuelidate/lib/validators';
+import { required, minLength } from 'vuelidate/lib/validators';
 import { HalfCircleSpinner } from 'epic-spinners';
 import { bus } from '../main';
 
 export default {
-  name: 'Register',
+  name: 'UpdatePassword',
 
   components: {
     HalfCircleSpinner,
@@ -182,10 +147,7 @@ export default {
     loading: false,
 
     payload: {
-      name: '',
-      username: '',
-      email: '',
-      gender: '',
+      passwordCurrent: '',
       password: '',
       passwordConfirm: '',
     },
@@ -193,19 +155,9 @@ export default {
 
   validations: {
     payload: {
-      name: {
+      passwordCurrent: {
         required,
-      },
-      username: {
-        required,
-      },
-
-      email: {
-        required,
-        email,
-      },
-      gender: {
-        required,
+        minLength: minLength(8),
       },
 
       password: {
@@ -220,20 +172,12 @@ export default {
   },
 
   methods: {
-    ...mapActions(['signIn']),
+    ...mapActions(['updatePassword']),
 
-    signInUser() {
+    sendDetails() {
       this.loading = true;
       console.log(this.payload);
-      this.signIn(this.payload);
-    },
-
-    clearFields() {
-      this.name = '';
-      this.email = '';
-      this.gender = '';
-      this.password = '';
-      this.passwordConfirm = '';
+      this.updatePassword(this.payload);
     },
   },
   mounted() {
@@ -242,7 +186,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['errorMsg']),
+    ...mapGetters(['errorMsg', 'successMessage']),
 
     invalid() {
       // console.log(this.$v.payload);
@@ -270,6 +214,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  text-align: center;
 }
 
 .error {
@@ -277,6 +222,7 @@ export default {
   position: relative;
   bottom: 10px;
   color: #f57f6c;
+  margin-top: 15px;
 }
 
 .inputError {

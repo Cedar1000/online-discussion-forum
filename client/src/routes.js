@@ -8,6 +8,8 @@ import singlePost from './components/singlePost.vue';
 import Login from './components/Login.vue';
 import Register from './components/Register.vue';
 import Categories from './components/Categories.vue';
+import Users from './components/Users.vue';
+import UpdatePassword from './components/UpdatePassword.vue';
 
 export default [
   { path: '/', component: Home },
@@ -58,4 +60,6 @@ export default [
   { path: '/login', component: Login },
   { path: '/register', component: Register },
   { path: '/categories', component: Categories },
+  { path: '/users', component: Users },
+  { path: '/update-password', component: UpdatePassword },
 ];

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { CREATE, DELETE } from '../factory';
+import { CREATE, EDIT, DELETE } from '../factory';
 
 axios.defaults.baseURL = 'http://localhost:3000/api/v1/';
 
@@ -66,13 +66,8 @@ const actions = {
   //Add Post
   async addPost({ commit }, post) {
     console.log(post);
-    try {
-      const response = await axios.post(`posts`, post);
-      console.log(response.data.postGotBack);
-      commit('addPost', response.data.postGotBack);
-    } catch (error) {
-      console.log(error.response);
-    }
+    // commit('addPost', post);
+    console.log(commit);
   },
 
   //Delete Post
@@ -151,10 +146,7 @@ const mutations = {
   },
 
   setCategory: (state, category) => {
-    const index = state.categories.findIndex(
-      (el) => el._id === category.data._id
-    );
-    state.categories[index].name = category.data.name;
+    EDIT(state.categories, category.data);
   },
 
   deleteCategory: (state, id) => {

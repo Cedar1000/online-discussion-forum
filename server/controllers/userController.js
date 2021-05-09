@@ -81,6 +81,18 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getImages = catchAsync(async (req, res, next) => {
-  res.send('../public/img/users/cake1.png');
+exports.makeAdmin = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+
+  req.body.role = 'admin';
+
+  const user = await User.findByIdAndUpdate(id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    status: 'success',
+    user,
+  });
 });

@@ -32,11 +32,12 @@ const actions = {
         password,
       });
 
+      console.log(response);
       commit('setUser', response.data.user);
       commit('setToken', response.data.token);
       router.push({ path: 'Profile' });
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error);
 
       commit('setError', error.response.data.message);
     }

@@ -125,8 +125,8 @@ export default {
     },
 
     setAdd() {
-      this.name = '';
       this.addCategory({ name: this.name });
+      this.name = '';
     },
 
     setDelete() {

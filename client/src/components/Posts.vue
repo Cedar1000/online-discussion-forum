@@ -69,8 +69,16 @@
 </template>
 
 <script>
+import io from 'socket.io-client';
 import { mapGetters, mapActions } from 'vuex';
 import { bus } from '../main';
+
+const socket = io('http://localhost:3000', {
+  withCredentials: true,
+  extraHeaders: {
+    'my-custom-header': 'abcd',
+  },
+});
 
 export default {
   name: 'Posts',
@@ -135,6 +143,20 @@ export default {
     });
 
     bus.$emit('closeSidebar');
+  },
+
+  created() {
+    socket.on('welcome', (message) => {
+      console.log(message);
+    });
+
+    socket.on('chat-message', (message) => {
+      console.log('client', message);
+    });
+  },
+
+  beforeDestroy() {
+    socket.off('chat-message');
   },
 };
 </script>
