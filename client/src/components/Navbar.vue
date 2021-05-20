@@ -114,6 +114,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import { bus } from '../main';
 
 export default {
   name: 'navbar',
@@ -139,8 +140,11 @@ export default {
     },
 
     redirect(category) {
+      const roomLeaving = this.$route.params.category;
       this.closeNavbar();
+      if (!this.$route.params.category) console.log('No route');
       this.$router.push(`/posts/${category}`);
+      bus.$emit('change-posts', { roomLeaving, category });
     },
   },
 

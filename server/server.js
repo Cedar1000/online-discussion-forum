@@ -3,6 +3,14 @@ const socketio = require('socket.io');
 const dotenv = require('dotenv');
 const http = require('http');
 dotenv.config({ path: './config.env' });
+const {
+  userJoin,
+  getCurrentUser,
+  userLeave,
+  getRoomUsers,
+} = require('./utils/users');
+
+const postController = require('./controllers/postController');
 
 const app = require('./app');
 
@@ -20,11 +28,56 @@ const io = socketio(server, {
 io.on('connection', (socket) => {
   console.log(socket.id, 'New Ws Connection...');
 
-  socket.emit('welcome', 'Welcome to the App!');
+  //Listen for when a user joined the room
+  socket.on('join-room', ({ username, room }) => {
+    console.log({ username, room });
+    const user = userJoin(socket.id, username, room);
 
-  socket.on('chat-message', (message) => {
-    console.log('Server', message);
-    io.emit('chat-message', message);
+    socket.join(user.room);
+
+    //Welcome user to the app
+    socket.emit('welcome', 'Welcome to the App!');
+
+    socket.broadcast
+      .to(user.room)
+      .emit('user-join', `${user.username} has joined the chat`);
+  });
+
+  socket.on('leave-room', ({ id, room, username }) => {
+    console.log('leave', { id, room, username });
+    const user = userLeave(socket.id);
+    console.log(user);
+    socket.leave(room);
+    socket.broadcast.to(room).emit('leave-room', `${username} left the room`);
+  });
+
+  //Recieve Message
+  socket.on('chat-message', async (message) => {
+    //Save Message to DB
+    const result = await postController.createPost(message);
+    //Emit message to server
+    io.in(message.category).emit('chat-message', result);
+  });
+
+  //Listen for when a user is typing
+  socket.on('typing', (user) => {
+    console.log('typing...');
+    socket.broadcast.to(user.room).emit('typing', user);
+  });
+
+  //Listen for when a user stopped typing
+  socket.on('stopTyping', () => {
+    console.log('stopped typing..');
+    socket.broadcast.emit('stopTyping');
+  });
+
+  //Run when client disconnects
+  socket.on('disconnect', () => {
+    const user = userLeave(socket.id);
+    console.log('left', user);
+
+    if (user)
+      io.to(user.room).emit('user-exit', `${user.username} has left the chat`);
   });
 });
 

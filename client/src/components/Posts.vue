@@ -1,84 +1,96 @@
 <template>
-  <div class="posts" id="posts">
-    <div
-      v-for="post in allCategoryPosts"
-      :key="post.id"
-      class="post"
-      :class="{ me: post.user._id === currentUser._id }"
-    >
-      <vs-avatar
-        badge
-        circle
-        badge-color="success"
-        badge-position="bottom-right"
-        size="40"
+  <div>
+    <div class="posts" id="posts">
+      <div
+        v-for="post in allCategoryPosts"
+        :key="post.id"
+        class="post"
+        :class="{ me: post.user._id === currentUser._id }"
       >
-        <img :src="post.user.avatar" alt="" />
-      </vs-avatar>
-      <vs-card class="card">
-        <template #title>
-          <span class="post-details"
-            ><h3>{{ post.user.name }}</h3>
-            <b>5 mins ago</b></span
-          >
-        </template>
+        <vs-avatar
+          badge
+          circle
+          badge-color="success"
+          badge-position="bottom-right"
+          size="40"
+        >
+          <img :src="post.user.avatar" alt="" />
+        </vs-avatar>
+        <vs-card class="card">
+          <template #title>
+            <span class="post-details"
+              ><h3>{{ post.user.name }}</h3>
+              <b>5 mins ago</b></span
+            >
+          </template>
 
-        <template #text>
-          <router-link :to="`/post/${post.id}`">
-            <p>
-              {{ post.body }}
-            </p>
-          </router-link>
-          <div class="action-div">
-            <div class="actions">
-              <span>
-                <span
-                  v-show="post.likes && hasLiked(currentUser._id, post.likes)"
-                  @click="handleDislike(post)"
+          <template #text>
+            <router-link :to="`/post/${post.id}`">
+              <p>
+                {{ post.body }}
+              </p>
+            </router-link>
+            <div class="action-div">
+              <div class="actions">
+                <span>
+                  <span
+                    v-show="post.likes && hasLiked(currentUser._id, post.likes)"
+                    @click="handleDislike(post)"
+                  >
+                    <i class="fas fa-heart liked"></i>
+                  </span>
+                  <span
+                    v-show="!hasLiked(currentUser._id, post.likes)"
+                    @click="sendLikeReq(post._id)"
+                  >
+                    <i class="far fa-heart"></i> </span
+                  ><b>{{ post.likesQuantity }}</b></span
                 >
-                  <i class="fas fa-heart liked"></i>
-                </span>
                 <span
-                  v-show="!hasLiked(currentUser._id, post.likes)"
-                  @click="sendLikeReq(post._id)"
+                  ><i class="far fa-comment"></i
+                  ><b>{{ post.commentsQuantity }}</b></span
                 >
-                  <i class="far fa-heart"></i> </span
-                ><b>{{ post.likesQuantity }}</b></span
-              >
-              <span
-                ><i class="far fa-comment"></i
-                ><b>{{ post.commentsQuantity }}</b></span
-              >
 
+                <span
+                  v-if="post.user._id === currentUser._id"
+                  @click="editPost(post)"
+                  ><i class="far fa-user"></i
+                ></span>
+              </div>
               <span
                 v-if="post.user._id === currentUser._id"
-                @click="editPost(post)"
-                ><i class="far fa-user"></i
+                @click="sendDelReq(post._id)"
+                ><i class="fas fa-trash"></i
               ></span>
             </div>
-            <span
-              v-if="post.user._id === currentUser._id"
-              @click="sendDelReq(post._id)"
-              ><i class="fas fa-trash"></i
-            ></span>
-          </div>
-        </template>
-      </vs-card>
+          </template>
+        </vs-card>
+      </div>
     </div>
+
+    <!-- <div v-if="typerExists" class="typers">
+      <span v-for="typer in typers" :key="typer.id" class="typing">
+        <vs-avatar
+          badge
+          circle
+          badge-color="success"
+          badge-position="bottom-right"
+          size="40"
+        >
+          <img :src="typer.avatar" alt="" />
+        </vs-avatar>
+
+        <vs-card>
+          <p>typing....</p>
+        </vs-card>
+      </span>
+    </div> -->
   </div>
 </template>
 
 <script>
-import io from 'socket.io-client';
 import { mapGetters, mapActions } from 'vuex';
 import { bus } from '../main';
-
-const socket = io('http://localhost:3000', {
-  withCredentials: true,
-  extraHeaders: {
-    'my-custom-header': 'abcd',
-  },
-});
 
 export default {
   name: 'Posts',
@@ -86,6 +98,8 @@ export default {
     return {
       param: this.$route.params.category,
       path: this.$route.fullPath,
+      typing: false,
+      typers: [],
     };
   },
 
@@ -127,9 +141,8 @@ export default {
   computed: {
     ...mapGetters(['allCategoryPosts', 'currentUser']),
 
-    getPath() {
-      this.fetchCategoryPosts(this.$route.params.category);
-      return this.$route.params.category;
+    typerExists() {
+      return this.typers.length > 0;
     },
   },
 
@@ -146,22 +159,23 @@ export default {
   },
 
   created() {
-    socket.on('welcome', (message) => {
+    bus.$on('typing', (user) => {
+      const found = this.typers.find((el) => el.id === user.id);
+      if (!found) this.typers.push(user);
+    });
+
+    bus.$on('user-join', (message) => {
       console.log(message);
     });
-
-    socket.on('chat-message', (message) => {
-      console.log('client', message);
-    });
-  },
-
-  beforeDestroy() {
-    socket.off('chat-message');
   },
 };
 </script>
 
 <style scoped>
+.typing {
+  display: flex;
+}
+
 a {
   text-decoration: none;
   display: flex;

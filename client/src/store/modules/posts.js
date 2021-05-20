@@ -65,9 +65,8 @@ const actions = {
 
   //Add Post
   async addPost({ commit }, post) {
-    console.log(post);
-    // commit('addPost', post);
-    console.log(commit);
+    // console.log(commit, post);
+    commit('addPost', post);
   },
 
   //Delete Post

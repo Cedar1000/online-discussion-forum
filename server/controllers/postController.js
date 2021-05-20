@@ -72,16 +72,13 @@ exports.getPost = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.createPost = catchAsync(async (req, res, next) => {
-  const postCreated = await Post.create(req.body);
+exports.createPost = async (post) => {
+  const postCreated = await Post.create(post);
 
   const postGotBack = await Post.findById(postCreated.id).populate('likes');
 
-  res.status(201).json({
-    status: 'Success',
-    postGotBack,
-  });
-});
+  return postGotBack;
+};
 
 exports.updatePost = catchAsync(async (req, res, next) => {
   const postUpdated = await Post.findByIdAndUpdate(req.params.id, req.body, {

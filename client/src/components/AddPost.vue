@@ -5,7 +5,7 @@
       ref="myTextarea"
       :min-height="20"
       :max-height="650"
-      v-model="post.body"
+      v-model="body"
     />
     <v-btn @click="sendMessage" class="mx-2" fab dark color="indigo">
       <i class="fas fa-paper-plane"></i>
@@ -18,44 +18,36 @@ import io from 'socket.io-client';
 import { mapActions, mapGetters } from 'vuex';
 import { bus } from '../main';
 
+const socket = io('http://localhost:3000', {
+  withCredentials: true,
+  extraHeaders: {
+    'my-custom-header': 'abcd',
+  },
+});
+
 export default {
   name: 'addpost',
   data() {
     return {
-      post: {
-        user: '',
-        body: '',
-        category: this.$route.params.category,
-      },
+      user: '',
+      body: '',
 
       edit: false,
-
-      socket: io('http://localhost:3000', {
-        withCredentials: true,
-        extraHeaders: {
-          'my-custom-header': 'abcd',
-        },
-      }),
     };
   },
 
   methods: {
-    ...mapActions(['addPost', 'editPost']),
-
-    // async sendPost() {
-    //   if (this.edit) {
-    //     this.editPost({ id: this.post._id, body: this.post.body });
-    //     this.edit = false;
-    //   } else {
-    //     this.addPost(this.post);
-    //   }
-    //   this.post.body = '';
-    // },
+    ...mapActions(['addPost', 'editPost', 'fetchCategoryPosts']),
 
     sendMessage() {
-      this.post.user = this.currentUser._id;
-      this.socket.emit('chat-message', this.post);
-      this.post.body = '';
+      const post = {
+        body: this.body,
+        user: this.currentUser._id,
+        category: this.$route.params.category,
+      };
+
+      socket.emit('chat-message', post);
+      this.body = '';
     },
   },
 
@@ -63,17 +55,63 @@ export default {
     ...mapGetters(['currentUser']),
   },
 
-  created() {
-    // this.socket.on('chat-message', (message) => {
-    //   console.log('client', message);
-    //   // this.addPost(message);
-    //   console.log('Hello word!');
-    // });
+  watch: {
+    body(value) {
+      value
+        ? socket.emit('typing', {
+            id: this.currentUser._id,
+            username: this.currentUser.username,
+            avatar: this.currentUser.avatar,
+            room: this.$route.params.category,
+          })
+        : socket.emit('stopTyping');
+    },
+  },
 
-    bus.$on('transferPost', (post) => {
-      this.post = post;
-      this.edit = true;
+  created() {
+    socket.emit('join-room', {
+      username: this.currentUser.username,
+      room: this.$route.params.category,
     });
+
+    bus.$on('change-posts', ({ roomLeaving, category }) => {
+      console.log(roomLeaving);
+      console.log(category);
+      this.fetchCategoryPosts(category);
+
+      if (roomLeaving) {
+        socket.emit('leave-room', {
+          username: this.currentUser.username,
+          room: roomLeaving,
+          id: this.currentUser._id,
+        });
+      }
+
+      socket.emit('join-room', {
+        username: this.currentUser.username,
+        room: this.$route.params.category,
+      });
+    });
+
+    socket.on('chat-message', (message) => this.addPost(message));
+
+    socket.on('typing', (user) => console.log(`${user.username} is typing...`));
+
+    socket.on('leave-room', (message) => console.log(message));
+
+    socket.on('user-join', (message) => console.log(message));
+
+    socket.on('user-exit', (message) => console.log(message));
+  },
+
+  beforeDestroy() {
+    console.log('AddPost Destroyed');
+    bus.$off('leave-room');
+    bus.$off('change-posts');
+    socket.off('chat-message');
+    socket.off('user-join');
+    socket.off('leave-room');
+    socket.off('typing');
   },
 };
 </script>
