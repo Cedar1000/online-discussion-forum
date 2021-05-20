@@ -37,7 +37,12 @@ export default {
   },
 
   methods: {
-    ...mapActions(['addPost', 'editPost', 'fetchCategoryPosts']),
+    ...mapActions([
+      'addPost',
+      'editPost',
+      'fetchCategoryPosts',
+      'deleteTyping',
+    ]),
 
     sendMessage() {
       const post = {
@@ -64,7 +69,7 @@ export default {
             avatar: this.currentUser.avatar,
             room: this.$route.params.category,
           })
-        : socket.emit('stopTyping');
+        : socket.emit('stopTyping', this.currentUser._id);
     },
   },
 
@@ -95,13 +100,15 @@ export default {
 
     socket.on('chat-message', (message) => this.addPost(message));
 
-    socket.on('typing', (user) => console.log(`${user.username} is typing...`));
+    socket.on('typing', (message) => this.addPost(message));
 
     socket.on('leave-room', (message) => console.log(message));
 
     socket.on('user-join', (message) => console.log(message));
 
     socket.on('user-exit', (message) => console.log(message));
+
+    socket.on('stopTyping', (id) => this.deleteTyping(id));
   },
 
   beforeDestroy() {

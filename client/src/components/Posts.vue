@@ -16,7 +16,7 @@
         >
           <img :src="post.user.avatar" alt="" />
         </vs-avatar>
-        <vs-card class="card">
+        <vs-card v-if="post.body" class="card">
           <template #title>
             <span class="post-details"
               ><h3>{{ post.user.name }}</h3>
@@ -63,6 +63,14 @@
                 ><i class="fas fa-trash"></i
               ></span>
             </div>
+          </template>
+        </vs-card>
+
+        <vs-card v-if="!post.body" class="card">
+          <template #title> </template>
+
+          <template #text>
+            <p style="padding-top: 10px">Typing....</p>
           </template>
         </vs-card>
       </div>

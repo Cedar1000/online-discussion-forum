@@ -120,6 +120,10 @@ const actions = {
       console.log(error.response);
     }
   },
+
+  async deleteTyping({ commit }, id) {
+    commit('removeTyping', id);
+  },
 };
 
 const mutations = {
@@ -150,6 +154,14 @@ const mutations = {
 
   deleteCategory: (state, id) => {
     state.categories = DELETE(state.categories, id);
+  },
+
+  removeTyping: (state, id) => {
+    const index = state.categoryPosts.findIndex(
+      (post) => post.user.id === id && post.typing
+    );
+
+    state.categoryPosts.splice(index, 1);
   },
 };
 

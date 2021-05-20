@@ -61,14 +61,19 @@ io.on('connection', (socket) => {
 
   //Listen for when a user is typing
   socket.on('typing', (user) => {
+    const post = {
+      id: Date.now(),
+      typing: true,
+      user,
+    };
     console.log('typing...');
-    socket.broadcast.to(user.room).emit('typing', user);
+    socket.broadcast.to(user.room).emit('typing', post);
   });
 
   //Listen for when a user stopped typing
-  socket.on('stopTyping', () => {
+  socket.on('stopTyping', (id) => {
     console.log('stopped typing..');
-    socket.broadcast.emit('stopTyping');
+    socket.broadcast.emit('stopTyping', id);
   });
 
   //Run when client disconnects
