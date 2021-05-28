@@ -80,9 +80,7 @@ export default {
     });
 
     bus.$on('change-posts', ({ roomLeaving, category }) => {
-      console.log(roomLeaving);
-      console.log(category);
-      this.fetchCategoryPosts(category);
+      this.fetchCategoryPosts({ category });
 
       if (roomLeaving) {
         socket.emit('leave-room', {
@@ -98,17 +96,28 @@ export default {
       });
     });
 
+    bus.$on('join-room', () => {
+      socket.emit('join-room', {
+        username: this.currentUser.username,
+        room: this.$route.params.category,
+      });
+    });
+
     socket.on('chat-message', (message) => this.addPost(message));
 
     socket.on('typing', (message) => this.addPost(message));
 
-    socket.on('leave-room', (message) => console.log(message));
+    socket.on('leave-room', (message) => this.addPost(message));
 
-    socket.on('user-join', (message) => console.log(message));
+    socket.on('user-join', (message) => this.addPost(message));
 
     socket.on('user-exit', (message) => console.log(message));
 
     socket.on('stopTyping', (id) => this.deleteTyping(id));
+
+    socket.on('my-message', () => bus.$emit('my-message'));
+
+    socket.on('recieve-message', () => bus.$emit('recieve-message'));
   },
 
   beforeDestroy() {
@@ -116,6 +125,7 @@ export default {
     bus.$off('leave-room');
     bus.$off('change-posts');
     socket.off('chat-message');
+    socket.off('recieve-message');
     socket.off('user-join');
     socket.off('leave-room');
     socket.off('typing');

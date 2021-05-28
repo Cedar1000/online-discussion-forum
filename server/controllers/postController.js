@@ -13,21 +13,30 @@ exports.setSlugAndId = (req, res, next) => {
 
 exports.checkCategory = catchAsync(async (req, res, next) => {
   const category = await Category.findOne({ name: req.body.category });
-  if (!category) {
-    return next(new AppError('No such category exists', 404));
-  }
+
+  if (!category) return next(new AppError('No such category exists', 404));
+
   next();
 });
 
 exports.getAllPost = catchAsync(async (req, res, next) => {
   let categoryObj = {};
 
-  if (req.params.category) {
-    categoryObj.category = req.params.category;
-  }
+  if (req.params.category) categoryObj.category = req.params.category;
 
-  const posts = await Post.find(categoryObj)
+  //Pagination
+  const page = req.query.page * 1 || 1;
+  const limit = req.query.limit * 1 || 10;
+  const skip = (page - 1) * limit;
+  const numDocs = await Post.countDocuments(categoryObj);
+  console.log(categoryObj);
+  console.log(numDocs);
+  const pages = Math.ceil(numDocs / limit);
+
+  const results = await Post.find(categoryObj)
     .sort('-createdAt')
+    .skip(skip)
+    .limit(limit)
     .populate({
       path: 'comments',
       populate: [
@@ -46,8 +55,11 @@ exports.getAllPost = catchAsync(async (req, res, next) => {
       path: 'likes',
     });
 
+  const posts = results.sort((a, b) => a.createdAt - b.createdAt);
+
   res.status(200).json({
     results: posts.length,
+    pages,
     status: 'success',
     posts,
   });
@@ -62,9 +74,7 @@ exports.getPost = catchAsync(async (req, res, next) => {
       populate: [{ path: 'likes' }, { path: 'replies' }, { path: 'user' }],
     });
 
-  if (!post) {
-    return next(new AppError('No Post with that ID', 404));
-  }
+  if (!post) return next(new AppError('No Post with that ID', 404));
 
   res.status(200).json({
     status: 'Success',

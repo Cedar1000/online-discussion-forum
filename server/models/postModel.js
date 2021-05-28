@@ -27,7 +27,6 @@ const postSchema = new mongoose.Schema(
 
     createdAt: {
       type: Date,
-      default: Date.now(),
     },
   },
   {
@@ -50,6 +49,11 @@ postSchema.virtual('comments', {
 });
 
 //DOCUMENT MIDDLEWARE: runs before .save() and create()
+
+postSchema.pre('save', function (next) {
+  this.createdAt = Date.now();
+  next();
+});
 
 //QUERY MIDDLEWARE
 postSchema.pre(/^find/, function (next) {

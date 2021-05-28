@@ -30,33 +30,48 @@ io.on('connection', (socket) => {
 
   //Listen for when a user joined the room
   socket.on('join-room', ({ username, room }) => {
-    console.log({ username, room });
     const user = userJoin(socket.id, username, room);
 
     socket.join(user.room);
 
+    const message = {
+      id: Date.now(),
+      broadcast: `${username} has join the room`,
+      user,
+    };
+
     //Welcome user to the app
     socket.emit('welcome', 'Welcome to the App!');
 
-    socket.broadcast
-      .to(user.room)
-      .emit('user-join', `${user.username} has joined the chat`);
+    if (username) socket.broadcast.to(user.room).emit('user-join', message);
   });
 
   socket.on('leave-room', ({ id, room, username }) => {
     console.log('leave', { id, room, username });
     const user = userLeave(socket.id);
-    console.log(user);
+
+    const message = {
+      id: Date.now(),
+      broadcast: `${username} left the room`,
+      user,
+    };
+
     socket.leave(room);
-    socket.broadcast.to(room).emit('leave-room', `${username} left the room`);
+    socket.broadcast.to(room).emit('leave-room', message);
   });
 
   //Recieve Message
   socket.on('chat-message', async (message) => {
     //Save Message to DB
     const result = await postController.createPost(message);
+
     //Emit message to server
     io.in(message.category).emit('chat-message', result);
+
+    socket.broadcast.to(message.category).emit('recieve-message');
+
+    //Emit only to user
+    socket.emit('my-message');
   });
 
   //Listen for when a user is typing
@@ -66,13 +81,12 @@ io.on('connection', (socket) => {
       typing: true,
       user,
     };
-    console.log('typing...');
+
     socket.broadcast.to(user.room).emit('typing', post);
   });
 
   //Listen for when a user stopped typing
   socket.on('stopTyping', (id) => {
-    console.log('stopped typing..');
     socket.broadcast.emit('stopTyping', id);
   });
 

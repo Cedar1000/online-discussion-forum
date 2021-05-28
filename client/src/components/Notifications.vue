@@ -14,7 +14,7 @@
 
           <div @click="markRead(Not)">
             {{ Not.body }}
-            <div class="timestamp">5 sec ago.</div>
+            <div class="timestamp">{{ simplifyDate(Not.createdAt) }}</div>
           </div>
         </v-list-item>
         <v-divider></v-divider>
@@ -31,6 +31,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import moment from 'moment';
 
 export default {
   name: 'Notifications',
@@ -46,6 +47,12 @@ export default {
       if (not.read === false) {
         this.patchNotification(not._id);
       }
+    },
+
+    simplifyDate(date) {
+      // console.log((Date.now() - date));
+
+      return moment(date).fromNow();
     },
   },
 };

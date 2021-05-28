@@ -12,10 +12,26 @@
           </vs-avatar>
 
           <div class="post-details">
-            <p>
-              <b>{{ presentPost.user.name }}</b>
-            </p>
-            <p class="timestamp">{{ presentPost.createdAt }}</p>
+            <div class="user-stuff">
+              <p>
+                <b>{{ presentPost.user.name }}</b>
+              </p>
+              <p class="timestamp">{{ simplifyDate(presentPost.createdAt) }}</p>
+            </div>
+
+            <div class="user-actions">
+              <span
+                v-if="presentPost.user._id === currentUser._id"
+                @click="handleEdit"
+                ><i class="action-icon fas fa-pencil-alt"></i
+              ></span>
+
+              <span
+                v-if="presentPost.user._id === currentUser._id"
+                @click="editPost(presentPost)"
+                ><i class="action-icon fas fa-trash"></i
+              ></span>
+            </div>
           </div>
         </div>
 
@@ -34,6 +50,34 @@
             ><b>{{ presentPost.commentsQuantity }}</b></span
           >
         </div>
+
+        <vs-dialog
+          class="vs-dialogue"
+          width="300px"
+          not-center
+          v-model="active"
+        >
+          <template #header>
+            <h4 class="not-margin">Edit Post <b>Name</b></h4>
+          </template>
+
+          <div class="con-content">
+            <vs-input v-model="postToEdit" placeholder="Name"></vs-input>
+          </div>
+
+          <template #footer>
+            <div class="con-footer">
+              <div class="btn-section">
+                <vs-button @click="sendEdit" transparent>
+                  Ok
+                </vs-button>
+                <vs-button @click="active = false" dark transparent>
+                  Cancel
+                </vs-button>
+              </div>
+            </div>
+          </template>
+        </vs-dialog>
       </div>
 
       <v-divider class="divider"></v-divider>
@@ -46,7 +90,13 @@
             :max-height="350"
             v-model="comment"
           />
-          <v-btn @click="sendComment" class="mx-2" fab dark color="indigo">
+          <v-btn
+            @click="sendComment"
+            class="mx-2 comment-btn"
+            fab
+            dark
+            color="indigo"
+          >
             <i class="fas fa-paper-plane"></i>
           </v-btn>
         </div>
@@ -156,6 +206,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import moment from 'moment';
 
 export default {
   name: 'singlePost',
@@ -165,6 +216,8 @@ export default {
     reply: '',
     replyMode: false,
     commentToReply: '',
+    active: false,
+    postToEdit: '',
   }),
 
   methods: {
@@ -174,7 +227,19 @@ export default {
       'likeComment',
       'dislikeComment',
       'replyComment',
+      'editPost',
     ]),
+
+    handleEdit() {
+      this.active = true;
+      this.postToEdit = this.presentPost.body;
+      this.id = this.presentPost.id;
+    },
+
+    sendEdit() {
+      this.editPost({ id: this.id, body: this.postToEdit });
+      this.active = false;
+    },
 
     sendComment() {
       this.commentOnPost({ postId: this.id, comment: this.comment });
@@ -207,6 +272,12 @@ export default {
       this.replyComment({ id, body: this.reply });
       this.reply = '';
     },
+
+    simplifyDate(date) {
+      // console.log((Date.now() - date));
+
+      return moment(date).fromNow();
+    },
   },
 
   created() {
@@ -221,6 +292,22 @@ export default {
 </script>
 
 <style scoped>
+.con-content {
+  font-family: 'Lato', sans-serif;
+}
+
+.btn-section {
+  display: flex;
+}
+
+.action-icon {
+  color: #195bff;
+}
+
+.user-actions span {
+  margin-left: 20px;
+}
+
 .divider {
   margin-top: 10px;
 }
@@ -257,6 +344,9 @@ export default {
 
 .user .post-details {
   margin-left: 10px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .timestamp {
@@ -304,7 +394,7 @@ textarea:focus {
   outline: none;
 }
 
-button {
+.comment-btn {
   height: 40px !important;
   width: 40px !important;
   background-color: #195bff !important;

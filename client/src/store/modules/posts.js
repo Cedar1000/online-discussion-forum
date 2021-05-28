@@ -9,6 +9,7 @@ const state = {
   categories: [],
   categoryPosts: [],
   singlePost: '',
+  pages: null,
 };
 
 const getters = {
@@ -16,6 +17,7 @@ const getters = {
   allCategories: (state) => state.categories,
   allCategoryPosts: (state) => state.categoryPosts,
   presentPost: (state) => state.singlePost,
+  pages: (state) => state.pages,
 };
 
 const actions = {
@@ -42,11 +44,19 @@ const actions = {
   },
 
   // Getting Posts based on categories
-  async fetchCategoryPosts({ commit }, category) {
+  async fetchCategoryPosts({ commit }, { category, page, appendPost }) {
     try {
-      const response = await axios.get(`category/${category}/posts`);
+      const response = await axios.get(
+        `category/${category}/posts?page=${page}`
+      );
 
-      commit('setPostCategories', response.data.posts);
+      const { posts, pages } = response.data;
+
+      if (appendPost) {
+        commit('appendPosts', response.data.posts);
+      } else {
+        commit('setPostCategories', { posts, pages });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -56,7 +66,7 @@ const actions = {
   async fetchSinglePost({ commit }, id) {
     try {
       const response = await axios.get(`posts/${id}`);
-      console.log(response.data.post);
+
       commit('setSinglePost', response.data.post);
     } catch (error) {
       console.log(error);
@@ -64,7 +74,7 @@ const actions = {
   },
 
   //Add Post
-  async addPost({ commit }, post) {
+  addPost({ commit }, post) {
     // console.log(commit, post);
     commit('addPost', post);
   },
@@ -72,7 +82,6 @@ const actions = {
   //Delete Post
   async deletePost({ commit }, id) {
     try {
-      console.log(id);
       await axios.delete(`posts/${id}`);
       commit('removePost', id);
     } catch (error) {
@@ -128,24 +137,46 @@ const actions = {
 
 const mutations = {
   setPosts: (state, posts) => (state.posts = posts),
+
   setCategories: (state, categories) => (state.categories = categories),
-  setPostCategories: (state, posts) => (state.categoryPosts = posts),
+
+  setPostCategories: (state, { posts, pages }) => {
+    state.categoryPosts = posts;
+    state.pages = pages;
+  },
+
   setSinglePost: (state, post) => (state.singlePost = post),
 
   addPost: (state, newPost) => {
-    state.categoryPosts.push(newPost);
+    //Check if it's a typing event
+    if (newPost.typing) {
+      //Check if it's already in the state
+      const found = state.categoryPosts.find(
+        (post) => post.user.id === newPost.user.id
+      );
+
+      if (!found) state.categoryPosts.push(newPost);
+    } else {
+      //Push it anyways
+      state.categoryPosts.push(newPost);
+    }
   },
 
   removePost: (state, id) =>
     (state.categoryPosts = state.categoryPosts.filter((el) => el._id !== id)),
 
   editPost: (state, post) => {
-    const index = state.categoryPosts.findIndex((el) => el._id === post._id);
-    state.categoryPosts.splice(index, 1, post);
+    state.singlePost.body = post.body;
   },
 
   addCategory: (state, category) => {
     CREATE(state.categories, category);
+  },
+
+  appendPosts: (state, newPosts) => {
+    console.log(newPosts);
+    const modifiedState = [...newPosts, ...state.categoryPosts];
+    state.categoryPosts = modifiedState;
   },
 
   setCategory: (state, category) => {

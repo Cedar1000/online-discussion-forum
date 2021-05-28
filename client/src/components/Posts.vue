@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="posts" id="posts">
+    <div class="posts" @scroll="fetchNewPosts" id="posts">
       <div
         v-for="post in allCategoryPosts"
         :key="post.id"
@@ -13,14 +13,16 @@
           badge-color="success"
           badge-position="bottom-right"
           size="40"
+          v-if="!post.broadcast"
         >
           <img :src="post.user.avatar" alt="" />
         </vs-avatar>
+
         <vs-card v-if="post.body" class="card">
           <template #title>
             <span class="post-details"
-              ><h3>{{ post.user.name }}</h3>
-              <b>5 mins ago</b></span
+              ><h3>{{ post.user.username }}</h3>
+              <b>{{ simplifyDate(post.createdAt) }}</b></span
             >
           </template>
 
@@ -50,12 +52,6 @@
                   ><i class="far fa-comment"></i
                   ><b>{{ post.commentsQuantity }}</b></span
                 >
-
-                <span
-                  v-if="post.user._id === currentUser._id"
-                  @click="editPost(post)"
-                  ><i class="far fa-user"></i
-                ></span>
               </div>
               <span
                 v-if="post.user._id === currentUser._id"
@@ -66,37 +62,25 @@
           </template>
         </vs-card>
 
-        <vs-card v-if="!post.body" class="card">
+        <vs-card v-if="post.typing" class="card">
           <template #title> </template>
 
           <template #text>
             <p style="padding-top: 10px">Typing....</p>
           </template>
         </vs-card>
+
+        <div v-if="post.broadcast" class="broadcast-div">
+          <p>{{ post.broadcast }}</p>
+        </div>
       </div>
     </div>
-
-    <!-- <div v-if="typerExists" class="typers">
-      <span v-for="typer in typers" :key="typer.id" class="typing">
-        <vs-avatar
-          badge
-          circle
-          badge-color="success"
-          badge-position="bottom-right"
-          size="40"
-        >
-          <img :src="typer.avatar" alt="" />
-        </vs-avatar>
-
-        <vs-card>
-          <p>typing....</p>
-        </vs-card>
-      </span>
-    </div> -->
   </div>
 </template>
 
 <script>
+import moment from 'moment';
+
 import { mapGetters, mapActions } from 'vuex';
 import { bus } from '../main';
 
@@ -104,10 +88,9 @@ export default {
   name: 'Posts',
   data() {
     return {
-      param: this.$route.params.category,
       path: this.$route.fullPath,
-      typing: false,
-      typers: [],
+      unread: 0,
+      page: 2,
     };
   },
 
@@ -117,6 +100,7 @@ export default {
       'deletePost',
       'likePost',
       'dislikePost',
+      'appendPosts',
     ]),
 
     sendDelReq(id) {
@@ -144,36 +128,84 @@ export default {
     editPost(post) {
       bus.$emit('transferPost', post);
     },
+
+    simplifyDate(date) {
+      // console.log((Date.now() - date));
+
+      return moment(date).fromNow();
+    },
+
+    printName(name) {
+      console.log(name);
+    },
+
+    fetchNewPosts() {
+      const postDiv = document.getElementById('posts');
+
+      // console.log(postDiv.scrollHeight - postDiv.scrollTop);
+
+      if (postDiv.scrollTop === 0 && this.page <= this.pages) {
+        this.fetchCategoryPosts({
+          category: this.$route.params.category,
+          page: this.page,
+          appendPost: true,
+        });
+        this.page += 1;
+        // postDiv.scrollTop = 50;
+      }
+
+      // if (postDiv.scrollTop) return;
+    },
   },
 
   computed: {
-    ...mapGetters(['allCategoryPosts', 'currentUser']),
+    ...mapGetters(['allCategoryPosts', 'currentUser', 'pages']),
 
-    typerExists() {
-      return this.typers.length > 0;
+    checkRoute() {
+      return this.$route.params.category;
+    },
+  },
+
+  watch: {
+    // allCategoryPosts() {
+    //   const postDiv = document.getElementById('posts');
+
+    //   console.log(postDiv.scrollTop, postDiv.scrollHeight);
+    // },
+
+    checkRoute() {
+      this.page = 2;
     },
   },
 
   mounted() {
-    this.fetchCategoryPosts(this.param);
-
-    bus.$on('emitSub', () => {
-      const postDiv = document.getElementById('posts');
-
-      postDiv.scrollTop = postDiv.scrollHeight;
-    });
+    this.$nextTick(() => console.log('DOM Channged'));
 
     bus.$emit('closeSidebar');
   },
 
   created() {
-    bus.$on('typing', (user) => {
-      const found = this.typers.find((el) => el.id === user.id);
-      if (!found) this.typers.push(user);
-    });
+    this.fetchCategoryPosts({ category: this.$route.params.category });
+
+    bus.$on('newPost', () => (this.nPosts += 1));
 
     bus.$on('user-join', (message) => {
       console.log(message);
+    });
+
+    bus.$on('my-message', () => {
+      const postDiv = document.getElementById('posts');
+
+      postDiv.scrollTop = postDiv.scrollHeight;
+    });
+
+    bus.$on('recieve-message', () => {
+      const postDiv = document.getElementById('posts');
+
+      if (postDiv.scrollHeight - postDiv.scrollTop > 1000) {
+        this.unread += 1;
+        console.log(this.unread);
+      }
     });
   },
 };
@@ -182,6 +214,12 @@ export default {
 <style scoped>
 .typing {
   display: flex;
+}
+
+.broadcast-div {
+  width: 100%;
+  text-align: center;
+  color: #8c8181;
 }
 
 a {
@@ -221,7 +259,7 @@ a {
 }
 
 b {
-  margin-left: 5px;
+  margin-left: 3px;
 }
 .action-div {
   display: flex;

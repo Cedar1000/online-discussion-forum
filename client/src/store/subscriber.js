@@ -16,9 +16,6 @@ store.subscribe((mutation) => {
         localStorage.removeItem('token');
       }
       break;
-    case 'addPost':
-      bus.$emit('emitSub');
-      break;
 
     case 'setError':
       bus.$emit('stopLoading');
@@ -26,6 +23,14 @@ store.subscribe((mutation) => {
 
     case 'updateUser':
       bus.$emit('stopLoading');
+      break;
+
+    case 'setUser':
+      bus.$emit('join-room');
+      break;
+
+    case 'addPost':
+      bus.$emit('newPost');
       break;
   }
 });
