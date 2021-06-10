@@ -16,7 +16,7 @@
       />
     </div>
 
-    <div v-if="!loading" class="posts" @scroll="fetchNewPosts" ref="posts">
+    <div v-show="!loading" class="posts" @scroll="fetchNewPosts" ref="posts">
       <div
         v-for="post in allCategoryPosts"
         :key="post.id"
