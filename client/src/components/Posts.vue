@@ -206,8 +206,8 @@ export default {
     fetchNewPosts() {
       const { posts } = this.$refs;
 
-      console.log(posts.scrollHeight - posts.scrollTop, posts.scrollHeight);
-      if (posts.scrollHeight - posts.scrollTop < 700) {
+      // console.log(posts.scrollHeight - posts.scrollTop, posts.scrollHeight);
+      if (posts.scrollTop === posts.scrollHeight - posts.offsetHeight) {
         this.scrollMode = false;
         console.log(this.scrollMode);
       } else {
@@ -248,17 +248,11 @@ export default {
     },
   },
 
-  beforeUpdate() {
-    const { posts } = this.$refs;
-    console.log(posts);
-    posts.scrollTop = posts.scrollHeight;
-  },
-
   mounted() {
     this.$nextTick(() => {
-      this.fetchLoading = false;
-      this.loading = false;
-      console.log(this.loading);
+      const { posts } = this.$refs;
+      console.log(posts);
+      posts.scrollTop = posts.scrollHeight;
     });
 
     bus.$emit('closeSidebar');
