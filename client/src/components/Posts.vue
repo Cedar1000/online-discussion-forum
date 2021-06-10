@@ -92,9 +92,13 @@
         </div>
       </div>
 
-      <div class="unread">
-        <i class="fas fa-angle-down"></i>
-        <span v-show="unread" class="not-div">{{ unread }}</span>
+      <div class="unread" v-if="scrollMode">
+        <div class="relative">
+          <vs-button class="vs-button" circle icon floating>
+            <i class="fas fa-angle-down"></i>
+          </vs-button>
+          <span v-show="unread" class="not-div">{{ unread }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -116,6 +120,7 @@ export default {
       loading: true,
       index: 0,
       fetchLoading: false,
+      scrollMode: false,
     };
   },
 
@@ -201,6 +206,8 @@ export default {
     fetchNewPosts() {
       const { posts } = this.$refs;
 
+      console.log(posts.scrollHeight, posts.innerHeight);
+
       if (posts.scrollTop === 0 && this.page <= this.pages) {
         this.fetchLoading = true;
         this.fetchCategoryPosts({
@@ -211,6 +218,12 @@ export default {
         this.page += 1;
         posts.scrollTop = 50;
       } else {
+        if (posts.scrollTop - posts.scrollHeight > 800) {
+          this.scrollMode = false;
+        } else {
+          this.scrollMode = true;
+        }
+
         this.$refs.postCon.forEach((el, i) => {
           if (this.isVisible(el, posts) && this.allCategoryPosts[i].unread) {
             this.makeRead(i);
@@ -234,6 +247,12 @@ export default {
     },
   },
 
+  beforeUpdate() {
+    const { posts } = this.$refs;
+    console.log(posts);
+    posts.scrollTop = posts.scrollHeight;
+  },
+
   mounted() {
     this.$nextTick(() => {
       this.fetchLoading = false;
@@ -253,6 +272,7 @@ export default {
 
     bus.$on('my-message', () => {
       const { posts } = this.$refs;
+      console.log(posts);
       posts.scrollTop = posts.scrollHeight;
     });
 
@@ -270,6 +290,20 @@ export default {
 </script>
 
 <style scoped>
+.unread {
+  position: fixed;
+  right: 1rem;
+  bottom: 7.5rem;
+  z-index: 2;
+}
+
+.unread .vs-button {
+  background: #fff;
+  color: #000;
+  padding: 8px 10px;
+  border-radius: 50%;
+}
+
 .spinner {
   display: flex;
   justify-content: center;
@@ -301,6 +335,7 @@ a {
   overflow: hidden;
   overflow-y: scroll;
   box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, var(--vs-shadow-opacity));
+  z-index: 1;
 }
 
 .post {
@@ -377,9 +412,10 @@ b {
   border-radius: 50%;
   font-size: 10px;
   z-index: 2;
-  position: fixed;
-  right: 1rem;
-  bottom: 7.5rem;
+  position: absolute;
+  top: -7px;
+  right: -7px;
+
   border: 2px solid #fff;
 }
 
