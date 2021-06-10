@@ -18,6 +18,7 @@ const getters = {
   allCategoryPosts: (state) => state.categoryPosts,
   presentPost: (state) => state.singlePost,
   pages: (state) => state.pages,
+  unread: (state) => state.categoryPosts.filter((el) => el.unread).length,
 };
 
 const actions = {
@@ -133,6 +134,14 @@ const actions = {
   async deleteTyping({ commit }, id) {
     commit('removeTyping', id);
   },
+
+  makeUnread({ commit }, index) {
+    commit('markAsUnread', index);
+  },
+
+  makeRead({ commit }, index) {
+    commit('markAsRead', index);
+  },
 };
 
 const mutations = {
@@ -174,7 +183,6 @@ const mutations = {
   },
 
   appendPosts: (state, newPosts) => {
-    console.log(newPosts);
     const modifiedState = [...newPosts, ...state.categoryPosts];
     state.categoryPosts = modifiedState;
   },
@@ -193,6 +201,20 @@ const mutations = {
     );
 
     state.categoryPosts.splice(index, 1);
+  },
+
+  markAsUnread: (state, index) => {
+    const post = { ...state.categoryPosts[index] };
+
+    post.unread = true;
+    state.categoryPosts.splice(index, 1, post);
+  },
+
+  markAsRead: (state, index) => {
+    const post = { ...state.categoryPosts[index] };
+
+    post.unread = false;
+    state.categoryPosts.splice(index, 1, post);
   },
 };
 

@@ -1,11 +1,28 @@
 <template>
   <div>
-    <div class="posts" @scroll="fetchNewPosts" id="posts">
+    <div v-if="loading" class="spinner">
+      <half-circle-spinner
+        :animation-duration="1000"
+        :size="35"
+        :color="'#195bff'"
+      />
+    </div>
+
+    <div v-if="fetchLoading" class="spinner fetch">
+      <half-circle-spinner
+        :animation-duration="1000"
+        :size="35"
+        :color="'#195bff'"
+      />
+    </div>
+
+    <div v-if="!loading" class="posts" @scroll="fetchNewPosts" ref="posts">
       <div
         v-for="post in allCategoryPosts"
         :key="post.id"
         class="post"
         :class="{ me: post.user._id === currentUser._id }"
+        ref="postCon"
       >
         <vs-avatar
           badge
@@ -74,6 +91,11 @@
           <p>{{ post.broadcast }}</p>
         </div>
       </div>
+
+      <div class="unread">
+        <i class="fas fa-angle-down"></i>
+        <span v-show="unread" class="not-div">{{ unread }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -82,6 +104,7 @@
 import moment from 'moment';
 
 import { mapGetters, mapActions } from 'vuex';
+import { HalfCircleSpinner } from 'epic-spinners';
 import { bus } from '../main';
 
 export default {
@@ -89,9 +112,15 @@ export default {
   data() {
     return {
       path: this.$route.fullPath,
-      unread: 0,
       page: 2,
+      loading: true,
+      index: 0,
+      fetchLoading: false,
     };
+  },
+
+  components: {
+    HalfCircleSpinner,
   },
 
   methods: {
@@ -101,6 +130,8 @@ export default {
       'likePost',
       'dislikePost',
       'appendPosts',
+      'makeUnread',
+      'makeRead',
     ]),
 
     sendDelReq(id) {
@@ -139,27 +170,58 @@ export default {
       console.log(name);
     },
 
+    isVisible(ele, container) {
+      const eleTop = ele.offsetTop;
+      const eleBottom = eleTop + ele.clientHeight;
+
+      const containerTop = container.scrollTop;
+      const containerBottom = containerTop + container.clientHeight;
+
+      // The element is fully visible in the container
+      return (
+        (eleTop >= containerTop && eleBottom <= containerBottom) ||
+        // Some part of the element is visible in the container
+        (eleTop < containerTop && containerTop < eleBottom) ||
+        (eleTop < containerBottom && containerBottom < eleBottom)
+      );
+    },
+
+    checkUnread(arr, index) {
+      let unread = 0;
+      arr.forEach((el, i) => {
+        if (el === false && i >= index) unread += 1;
+      });
+      return unread;
+    },
+
+    sendRead(index) {
+      this.makeRead(index);
+    },
+
     fetchNewPosts() {
-      const postDiv = document.getElementById('posts');
+      const { posts } = this.$refs;
 
-      // console.log(postDiv.scrollHeight - postDiv.scrollTop);
-
-      if (postDiv.scrollTop === 0 && this.page <= this.pages) {
+      if (posts.scrollTop === 0 && this.page <= this.pages) {
+        this.fetchLoading = true;
         this.fetchCategoryPosts({
           category: this.$route.params.category,
           page: this.page,
           appendPost: true,
         });
         this.page += 1;
-        // postDiv.scrollTop = 50;
+        posts.scrollTop = 50;
+      } else {
+        this.$refs.postCon.forEach((el, i) => {
+          if (this.isVisible(el, posts) && this.allCategoryPosts[i].unread) {
+            this.makeRead(i);
+          }
+        });
       }
-
-      // if (postDiv.scrollTop) return;
     },
   },
 
   computed: {
-    ...mapGetters(['allCategoryPosts', 'currentUser', 'pages']),
+    ...mapGetters(['allCategoryPosts', 'currentUser', 'pages', 'unread']),
 
     checkRoute() {
       return this.$route.params.category;
@@ -167,51 +229,56 @@ export default {
   },
 
   watch: {
-    // allCategoryPosts() {
-    //   const postDiv = document.getElementById('posts');
-
-    //   console.log(postDiv.scrollTop, postDiv.scrollHeight);
-    // },
-
     checkRoute() {
       this.page = 2;
     },
   },
 
   mounted() {
-    this.$nextTick(() => console.log('DOM Channged'));
+    this.$nextTick(() => {
+      this.fetchLoading = false;
+      this.loading = false;
+      console.log(this.loading);
+    });
 
     bus.$emit('closeSidebar');
+
+    bus.$on('recieve-message', () => {
+      const { posts } = this.$refs;
+      if (posts.scrollHeight - posts.scrollTop > 1000) {
+        this.index = this.allCategoryPosts.length - 1;
+        this.makeUnread(this.index);
+      }
+    });
+
+    bus.$on('my-message', () => {
+      const { posts } = this.$refs;
+      posts.scrollTop = posts.scrollHeight;
+    });
+
+    bus.$on('change-posts', () => (this.loading = true));
+
+    bus.$on('set-posts', () => (this.loading = false));
+
+    bus.$on('append-posts', () => (this.fetchLoading = false));
   },
 
   created() {
     this.fetchCategoryPosts({ category: this.$route.params.category });
-
-    bus.$on('newPost', () => (this.nPosts += 1));
-
-    bus.$on('user-join', (message) => {
-      console.log(message);
-    });
-
-    bus.$on('my-message', () => {
-      const postDiv = document.getElementById('posts');
-
-      postDiv.scrollTop = postDiv.scrollHeight;
-    });
-
-    bus.$on('recieve-message', () => {
-      const postDiv = document.getElementById('posts');
-
-      if (postDiv.scrollHeight - postDiv.scrollTop > 1000) {
-        this.unread += 1;
-        console.log(this.unread);
-      }
-    });
   },
 };
 </script>
 
 <style scoped>
+.spinner {
+  display: flex;
+  justify-content: center;
+}
+
+.fetch {
+  z-index: 10;
+}
+
 .typing {
   display: flex;
 }
@@ -296,6 +363,24 @@ b {
 
 .post-details b {
   font-size: 12px;
+}
+
+.not-div {
+  height: 30px;
+  width: 30px;
+  background: #195bff;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 10px;
+  z-index: 2;
+  position: fixed;
+  right: 1rem;
+  bottom: 7.5rem;
+  border: 2px solid #fff;
 }
 
 @media (max-width: 600px) {
