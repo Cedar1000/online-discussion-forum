@@ -206,7 +206,14 @@ export default {
     fetchNewPosts() {
       const { posts } = this.$refs;
 
-      console.log(posts.scrollHeight, posts.innerHeight);
+      console.log(posts.scrollHeight - posts.scrollTop, posts.scrollHeight);
+      if (posts.scrollHeight - posts.scrollTop < 700) {
+        this.scrollMode = false;
+        console.log(this.scrollMode);
+      } else {
+        this.scrollMode = true;
+        // console.log(this.scrollMode);
+      }
 
       if (posts.scrollTop === 0 && this.page <= this.pages) {
         this.fetchLoading = true;
@@ -218,12 +225,6 @@ export default {
         this.page += 1;
         posts.scrollTop = 50;
       } else {
-        if (posts.scrollTop - posts.scrollHeight > 800) {
-          this.scrollMode = false;
-        } else {
-          this.scrollMode = true;
-        }
-
         this.$refs.postCon.forEach((el, i) => {
           if (this.isVisible(el, posts) && this.allCategoryPosts[i].unread) {
             this.makeRead(i);
