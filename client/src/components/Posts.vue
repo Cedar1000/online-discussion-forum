@@ -94,7 +94,13 @@
 
       <div class="unread" v-if="scrollMode">
         <div class="relative">
-          <vs-button class="vs-button" circle icon floating>
+          <vs-button
+            @click="scrollToBottom"
+            class="vs-button"
+            circle
+            icon
+            floating
+          >
             <i class="fas fa-angle-down"></i>
           </vs-button>
           <span v-show="unread" class="not-div">{{ unread }}</span>
@@ -203,6 +209,12 @@ export default {
       this.makeRead(index);
     },
 
+    scrollToBottom() {
+      const { posts } = this.$refs;
+      console.log(posts);
+      posts.scrollTop = posts.scrollHeight;
+    },
+
     fetchNewPosts() {
       const { posts } = this.$refs;
 
@@ -249,11 +261,9 @@ export default {
   },
 
   mounted() {
-    this.$nextTick(() => {
-      const { posts } = this.$refs;
-      console.log(posts);
-      posts.scrollTop = posts.scrollHeight;
-    });
+    const { posts } = this.$refs;
+    console.log(posts);
+    posts.scrollTop = posts.scrollHeight;
 
     bus.$emit('closeSidebar');
 
