@@ -211,7 +211,6 @@ export default {
 
     scrollToBottom() {
       const { posts } = this.$refs;
-      console.log(posts);
       posts.scrollTop = posts.scrollHeight;
     },
 

@@ -45,9 +45,7 @@
           <template #icon>
             <i class="bx bxl-instagram"></i>
           </template>
-          <router-link :to="`/posts/${category.name}`">{{
-            category.name
-          }}</router-link>
+          <span @click="redirect(category.name)">{{ category.name }}</span>
         </vs-sidebar-item>
       </vs-sidebar-group>
 
@@ -86,6 +84,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import { bus } from '../main';
 
 export default {
   name: 'sidebar',
@@ -113,6 +112,14 @@ export default {
     signout() {
       this.logout();
       console.log('Signed Out');
+    },
+
+    redirect(category) {
+      const roomLeaving = this.$route.params.category;
+
+      if (!this.$route.params.category) console.log('No route');
+      this.$router.push(`/posts/${category}`);
+      bus.$emit('change-posts', { roomLeaving, category });
     },
 
     getCatPosts(name) {
