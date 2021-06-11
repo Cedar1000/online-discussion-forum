@@ -74,6 +74,7 @@ export default {
   bottom: 5px;
   grid-column: 3/11;
   display: flex;
+  z-index: 10;
 }
 
 @media (max-width: 768px) {

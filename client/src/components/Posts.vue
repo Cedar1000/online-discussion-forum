@@ -127,6 +127,7 @@ export default {
       index: 0,
       fetchLoading: false,
       scrollMode: false,
+      postInit: true,
     };
   },
 
@@ -172,8 +173,6 @@ export default {
     },
 
     simplifyDate(date) {
-      // console.log((Date.now() - date));
-
       return moment(date).fromNow();
     },
 
@@ -220,10 +219,8 @@ export default {
       // console.log(posts.scrollHeight - posts.scrollTop, posts.scrollHeight);
       if (posts.scrollTop === posts.scrollHeight - posts.offsetHeight) {
         this.scrollMode = false;
-        console.log(this.scrollMode);
       } else {
         this.scrollMode = true;
-        // console.log(this.scrollMode);
       }
 
       if (posts.scrollTop === 0 && this.page <= this.pages) {
@@ -259,15 +256,22 @@ export default {
     },
   },
 
-  mounted() {
-    const { posts } = this.$refs;
-    console.log(posts);
-    posts.scrollTop = posts.scrollHeight;
+  updated() {
+    console.log(this.postInit);
+    if (this.postInit) {
+      const { posts } = this.$refs;
+      console.log(posts);
+      posts.scrollTop = posts.scrollHeight;
 
+      this.postInit = false;
+    }
+  },
+
+  mounted() {
     bus.$emit('closeSidebar');
+    const { posts } = this.$refs;
 
     bus.$on('recieve-message', () => {
-      const { posts } = this.$refs;
       if (posts.scrollHeight - posts.scrollTop > 1000) {
         this.index = this.allCategoryPosts.length - 1;
         this.makeUnread(this.index);
@@ -275,12 +279,16 @@ export default {
     });
 
     bus.$on('my-message', () => {
-      const { posts } = this.$refs;
       console.log(posts);
       posts.scrollTop = posts.scrollHeight;
     });
 
-    bus.$on('change-posts', () => (this.loading = true));
+    bus.$on('change-posts', () => {
+      this.loading = true;
+      this.postInit = true;
+
+      posts.scrollTop = posts.scrollHeight;
+    });
 
     bus.$on('set-posts', () => (this.loading = false));
 
@@ -380,6 +388,7 @@ b {
 .actions {
   display: flex;
   justify-content: space-between;
+  padding-right: 30px;
   width: 100px;
 }
 

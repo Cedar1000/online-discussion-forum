@@ -142,7 +142,7 @@ export default {
     redirect(category) {
       const roomLeaving = this.$route.params.category;
       this.closeNavbar();
-      if (!this.$route.params.category) console.log('No route');
+      if (!this.$route.params.category);
       this.$router.push(`/posts/${category}`);
       bus.$emit('change-posts', { roomLeaving, category });
     },

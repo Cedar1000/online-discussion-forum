@@ -35,6 +35,7 @@ store.subscribe((mutation) => {
 
     case 'setPostCategories':
       bus.$emit('set-posts');
+      bus.$emit('scroll-down');
       break;
 
     case 'appendPosts':
