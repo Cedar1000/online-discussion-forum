@@ -92,6 +92,13 @@
         <span @click="redirectTo('/Profile')">Profile</span>
       </vs-sidebar-item>
 
+      <vs-sidebar-item v-if="isLoggedIn" id="manageCategory">
+        <template #icon>
+          <i class="fas fa-tasks"></i>
+        </template>
+        <span @click="redirectTo('/categories')">Manage Categories</span>
+      </vs-sidebar-item>
+
       <vs-sidebar-item v-show="isLoggedIn" id="signout">
         <template #icon>
           <i class="fas fa-sign-out-alt"></i>

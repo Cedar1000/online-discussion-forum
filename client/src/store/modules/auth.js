@@ -4,7 +4,7 @@ import { router } from '../../main';
 axios.defaults.baseURL = 'http://localhost:3000/api/v1';
 
 const state = {
-  user: '',
+  user: null,
   token: null,
   errorMsg: '',
   notifications: '',

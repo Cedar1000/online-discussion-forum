@@ -59,7 +59,32 @@ export default [
   },
   { path: '/login', component: Login },
   { path: '/register', component: Register },
-  { path: '/categories', component: Categories },
-  { path: '/users', component: Users },
+  {
+    path: '/categories',
+    component: Categories,
+    beforeEnter: (to, from, next) => {
+      // store.dispatch('attempt', localStorage.getItem('token'));
+      const { token } = store.state.auth;
+
+      const { currentUser } = store.getters;
+
+      if (token && currentUser.role == 'admin') {
+        next();
+      } else {
+        next('/login');
+      }
+    },
+  },
+  {
+    path: '/users',
+    component: Users,
+    beforeEnter: (to, from, next) => {
+      if (!store.state.auth.token) {
+        next('/login');
+      } else {
+        next();
+      }
+    },
+  },
   { path: '/update-password', component: UpdatePassword },
 ];
