@@ -8,10 +8,19 @@ const getters = {};
 
 const actions = {
   //Like A Post
-  async likePost({ commit, rootState }, id) {
+  async likePost({ commit, rootState }, { id, presentPost }) {
+    console.log(id);
     try {
       const response = await axios.post(`posts/${id}/likes`);
-      commit('addLike', { id, rootState, newLike: response.data.likePoped });
+      if (!presentPost) {
+        commit('addLike', { id, rootState, newLike: response.data.likePoped });
+      } else {
+        commit('likePresentPost', {
+          id,
+          rootState,
+          newLike: response.data.likePoped,
+        });
+      }
     } catch (error) {
       console.log(error.response);
     }
@@ -22,6 +31,16 @@ const actions = {
     try {
       await axios.delete(`likes/${likeId}`);
       commit('removeLike', { likeId, postId, rootState });
+    } catch (error) {
+      console.log(error.response);
+    }
+  },
+
+  async dislikePresentPost({ commit, rootState }, { likeId }) {
+    console.log(likeId);
+    try {
+      await axios.delete(`likes/${likeId}`);
+      commit('unlikePresentPost', { likeId, rootState });
     } catch (error) {
       console.log(error.response);
     }
@@ -91,12 +110,30 @@ const mutations = {
     post.likes.push(payload.newLike);
   },
 
+  likePresentPost: (state, payload) => {
+    console.log(payload);
+    const { singlePost } = payload.rootState.posts;
+    singlePost.likesQuantity += 1;
+    singlePost.likes.push(payload.newLike);
+  },
+
   //Remove like from state
   removeLike: (state, payload) => {
     const { categoryPosts } = payload.rootState.posts;
     const post = categoryPosts.find((el) => el.id === payload.postId);
     post.likesQuantity -= 1;
     post.likes = post.likes.filter((el) => el.id !== payload.likeId);
+  },
+
+  unlikePresentPost: (state, payload) => {
+    console.log(payload);
+    const { singlePost } = payload.rootState.posts;
+    singlePost.likes = singlePost.likes.filter(
+      (el) => el._id !== payload.likeId
+    );
+
+    console.log(singlePost.likes);
+    singlePost.likesQuantity -= 1;
   },
 
   //Add comment to state

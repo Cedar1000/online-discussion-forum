@@ -73,12 +73,14 @@ export default {
     },
   },
 
-  created() {
+  mounted() {
     socket.emit('join-room', {
       username: this.currentUser.username,
       room: this.$route.params.category,
     });
+  },
 
+  created() {
     bus.$on('change-posts', ({ roomLeaving, category }) => {
       this.fetchCategoryPosts({ category });
 

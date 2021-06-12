@@ -92,7 +92,10 @@
         <span @click="redirectTo('/Profile')">Profile</span>
       </vs-sidebar-item>
 
-      <vs-sidebar-item v-if="isLoggedIn" id="manageCategory">
+      <vs-sidebar-item
+        v-if="isLoggedIn && currentUser.role === 'admin'"
+        id="manageCategory"
+      >
         <template #icon>
           <i class="fas fa-tasks"></i>
         </template>

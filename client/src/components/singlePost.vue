@@ -41,14 +41,24 @@
           </p>
         </div>
         <div class="actions">
-          <span
-            ><i class="fas fa-heart"></i
-            ><b>{{ presentPost.likesQuantity }}</b></span
-          >
-          <span
-            ><i class="far fa-comment"></i
-            ><b>{{ presentPost.commentsQuantity }}</b></span
-          >
+          <div class="likes">
+            <span
+              v-show="
+                presentPost.likes &&
+                  hasLiked(currentUser._id, presentPost.likes)
+              "
+              @click="handleDislike(presentPost.likes, currentUser._id)"
+            >
+              <i class="fas fa-heart liked"></i>
+            </span>
+            <span
+              v-show="!hasLiked(currentUser._id, presentPost.likes)"
+              @click="likePost({ id: presentPost._id, presentPost: true })"
+            >
+              <i class="far fa-heart"></i>
+            </span>
+            <b>{{ presentPost.likesQuantity }}</b>
+          </div>
         </div>
 
         <vs-dialog
@@ -228,6 +238,9 @@ export default {
       'dislikeComment',
       'replyComment',
       'editPost',
+      'likePost',
+      'dislikePost',
+      'dislikePresentPost',
     ]),
 
     handleEdit() {
@@ -247,19 +260,23 @@ export default {
     },
 
     hasLiked(userId, likesArr) {
-      const IDs = [];
-      likesArr.forEach((el) => IDs.push(el.user));
-      return IDs.includes(userId);
+      return likesArr.map((el) => el.user._id).includes(userId);
     },
 
     sendLikeReq(id) {
       this.likeComment(id);
     },
 
-    handleDislike(likes, id) {
-      const like = likes.find((el) => el.user === this.currentUser._id);
+    unlikePost(likes, id) {
+      const like = likes.find((el) => el.user._id === this.currentUser._id);
 
       this.dislikeComment({ commentId: id, likeId: like._id });
+    },
+
+    handleDislike(likes, id) {
+      const like = likes.find((el) => el.user._id === id);
+
+      this.dislikePresentPost({ likeId: like._id });
     },
 
     toggleReply(id) {
@@ -367,6 +384,10 @@ b {
 }
 
 .fa-heart {
+  color: #195bff;
+}
+
+.liked {
   color: #ef4545;
 }
 

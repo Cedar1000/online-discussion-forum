@@ -50,6 +50,7 @@ export default [
     path: '/post/:id',
     component: singlePost,
     beforeEnter: (to, from, next) => {
+      console.log(from);
       if (!store.state.auth.token) {
         next('/login');
       } else {
@@ -63,15 +64,15 @@ export default [
     path: '/categories',
     component: Categories,
     beforeEnter: (to, from, next) => {
-      // store.dispatch('attempt', localStorage.getItem('token'));
       const { token } = store.state.auth;
-
+      store.dispatch('attempt', localStorage.getItem('token'));
+      console.log(store.getters.currentUser);
       const { currentUser } = store.getters;
 
       if (token && currentUser.role == 'admin') {
         next();
       } else {
-        next('/login');
+        next('/');
       }
     },
   },

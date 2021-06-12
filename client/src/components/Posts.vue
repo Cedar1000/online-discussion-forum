@@ -151,7 +151,7 @@ export default {
     },
 
     sendLikeReq(id) {
-      this.likePost(id);
+      this.likePost({ id });
     },
 
     handleDislike(post) {
