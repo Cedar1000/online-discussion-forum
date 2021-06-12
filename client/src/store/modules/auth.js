@@ -8,6 +8,7 @@ const state = {
   token: null,
   errorMsg: '',
   notifications: '',
+  prevRoute: null,
 };
 
 const getters = {
@@ -15,6 +16,7 @@ const getters = {
   currentUser: (state) => state.user,
   errorMsg: (state) => state.errorMsg,
   signUpErrors: (state) => state.signUpErrors,
+  prevPath: (state) => state.prevRoute.fullPath,
 
   nNotifications: (state) => {
     if (state.notifications.length)

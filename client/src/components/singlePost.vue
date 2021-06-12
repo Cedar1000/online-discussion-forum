@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="wrapper">
-      <router-link :to="`/notifications`"
+      <router-link :to="`${prevPath}`"
         ><i class="fas fa-arrow-left"></i
       ></router-link>
       <div v-if="this.presentPost" class="post">
@@ -298,10 +298,11 @@ export default {
   created() {
     this.id = this.$route.params.id;
     this.fetchSinglePost(this.id);
+    console.log(this.$route);
   },
 
   computed: {
-    ...mapGetters(['presentPost', 'currentUser']),
+    ...mapGetters(['presentPost', 'currentUser', 'prevPath']),
   },
 };
 </script>

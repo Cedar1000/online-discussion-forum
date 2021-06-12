@@ -50,7 +50,8 @@ export default [
     path: '/post/:id',
     component: singlePost,
     beforeEnter: (to, from, next) => {
-      console.log(from);
+      store.state.auth.prevRoute = from;
+      console.log(store.state.auth.prevRoute);
       if (!store.state.auth.token) {
         next('/login');
       } else {
