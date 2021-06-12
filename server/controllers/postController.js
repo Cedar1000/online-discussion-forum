@@ -29,8 +29,7 @@ exports.getAllPost = catchAsync(async (req, res, next) => {
   const limit = req.query.limit * 1 || 10;
   const skip = (page - 1) * limit;
   const numDocs = await Post.countDocuments(categoryObj);
-  console.log(categoryObj);
-  console.log(numDocs);
+
   const pages = Math.ceil(numDocs / limit);
 
   const results = await Post.find(categoryObj)

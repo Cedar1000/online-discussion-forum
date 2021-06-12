@@ -274,8 +274,6 @@ export default {
     },
 
     simplifyDate(date) {
-      // console.log((Date.now() - date));
-
       return moment(date).fromNow();
     },
   },

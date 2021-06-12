@@ -32,13 +32,10 @@ const actions = {
         password,
       });
 
-      console.log(response);
       commit('setUser', response.data.user);
       commit('setToken', response.data.token);
       router.push({ path: 'Profile' });
     } catch (error) {
-      console.log(error);
-
       commit('setError', error.response.data.message);
     }
   },
@@ -102,13 +99,11 @@ const actions = {
   },
 
   async updateMe({ commit }, payload) {
-    console.log(payload);
     try {
       const response = await axios.patch('users/updateMe', payload);
-      console.log(response.data);
+
       commit('updateUser', response.data.user);
     } catch (error) {
-      console.log(error.response);
       commit('setError', error.response.data.message);
     }
   },

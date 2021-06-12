@@ -26,7 +26,6 @@ const replyCommentSchema = new mongoose.Schema(
 );
 
 replyCommentSchema.statics.calcNumber = async function (commentId) {
-  console.log(commentId);
   const stats = await this.aggregate([
     {
       $match: { comment: commentId },
@@ -38,8 +37,6 @@ replyCommentSchema.statics.calcNumber = async function (commentId) {
       },
     },
   ]);
-
-  // console.log(stats);
 
   if (stats.length > 0) {
     await Comment.findByIdAndUpdate(commentId, {

@@ -111,7 +111,6 @@ export default {
 
     signout() {
       this.logout();
-      console.log('Signed Out');
     },
 
     redirect(category) {

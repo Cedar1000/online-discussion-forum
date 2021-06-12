@@ -224,7 +224,7 @@ export default {
 
     signInUser() {
       this.loading = true;
-      console.log(this.payload);
+
       this.signIn(this.payload);
     },
 
@@ -236,16 +236,11 @@ export default {
       this.passwordConfirm = '';
     },
   },
-  mounted() {
-    console.log(this.$v.payload);
-    console.log(this.$v.payload.$anyError);
-  },
 
   computed: {
     ...mapGetters(['errorMsg']),
 
     invalid() {
-      // console.log(this.$v.payload);
       return this.$v.payload.$invalid;
     },
   },

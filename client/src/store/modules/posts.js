@@ -26,7 +26,7 @@ const actions = {
   async fetchPosts({ commit }) {
     try {
       const response = await axios.get(`posts`);
-      console.log(response.data.posts);
+
       commit('setPosts', response.data.posts);
     } catch (error) {
       console.log(error.response, 'I am an error');
@@ -76,7 +76,6 @@ const actions = {
 
   //Add Post
   addPost({ commit }, post) {
-    // console.log(commit, post);
     commit('addPost', post);
   },
 

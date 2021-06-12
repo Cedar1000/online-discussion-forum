@@ -41,6 +41,14 @@ store.subscribe((mutation) => {
     case 'appendPosts':
       bus.$emit('append-posts');
       break;
+
+    case 'setUsers':
+      bus.$emit('set-users');
+      break;
+
+    case 'setRole':
+      bus.$emit('set-role');
+      break;
   }
 });
 

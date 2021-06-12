@@ -45,8 +45,6 @@ exports.updateMe = catchAsync(async (req, res, next) => {
       overwrite: true,
     });
 
-    console.log(result);
-
     req.body.avatar = result.secure_url;
   }
 

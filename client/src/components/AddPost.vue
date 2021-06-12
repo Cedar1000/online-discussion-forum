@@ -111,8 +111,6 @@ export default {
 
     socket.on('user-join', (message) => this.addPost(message));
 
-    socket.on('user-exit', (message) => console.log(message));
-
     socket.on('stopTyping', (id) => this.deleteTyping(id));
 
     socket.on('my-message', () => bus.$emit('my-message'));
@@ -121,7 +119,6 @@ export default {
   },
 
   beforeDestroy() {
-    console.log('AddPost Destroyed');
     bus.$off('leave-room');
     bus.$off('change-posts');
     socket.off('chat-message');

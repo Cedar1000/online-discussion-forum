@@ -58,7 +58,6 @@ exports.login = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ email }).select('+password');
 
   if (!user) {
-    // console.log(new AppError('No User with that email', 404).message);
     const err = new AppError('No User with that email', 404);
 
     return next(err);
@@ -77,7 +76,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
 exports.protect = catchAsync(async (req, res, next) => {
   //1) Getting token and check if its there
-  console.log('protect');
+
   let token;
   if (
     req.headers.authorization &&

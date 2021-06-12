@@ -7,6 +7,10 @@
         </vs-button>
       </template>
 
+      <template>
+        <p class="room">{{ $route.params.category }}</p>
+      </template>
+
       <template #right>
         <vs-avatar
           v-if="isLoggedIn"
@@ -164,6 +168,10 @@ export default {
 </script>
 
 <style scoped>
+.room {
+  font-family: 'Lato', sans-serif;
+}
+
 a {
   text-decoration: none;
   color: #2c3e50;

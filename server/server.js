@@ -26,8 +26,6 @@ const io = socketio(server, {
 
 //Run when client connects
 io.on('connection', (socket) => {
-  console.log(socket.id, 'New Ws Connection...');
-
   //Listen for when a user joined the room
   socket.on('join-room', ({ username, room }) => {
     const user = userJoin(socket.id, username, room);
@@ -47,7 +45,6 @@ io.on('connection', (socket) => {
   });
 
   socket.on('leave-room', ({ id, room, username }) => {
-    console.log('leave', { id, room, username });
     const user = userLeave(socket.id);
 
     const message = {
@@ -93,7 +90,6 @@ io.on('connection', (socket) => {
   //Run when client disconnects
   socket.on('disconnect', () => {
     const user = userLeave(socket.id);
-    console.log('left', user);
 
     if (user)
       io.to(user.room).emit('user-exit', `${user.username} has left the chat`);
@@ -114,6 +110,6 @@ mongoose
 
 const port = process.env.PORT || 3000;
 
-server.listen(port, '127.0.0.1', () => {
+server.listen(port, () => {
   console.log(`Application running on port ${port}`);
 });

@@ -176,10 +176,6 @@ export default {
       return moment(date).fromNow();
     },
 
-    printName(name) {
-      console.log(name);
-    },
-
     isVisible(ele, container) {
       const eleTop = ele.offsetTop;
       const eleBottom = eleTop + ele.clientHeight;
@@ -216,7 +212,6 @@ export default {
     fetchNewPosts() {
       const { posts } = this.$refs;
 
-      // console.log(posts.scrollHeight - posts.scrollTop, posts.scrollHeight);
       if (posts.scrollTop === posts.scrollHeight - posts.offsetHeight) {
         this.scrollMode = false;
       } else {
@@ -257,10 +252,9 @@ export default {
   },
 
   updated() {
-    console.log(this.postInit);
     if (this.postInit) {
       const { posts } = this.$refs;
-      console.log(posts);
+
       posts.scrollTop = posts.scrollHeight;
 
       this.postInit = false;
@@ -278,10 +272,7 @@ export default {
       }
     });
 
-    bus.$on('my-message', () => {
-      console.log(posts);
-      posts.scrollTop = posts.scrollHeight;
-    });
+    bus.$on('my-message', () => (posts.scrollTop = posts.scrollHeight));
 
     bus.$on('change-posts', () => {
       this.loading = true;

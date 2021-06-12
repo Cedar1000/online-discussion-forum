@@ -176,20 +176,15 @@ export default {
 
     sendDetails() {
       this.loading = true;
-      console.log(this.payload);
+
       this.updatePassword(this.payload);
     },
-  },
-  mounted() {
-    console.log(this.$v.payload);
-    console.log(this.$v.payload.$anyError);
   },
 
   computed: {
     ...mapGetters(['errorMsg', 'successMessage']),
 
     invalid() {
-      // console.log(this.$v.payload);
       return this.$v.payload.$invalid;
     },
   },

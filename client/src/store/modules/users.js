@@ -25,7 +25,6 @@ const actions = {
   },
 
   async makeAdmin({ commit }, id) {
-    console.log(id);
     try {
       const response = await axios.patch(`users/${id}/makeAdmin`);
       console.log(response.data);
@@ -41,9 +40,7 @@ const actions = {
 
       commit('updateUser', response.data.user);
       commit('showMessage', 'Password Succesfully Changed!');
-      console.log(response);
     } catch (error) {
-      console.log(error.response);
       commit('setError', error.response.data.message);
     }
   },
@@ -57,7 +54,6 @@ const mutations = {
   },
 
   showMessage: (state, message) => {
-    console.log(message);
     state.successMessage = message;
   },
 };

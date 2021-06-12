@@ -43,7 +43,6 @@ const handleCastErrorDB = (err) => {
 
 //DUPPLICATE FIELD ERROR
 const handleDuplicateFieldsDB = (err) => {
-  console.log(err);
   const value = Object.keys(err.keyValue)[0];
   const message = `Duplicate Field value: ${value}. Please use another value!`;
   return new AppError(message, 400);
@@ -67,9 +66,8 @@ const handleJWTExpiredError = () =>
   );
 
 module.exports = (err, req, res, next) => {
-  console.log(err);
   err.statusCode = err.statusCode || 500;
-  // console.log({ ...err, isSpread: true });
+
   err.status = err.status || 'error';
 
   if (process.env.NODE_ENV.trim() === 'development') {
@@ -82,8 +80,7 @@ module.exports = (err, req, res, next) => {
       error = handleValidationErrorDB(error);
     if (error.name === 'JsonWebTokenError') error = handleJWTError();
     if (error.name === 'TokenExpiresError') error = handleJWTExpiredError();
-    // console.log('prod', error);
-    console.log(error);
+
     sendErrorProd(error, res);
   }
 };

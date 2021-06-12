@@ -19,7 +19,6 @@ const actions = {
 
   //Dislike A Post
   async dislikePost({ commit, rootState }, { postId, likeId }) {
-    console.log(postId, likeId);
     try {
       await axios.delete(`likes/${likeId}`);
       commit('removeLike', { likeId, postId, rootState });
@@ -31,11 +30,10 @@ const actions = {
   //Comment on A post
   async commentOnPost({ commit, rootState }, { postId, comment }) {
     try {
-      console.log(postId, comment);
       const response = await axios.post(`posts/${postId}/comments`, {
         body: comment,
       });
-      console.log(response);
+
       commit('addComment', {
         rootState,
         newComment: response.data.comment,
@@ -49,7 +47,7 @@ const actions = {
   async likeComment({ commit, rootState }, id) {
     try {
       const response = await axios.post(`comments/${id}/likes`);
-      console.log(response);
+
       commit('likeComment', {
         rootState,
         commentId: id,
@@ -62,7 +60,6 @@ const actions = {
 
   //Dislike A Comment
   async dislikeComment({ commit, rootState }, { commentId, likeId }) {
-    console.log(commentId, likeId);
     try {
       await axios.delete(`comments/${commentId}/likes/${likeId}`);
 
@@ -76,7 +73,6 @@ const actions = {
   async replyComment({ commit, rootState }, { id, body }) {
     try {
       const response = await axios.post(`comments/${id}/reply`, { body });
-      console.log(response.data.doc);
 
       commit('addReply', { rootState, id, reply: response.data.doc });
     } catch (error) {

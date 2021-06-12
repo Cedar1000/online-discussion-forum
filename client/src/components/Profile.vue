@@ -124,7 +124,6 @@ export default {
     this.payload.gender = this.currentUser.gender;
 
     bus.$on('stopLoading', () => {
-      console.log('uploadiing');
       this.loading = false;
       this.uploading = false;
     });
