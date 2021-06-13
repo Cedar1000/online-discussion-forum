@@ -30,9 +30,9 @@
         <template #header>
           <vs-sidebar-item arrow>
             <template #icon>
-              <i class="fas fa-list-ul"></i>
+              <i class="fas fa-comments"></i>
             </template>
-            Categories
+            Rooms
           </vs-sidebar-item>
         </template>
 

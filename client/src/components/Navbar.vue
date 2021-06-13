@@ -46,7 +46,7 @@
         <template #icon>
           <i class="fas fa-home"></i>
         </template>
-        <span @click="redirectTo('/Home')">Home</span>
+        <span @click="redirectTo('/')">Home</span>
       </vs-sidebar-item>
 
       <vs-sidebar-item v-if="isLoggedIn" id="Notifications">
@@ -66,9 +66,9 @@
         <template #header>
           <vs-sidebar-item arrow>
             <template #icon>
-              <i class="fas fa-list-ul"></i>
+              <i class="fas fa-comments"></i>
             </template>
-            Categories
+            Rooms
           </vs-sidebar-item>
         </template>
 
