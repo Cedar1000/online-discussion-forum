@@ -12,7 +12,7 @@
         <template #icon>
           <i class="fas fa-home"></i>
         </template>
-        <router-link to="/Home">Home</router-link>
+        <router-link to="/">Home</router-link>
       </vs-sidebar-item>
 
       <vs-sidebar-item id="Notifications">
@@ -53,7 +53,25 @@
         <template #icon>
           <i class="fas fa-user"></i>
         </template>
-        <router-link to="/Profile">Profile</router-link>
+        <router-link to="/profile">Profile</router-link>
+      </vs-sidebar-item>
+
+      <vs-sidebar-item
+        v-show="isLoggedIn && currentUser.role === 'admin'"
+        id="manageCategories"
+      >
+        <template #icon>
+          <i class="fas fa-tasks"></i>
+        </template>
+        <router-link to="/categories">Manage Categories</router-link>
+      </vs-sidebar-item>
+
+      <vs-sidebar-item
+        v-show="isLoggedIn && currentUser.role === 'admin'"
+        id="manageUsers"
+      >
+        <template #icon> <i class="fas fa-users"></i> </template>
+        <router-link to="/users">Manage Users</router-link>
       </vs-sidebar-item>
 
       <vs-sidebar-item v-show="isLoggedIn" id="signout">

@@ -298,7 +298,6 @@ export default {
   created() {
     this.id = this.$route.params.id;
     this.fetchSinglePost(this.id);
-    console.log(this.$route);
   },
 
   computed: {

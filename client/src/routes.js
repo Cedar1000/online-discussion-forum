@@ -51,7 +51,7 @@ export default [
     component: singlePost,
     beforeEnter: (to, from, next) => {
       store.state.auth.prevRoute = from;
-      console.log(store.state.auth.prevRoute);
+
       if (!store.state.auth.token) {
         next('/login');
       } else {
@@ -67,7 +67,7 @@ export default [
     beforeEnter: (to, from, next) => {
       const { token } = store.state.auth;
       store.dispatch('attempt', localStorage.getItem('token'));
-      console.log(store.getters.currentUser);
+
       const { currentUser } = store.getters;
 
       if (token && currentUser.role == 'admin') {
@@ -81,10 +81,14 @@ export default [
     path: '/users',
     component: Users,
     beforeEnter: (to, from, next) => {
-      if (!store.state.auth.token) {
-        next('/login');
-      } else {
+      const { token } = store.state.auth;
+      store.dispatch('attempt', localStorage.getItem('token'));
+
+      const { currentUser } = store.getters;
+      if (token && currentUser.role == 'admin') {
         next();
+      } else {
+        next('/login');
       }
     },
   },

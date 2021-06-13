@@ -102,6 +102,16 @@
         <span @click="redirectTo('/categories')">Manage Categories</span>
       </vs-sidebar-item>
 
+      <vs-sidebar-item
+        v-if="isLoggedIn && currentUser.role === 'admin'"
+        id="manageUsers"
+      >
+        <template #icon>
+          <i class="fas fa-users"></i>
+        </template>
+        <span @click="redirectTo('/users')">Manage Users</span>
+      </vs-sidebar-item>
+
       <vs-sidebar-item v-show="isLoggedIn" id="signout">
         <template #icon>
           <i class="fas fa-sign-out-alt"></i>
