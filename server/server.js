@@ -17,7 +17,7 @@ const app = require('./app');
 const server = http.createServer(app);
 const io = socketio(server, {
   cors: {
-    origin: 'https://chatforum.netlify.app/',
+    origin: 'https://chatforum.netlify.app',
     method: ['GET', 'POST'],
     allowedHeaders: ['my-custom-header'],
     credentials: true,

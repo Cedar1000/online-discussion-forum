@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://chatforum.netlify.app/v1';
+axios.defaults.baseURL = 'https://aqueous-citadel-79441.herokuapp.com/api/v1';
 
 const state = {};
 

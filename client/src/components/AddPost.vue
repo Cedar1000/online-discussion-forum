@@ -18,7 +18,7 @@ import io from 'socket.io-client';
 import { mapActions, mapGetters } from 'vuex';
 import { bus } from '../main';
 
-const socket = io('https://chatforum.netlify.app', {
+const socket = io('https://aqueous-citadel-79441.herokuapp.com', {
   withCredentials: true,
   extraHeaders: {
     'my-custom-header': 'abcd',
