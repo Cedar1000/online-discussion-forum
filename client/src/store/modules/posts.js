@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { CREATE, EDIT, DELETE } from '../factory';
 
-axios.defaults.baseURL = 'http://localhost:3000/api/v1/';
+axios.defaults.baseURL = 'https://chatforum.netlify.app/v1';
 
 const state = {
   posts: [],

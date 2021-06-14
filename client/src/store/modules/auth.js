@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { router } from '../../main';
 
-axios.defaults.baseURL = 'http://localhost:3000/api/v1';
+axios.defaults.baseURL = 'https://chatforum.netlify.app/v1';
 
 const state = {
   user: null,

@@ -18,7 +18,7 @@ import io from 'socket.io-client';
 import { mapActions, mapGetters } from 'vuex';
 import { bus } from '../main';
 
-const socket = io('http://localhost:3000', {
+const socket = io('https://chatforum.netlify.app', {
   withCredentials: true,
   extraHeaders: {
     'my-custom-header': 'abcd',
