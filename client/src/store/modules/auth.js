@@ -51,7 +51,7 @@ const actions = {
       router.push({ path: 'Profile' });
     } catch (error) {
       const { message } = error.response.data;
-      console.log(message);
+
       commit('setError', message);
     }
   },

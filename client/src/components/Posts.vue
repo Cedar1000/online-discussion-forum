@@ -262,7 +262,6 @@ export default {
   },
 
   mounted() {
-    this.allCategoryPosts.forEach((post) => console.log(post));
     bus.$emit('closeSidebar');
     const { posts } = this.$refs;
 

@@ -9,7 +9,6 @@ const getters = {};
 const actions = {
   //Like A Post
   async likePost({ commit, rootState }, { id, presentPost }) {
-    console.log(id);
     try {
       const response = await axios.post(`posts/${id}/likes`);
       if (!presentPost) {
@@ -37,7 +36,6 @@ const actions = {
   },
 
   async dislikePresentPost({ commit, rootState }, { likeId }) {
-    console.log(likeId);
     try {
       await axios.delete(`likes/${likeId}`);
       commit('unlikePresentPost', { likeId, rootState });
@@ -111,7 +109,6 @@ const mutations = {
   },
 
   likePresentPost: (state, payload) => {
-    console.log(payload);
     const { singlePost } = payload.rootState.posts;
     singlePost.likesQuantity += 1;
     singlePost.likes.push(payload.newLike);
@@ -126,13 +123,11 @@ const mutations = {
   },
 
   unlikePresentPost: (state, payload) => {
-    console.log(payload);
     const { singlePost } = payload.rootState.posts;
     singlePost.likes = singlePost.likes.filter(
       (el) => el._id !== payload.likeId
     );
 
-    console.log(singlePost.likes);
     singlePost.likesQuantity -= 1;
   },
 
