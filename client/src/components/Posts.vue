@@ -39,6 +39,7 @@
           <template #title>
             <span class="post-details"
               ><h3>{{ post.user.username }}</h3>
+              <div></div>
               <b>{{ simplifyDate(post.createdAt) }}</b></span
             >
           </template>
