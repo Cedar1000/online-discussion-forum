@@ -39,14 +39,14 @@
           <template #title>
             <span class="post-details"
               ><h3>{{ post.user.username }}</h3>
-              <div></div>
+
               <b>{{ simplifyDate(post.createdAt) }}</b></span
             >
           </template>
 
           <template #text>
             <router-link :to="`/post/${post.id}`">
-              <p>
+              <p class="post-body">
                 {{ post.body }}
               </p>
             </router-link>
@@ -321,6 +321,10 @@ export default {
   display: flex;
 }
 
+.post-body {
+  color: #100f0f;
+}
+
 .broadcast-div {
   width: 100%;
   text-align: center;
@@ -393,8 +397,9 @@ b {
 }
 
 .post-details {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
 }
 
 .post-details h3 {
@@ -402,6 +407,7 @@ b {
 }
 
 .post-details b {
+  text-align: end;
   font-size: 12px;
 }
 
