@@ -1,20 +1,28 @@
 <template>
-  <div class="input">
-    <textarea-autosize
-      placeholder="Type Post here..."
-      ref="myTextarea"
-      :min-height="20"
-      :max-height="650"
-      v-model="body"
+  <div class="wrapper">
+    <div class="input">
+      <textarea-autosize
+        placeholder="Type Post here..."
+        ref="myTextarea"
+        :min-height="20"
+        :max-height="650"
+        v-model="body"
+      />
+      <v-btn @click="sendMessage" class="mx-2" fab dark color="indigo">
+        <i class="fas fa-paper-plane"></i>
+      </v-btn>
+    </div>
+
+    <picker
+      @select="addEmoji"
+      :style="{ width: '100%', bottom: '20px', right: '20px' }"
     />
-    <v-btn @click="sendMessage" class="mx-2" fab dark color="indigo">
-      <i class="fas fa-paper-plane"></i>
-    </v-btn>
   </div>
 </template>
 
 <script>
 import io from 'socket.io-client';
+import { Picker } from 'emoji-mart-vue';
 import { mapActions, mapGetters } from 'vuex';
 import { bus } from '../main';
 
@@ -36,6 +44,10 @@ export default {
     };
   },
 
+  components: {
+    Picker,
+  },
+
   methods: {
     ...mapActions([
       'addPost',
@@ -53,6 +65,12 @@ export default {
 
       socket.emit('chat-message', post);
       this.body = '';
+    },
+
+    methods: {
+      addEmoji(emoji) {
+        console.log(emoji);
+      },
     },
   },
 
@@ -133,6 +151,10 @@ export default {
 </script>
 
 <style scoped>
+.wrapper {
+  width: 100%;
+}
+
 .input {
   display: flex;
   align-items: center;
