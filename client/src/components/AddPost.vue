@@ -1,22 +1,26 @@
 <template>
   <div class="wrapper">
     <div class="input">
-      <textarea-autosize
-        placeholder="Type Post here..."
-        ref="myTextarea"
-        :min-height="20"
-        :max-height="650"
-        v-model="body"
-      />
+      <div class="text">
+        <textarea
+          name="text"
+          placeholder="Type a message"
+          v-model="body"
+        ></textarea>
+
+        <span @click="emojiMode = true"><i class="far fa-laugh icon"></i></span>
+      </div>
       <v-btn @click="sendMessage" class="mx-2" fab dark color="indigo">
         <i class="fas fa-paper-plane"></i>
       </v-btn>
     </div>
 
-    <picker
-      @select="addEmoji"
-      :style="{ width: '100%', bottom: '20px', right: '20px' }"
-    />
+    <vs-dialog class="vs-dialogue" width="300px" not-center v-model="emojiMode">
+      <picker
+        @select="addEmoji"
+        :style="{ width: '100%', bottom: '20px', right: '20px' }"
+      />
+    </vs-dialog>
   </div>
 </template>
 
@@ -39,7 +43,7 @@ export default {
     return {
       user: '',
       body: '',
-
+      emojiMode: false,
       edit: false,
     };
   },
@@ -67,10 +71,12 @@ export default {
       this.body = '';
     },
 
-    methods: {
-      addEmoji(emoji) {
-        console.log(emoji);
-      },
+    addEmoji(emoji) {
+      this.body += emoji.native;
+    },
+
+    test() {
+      console.log('test');
     },
   },
 
@@ -151,6 +157,67 @@ export default {
 </script>
 
 <style scoped>
+.text {
+  width: 100%;
+  position: relative;
+}
+
+textarea {
+  position: absolute;
+  bottom: -18px;
+}
+
+.text .icon {
+  position: absolute;
+  right: 5%;
+  bottom: 50%;
+  font-size: 22px;
+  color: #100f0f85;
+  transform: translateY(40%);
+}
+
+/* TEXTAREA STYLES */
+.grow-wrap {
+  /* easy way to plop the elements on top of each other and have them both sized based on the tallest one's height */
+  display: grid;
+}
+.grow-wrap::after {
+  /* Note the weird space! Needed to preventy jumpy behavior */
+  content: attr(data-replicated-value) ' ';
+
+  /* This is how textarea text behaves */
+  white-space: pre-wrap;
+
+  /* Hidden from view, clicks, and screen readers */
+  visibility: hidden;
+}
+.grow-wrap > textarea {
+  /* You could leave this, but after a user resizes, then it ruins the auto sizing */
+  resize: none;
+
+  /* Firefox shows scrollbar on growth, you can hide like this. */
+  overflow: hidden;
+}
+.grow-wrap > textarea,
+.grow-wrap::after {
+  /* Identical styling required!! */
+  border: 1px solid black;
+  padding: 0.5rem;
+  font: inherit;
+
+  /* Place on top of each other */
+  grid-area: 1 / 1 / 2 / 2;
+}
+
+body {
+  margin: 2rem;
+  font: 1rem/1.4 system-ui, sans-serif;
+}
+
+label {
+  display: block;
+}
+
 .wrapper {
   width: 100%;
 }
