@@ -1,5 +1,5 @@
 # online-discussion-forum
-An online discussion forum with different chat rooms intended to connect people
+An online chat forum with built with MEVN stack and Socket.Io consisting of different chat rooms intended to connect people
 
 SERVER SIDE
 Node.js, Express
