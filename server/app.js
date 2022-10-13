@@ -19,6 +19,7 @@ const commentRouter = require('./routes/commentRoutes');
 const categoryRouter = require('./routes/categoryRoutes');
 const replyRouter = require('./routes/replyCommentRoutes');
 const notificationRouter = require('./routes/notificationRoutes');
+const waitingListRouter = require('./routes/waitingListRoutes');
 
 //1)GLOBAL MIDDLEWARES
 //Set security HTTP headers
@@ -64,6 +65,8 @@ app.use('/api/v1/comments', commentRouter);
 app.use('/api/v1/category', categoryRouter);
 app.use('/api/v1/reply', replyRouter);
 app.use('/api/v1/notifications', notificationRouter);
+app.use('/api/v1/notifications', notificationRouter);
+app.use('/api/v1/waitlist', waitingListRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
